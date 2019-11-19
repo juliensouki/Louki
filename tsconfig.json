@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "outDir": "./dist",
+    "lib": ["es2015", "dom"],
+    "types": [],
+    "jsx": "react"
+  },
+  "files": ["./src/client/client.tsx"]
+}

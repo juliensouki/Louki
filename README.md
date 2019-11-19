@@ -1,2 +1,1 @@
-# Louki
-Music player and manager
+# Louki music player and manager

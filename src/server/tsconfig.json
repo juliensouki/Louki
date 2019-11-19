@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "sourceMap": true,
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "outDir": "../../dist/server-root",
+    "rootDir": "..",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "types": ["node"],
+    "baseUrl": "./",
+    "incremental": true
+  },
+  "files": ["./main.ts"],
+  "exclude": [
+    "../node_modules"
+  ]
+}
