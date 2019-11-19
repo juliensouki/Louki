@@ -11,7 +11,17 @@
     "outDir": "./dist",
     "lib": ["es2015", "dom"],
     "types": [],
-    "jsx": "react"
+    "jsx": "react",
+    "experimentalDecorators": true  
   },
-  "files": ["./src/client/client.tsx"]
+  "paths": {
+    "@lang/*": ["lang/*"],
+    "@store/*": ["store/*"],
+    "@components/*": ["components/*"],
+    "@assets/*": ["assets/*"]
+  },
+  "files": [
+    "./types/global.d.ts",
+    "./src/client/Main.tsx"
+  ]
 }

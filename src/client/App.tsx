@@ -1,21 +1,31 @@
-import Grid from '@material-ui/core/Grid';
-import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { About } from './components/About';
-// Pages
-import { Header } from './components/Header';
-import { Home } from './components/Home';
-import { UsersList } from './components/UsersList';
+import * as React from 'react';
+import { observer } from 'mobx-react';
+import { Container } from '@material-ui/core';
+import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
-export const App = () => (
-  <BrowserRouter>
-    <Grid container spacing={2}>
-      <Header />
-      <Switch>
-        <Route exact path='/' component={Home} />
-        <Route path='/about' component={About} />
-        <Route path='/users-list' component={UsersList} />
-      </Switch>
-    </Grid>
-  </BrowserRouter>
-);
+const styles = (theme: Theme) => createStyles({
+  welcome: {
+    fontSize: 15,
+  },
+});
+
+export interface Props extends WithStyles<typeof styles>
+{
+}
+
+@observer
+class App extends React.Component<Props, NoState>
+{
+  render()
+  {
+    const { classes } = this.props;
+
+    return (
+      <Container className={classes.welcome}>
+        Bienvenue sur Louki !
+      </Container>
+    );
+  }
+}
+
+export default withStyles(styles)(App);

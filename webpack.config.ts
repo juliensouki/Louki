@@ -2,7 +2,6 @@ import path from 'path';
 import { Configuration } from 'webpack';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import cssnano from 'cssnano';
-
 import { SERVER_PORT, IS_DEV, WEBPACK_PORT } from './src/server/config';
 
 const plugins = [new ManifestPlugin()];
@@ -15,7 +14,7 @@ const nodeModulesPath = path.resolve(__dirname, 'node_modules');
 const config: Configuration = {
   mode: IS_DEV ? 'development' : 'production',
   devtool: IS_DEV ? 'inline-source-map' : false,
-  entry: ['core-js', './src/client/client'],
+  entry: ['core-js', './src/client/Main'],
   output: {
     path: path.join(__dirname, 'dist', 'statics'),
     filename: `[name]-[hash:8]-bundle.js`,
@@ -75,6 +74,10 @@ const config: Configuration = {
     port: WEBPACK_PORT,
     open: IS_DEV,
     openPage: `http://localhost:${SERVER_PORT}`
+  },
+  watchOptions: {
+    //IN ORDER TO MAKE WEBPACK POLLING WORK WITH WSL ADD 'WEBPACK__WATCH__USE_POLLING=true' IN .env AT ROOT OF PROJECT
+    poll: (JSON.stringify(process.env.WEBPACK__WATCH__USE_POLLING) != null ? true : false),
   },
   plugins,
   externals: {
