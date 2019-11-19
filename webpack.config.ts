@@ -72,7 +72,7 @@ const config: Configuration = {
   },
   devServer: {
     port: WEBPACK_PORT,
-    open: IS_DEV,
+    open: false,
     openPage: `http://localhost:${SERVER_PORT}`
   },
   watchOptions: {
