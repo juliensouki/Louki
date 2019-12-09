@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Container } from '@material-ui/core';
+
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import Layout from './components/Layout';
 
 const styles = (theme: Theme) => createStyles({
   welcome: {
@@ -21,9 +22,7 @@ class App extends React.Component<Props, NoState>
     const { classes } = this.props;
 
     return (
-      <Container className={classes.welcome}>
-        Bienvenue sur Louki !
-      </Container>
+      <Layout/>
     );
   }
 }

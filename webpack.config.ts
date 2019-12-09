@@ -4,6 +4,7 @@ import ManifestPlugin from 'webpack-manifest-plugin';
 import cssnano from 'cssnano';
 import { SERVER_PORT, IS_DEV, WEBPACK_PORT } from './src/server/config';
 
+const convertPathsToAliases = require('convert-tsconfig-paths-to-webpack-aliases').default;
 const plugins = [new ManifestPlugin()];
 
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
@@ -19,9 +20,6 @@ const config: Configuration = {
     path: path.join(__dirname, 'dist', 'statics'),
     filename: `[name]-[hash:8]-bundle.js`,
     publicPath: '/statics/',
-  },
-  resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
   },
   optimization: {
     splitChunks: {
@@ -74,6 +72,9 @@ const config: Configuration = {
     port: WEBPACK_PORT,
     open: false,
     openPage: `http://localhost:${SERVER_PORT}`
+  },
+  resolve: {
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.gql', '.graphql', '.json']
   },
   watchOptions: {
     //IN ORDER TO MAKE WEBPACK POLLING WORK WITH WSL ADD 'WEBPACK__WATCH__USE_POLLING=true' IN .env AT ROOT OF PROJECT

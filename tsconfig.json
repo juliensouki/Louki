@@ -12,14 +12,28 @@
     "lib": ["es2015", "dom"],
     "types": [],
     "jsx": "react",
-    "experimentalDecorators": true  
+    "baseUrl": "src/client",
+    "experimentalDecorators": true,
+    "paths": {
+      "@shared/*": ["../shared/*"],
+      "@lang/*": ["lang/*"],
+      "@store/*": ["store/*"],
+      "@components/*": ["components/*"],
+      "@assets/*": ["../../assets/*"]
+    }
   },
-  "paths": {
-    "@lang/*": ["lang/*"],
-    "@store/*": ["store/*"],
-    "@components/*": ["components/*"],
-    "@assets/*": ["assets/*"]
-  },
+  "include": [
+    "src/client/**/*.ts",
+    "src/client/**/*.tsx",
+  ],  
+  "exclude": [
+    ".eslintrc.js",
+    "node_modules"
+  ],
+  "filesGlob": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
   "files": [
     "./types/global.d.ts",
     "./src/client/Main.tsx"
