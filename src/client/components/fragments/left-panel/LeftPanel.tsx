@@ -7,12 +7,16 @@ import { Grid } from '@material-ui/core';
 const styles = (theme: Theme) => createStyles({
     root: {
         position: "absolute",
-        top: 70,
-        left: 350,
-        height: "calc(100% - 70px - 90px)",
-        width: "calc(100% - 350px)",
-        backgroundColor: "black",
+        top: 60,
+        left: 0,
+        height: "calc(100% - 60px - 80px)",
+        width: 350,
+        backgroundColor: "#373636",
+        paddingLeft: 20,
+        paddingRight: 20,
         color: "#FFF",
+        borderTop: "1px solid #403F3F",
+        borderBottom: "1px solid #403F3F",
     },
 
 });
@@ -22,7 +26,7 @@ interface Props extends WithStyles<typeof styles>
 };
 
 @observer
-class PlaylistPanel extends React.Component<Props, NoState>
+class LeftPanel extends React.Component<Props, NoState>
 {
   render()
   {
@@ -40,4 +44,4 @@ class PlaylistPanel extends React.Component<Props, NoState>
   }
 };
 
-export default withStyles(styles)(PlaylistPanel);
+export default withStyles(styles)(LeftPanel);

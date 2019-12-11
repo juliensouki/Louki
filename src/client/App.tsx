@@ -1,30 +1,18 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
-
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import theme from './theme';
 import Layout from './components/Layout';
 
-const styles = (theme: Theme) => createStyles({
-  welcome: {
-    fontSize: 15,
-  },
-});
 
-export interface Props extends WithStyles<typeof styles>
-{
-}
-
-@observer
-class App extends React.Component<Props, NoState>
+export default
+class App extends React.Component<NoProps, NoState>
 {
   render()
   {
-    const { classes } = this.props;
-
     return (
-      <Layout/>
+      <MuiThemeProvider theme={theme}>
+        <Layout/>
+      </MuiThemeProvider>
     );
   }
-}
-
-export default withStyles(styles)(App);
+};

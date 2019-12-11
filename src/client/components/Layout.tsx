@@ -1,13 +1,22 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import TopBar from './app/TopBar';
-import LeftPanel from './app/LeftPanel';
-import MusicBar from './app/MusicBar';
-import PlaylistPanel from './app/PlaylistPanel';
+import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
+import TopBar from './fragments/topbar/TopBar';
+import LeftPanel from './fragments/left-panel/LeftPanel';
+import MusicBar from './fragments/music-bar/MusicBar';
+import PlaylistPanel from './fragments/playlist-panel/PlaylistPanel';
+
+const styles = (theme: Theme) => createStyles({
+  "@global": {
+    "body": {
+      overflowY: "hidden",
+    },
+  },
+});
 @observer
-export default class Layout extends React.Component<NoProps, NoState>
+class Layout extends React.Component<NoProps, NoState>
 {
   render()
   {
@@ -21,3 +30,5 @@ export default class Layout extends React.Component<NoProps, NoState>
     );
   }
 }
+
+export default withStyles(styles)(Layout);

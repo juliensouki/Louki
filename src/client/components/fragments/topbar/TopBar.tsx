@@ -2,19 +2,25 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
     root: {
         position: "absolute",
-        bottom: 0,
+        top: 0,
         left: 0,
-        height: 90,
+        height: 60,
         width: "100%",
         backgroundColor: "#373636",
+        paddingLeft: 20,
+        paddingRight: 20,
         color: "#FFF",
     },
-
+    logo: {
+        fontSize: 30,
+        textTransform: "uppercase",
+        fontWeight: "lighter",
+    },
 });
 
 interface Props extends WithStyles<typeof styles>
@@ -22,7 +28,7 @@ interface Props extends WithStyles<typeof styles>
 };
 
 @observer
-class MusicBar extends React.Component<Props, NoState>
+class TopBar extends React.Component<Props, NoState>
 {
   render()
   {
@@ -31,13 +37,16 @@ class MusicBar extends React.Component<Props, NoState>
     return (
         <Grid 
             container 
-            justify="flex-start"
+            justify="space-between"
             alignItems="center"            
-            direction="column"
+            direction="row"
             className={classes.root}>
+            <Grid item>
+                <Typography className={classes.logo}>louki</Typography>
+            </Grid>
         </Grid>
     );
   }
 };
 
-export default withStyles(styles)(MusicBar);
+export default withStyles(styles)(TopBar);
