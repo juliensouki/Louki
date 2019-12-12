@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { computed } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import MenuIcon from '@material-ui/icons/Menu';
+import CloseIcon from '@material-ui/icons/Close';
 
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import MobileMenu from '../../../store/fragments/left-panel/MobileMenu';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -73,6 +76,19 @@ interface Props extends WithStyles<typeof styles>
 @observer
 class TopBar extends React.Component<Props, NoState>
 {
+  openOrCloseMenu = () => {
+      MobileMenu.setOpen(!MobileMenu.isOpen);
+  }    
+
+  @computed get menuIcon(): JSX.Element
+  {
+      if (MobileMenu.isOpen)
+      {
+          return <CloseIcon onClick={this.openOrCloseMenu} className={this.props.classes.menuIcon}/>
+      }
+      return <MenuIcon onClick={this.openOrCloseMenu} className={this.props.classes.menuIcon}/>;
+  }
+
   render()
   {
     // const T = texts.current.appBar;
@@ -86,11 +102,11 @@ class TopBar extends React.Component<Props, NoState>
                 direction="row"
                 className={classes.mainContainer}>
                 <Grid item>
-                    <ResponsiveAdapter desktop={
-                        <Typography className={classes.logo}>louki</Typography>
-                    } mobile={
-                        <MenuIcon className={classes.menuIcon}/>
-                    }/>
+                    <ResponsiveAdapter 
+                        breakpoint="sm" 
+                        desktop={
+                            <Typography className={classes.logo}>louki</Typography>
+                        } mobile={this.menuIcon}/>
                 </Grid>
                 <Grid item>
                     <Grid container item direction="row" justify="center" alignItems="center">

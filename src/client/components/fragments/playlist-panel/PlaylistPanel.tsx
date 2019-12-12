@@ -13,8 +13,11 @@ const styles = (theme: Theme) => createStyles({
         width: "calc(100% - 350px)",
         backgroundColor: "black",
         color: "#FFF",
+        [theme.breakpoints.down('sm')]: {
+          width: "100%",
+          left: 0,
+        },
     },
-
 });
 
 interface Props extends WithStyles<typeof styles>
