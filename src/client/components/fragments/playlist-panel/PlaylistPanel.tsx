@@ -17,6 +17,7 @@ const styles = (theme: Theme) => createStyles({
         width: "calc(100% - 390px)",
         backgroundColor: "black",
         color: "#FFF",
+        overflow: "auto",
         [theme.breakpoints.down('sm')]: {
           width: "100%",
           left: 0,
@@ -42,9 +43,6 @@ class PlaylistPanel extends React.Component<Props, NoState>
             alignItems="flex-start"            
             direction="column"
             className={classes.root}>
-            <PlaylistHeader/>
-            <SearchContainer/>
-            <PlaylistBody/>
         </Grid>
     );
   }
