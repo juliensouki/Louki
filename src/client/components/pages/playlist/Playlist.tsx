@@ -2,12 +2,12 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 @observer
-export default class NewPlaylist extends React.Component<NoProps, NoState>
+export default class Playlist extends React.Component<NoProps, NoState>
 {
   render()
   {
     return (
-        <div>New playlist</div>
+        <div>Playlist</div>
     );
   }
 }

@@ -7,7 +7,7 @@ export default class SpecificArtistOrAlbum extends React.Component<NoProps, NoSt
   render()
   {
     return (
-        <div></div>
+        <div>Specific album or artist</div>
     );
   }
 }

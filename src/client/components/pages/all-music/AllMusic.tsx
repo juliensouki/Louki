@@ -7,7 +7,7 @@ export default class AllMusic extends React.Component<NoProps, NoState>
   render()
   {
     return (
-        <div></div>
+        <div>All music</div>
     );
   }
 }

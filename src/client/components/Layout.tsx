@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
@@ -7,6 +8,12 @@ import TopBar from './fragments/topbar/TopBar';
 import LeftPanel from './fragments/left-panel/LeftPanel';
 import MusicBar from './fragments/music-bar/MusicBar';
 import PlaylistPanel from './fragments/playlist-panel/PlaylistPanel';
+import AllMusic from './pages/all-music/AllMusic';
+import ArtistsOrAlbums from './pages/artists-or-albums/ArtistsOrAlbums';
+import NewPlaylist from './pages/new-playlist/NewPlaylist';
+import Playlist from './pages/playlist/Playlist';
+import Settings from './pages/settings/Settings';
+
 
 const styles = (theme: Theme) => createStyles({
   "@global": {
@@ -22,10 +29,25 @@ class Layout extends React.Component<NoProps, NoState>
   {
     return (
       <React.Fragment>
-        <TopBar/>
-        <LeftPanel/>
-        <MusicBar/>
-        <PlaylistPanel/>
+        <BrowserRouter>
+          <React.Fragment>
+            <TopBar/>
+            <LeftPanel/>
+            <MusicBar/>
+            <PlaylistPanel>
+              <Switch>
+                <Route path={"/"} component={AllMusic} exact/>
+                <Route path={"/all-songs"} component={AllMusic} exact/>
+                <Route path={"/playlist"} component={Playlist} exact/>
+                <Route path={"/new-playlist"} component={NewPlaylist} exact/>
+                <Route path={"/artists"} component={ArtistsOrAlbums} exact/>
+                <Route path={"/albums"} component={ArtistsOrAlbums} exact/>
+                <Route path={"/settings"} component={Settings} exact/>
+                <Route component={AllMusic}/>
+              </Switch>
+            </PlaylistPanel>            
+          </React.Fragment>
+        </BrowserRouter>
       </React.Fragment>
     );
   }

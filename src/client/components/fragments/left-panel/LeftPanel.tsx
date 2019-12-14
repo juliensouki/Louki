@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
+import { NavLink } from 'react-router-dom';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
@@ -68,24 +69,24 @@ class LeftPanel extends React.Component<Props, NoState>
         mobile={<Slide direction="right" in={MobileMenu.isOpen} mountOnEnter unmountOnExit/>}>
         <div className={classes.root}>
           <Typography className={classes.sectionTitle}>Music</Typography>
-          <LeftPanelButton text="All Songs" icon={<MusicNoteIcon/>}/>
-          <LeftPanelButton text="Artists" icon={<MicIcon/>}/>
-          <LeftPanelButton text="Albums" icon={<AlbumIcon/>}/>
-          <LeftPanelButton text="Favorites" icon={<FavoriteIcon/>}/>
+          <LeftPanelButton routePath="/all-music" text="All Songs" icon={<MusicNoteIcon/>}/>
+          <LeftPanelButton routePath="/artists" text="Artists" icon={<MicIcon/>}/>
+          <LeftPanelButton routePath="/albums" text="Albums" icon={<AlbumIcon/>}/>
+          <LeftPanelButton routePath="/favorites" text="Favorites" icon={<FavoriteIcon/>}/>
 
           <Typography className={classes.sectionTitle}>Playlists</Typography>
           <Grid container direction="column" className={classes.playlistsContainer}>
-            <LeftPanelButton text="Playlist 1" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 2" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 3" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 4" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 5" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 5" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 5" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 5" icon={<QueueMusicIcon/>}/>
-            <LeftPanelButton text="Playlist 6" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 1" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 2" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 3" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 4" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 5" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 5" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 5" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 5" icon={<QueueMusicIcon/>}/>
+            <LeftPanelButton routePath="/playlist" text="Playlist 6" icon={<QueueMusicIcon/>}/>
           </Grid>
-          <LeftPanelButton text="New Playlist" icon={<PlaylistAddIcon/>}/>
+          <LeftPanelButton routePath="/new-playlist" text="New Playlist" icon={<PlaylistAddIcon/>}/>
         </div>
       </ResponsiveAdapter>
     );
