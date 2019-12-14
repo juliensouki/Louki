@@ -6,47 +6,44 @@ import { Grid, Typography } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        height: 70,
-        width: "100%",
-        backgroundColor: "#373636",
-        paddingLeft: 20,
-        paddingRight: 20,
-        color: "#FFF",
-    },
-    logo: {
-        fontSize: 30,
-        textTransform: "uppercase",
-        fontWeight: "lighter",
+        marginTop: 15,
+        width: "calc(100% - 40px)",
+        color: theme.palette.primary.main,
+        transition: "color .5s ease-in-out",
+        '&:hover': {
+            cursor: "pointer",
+            color: theme.palette.primary.light,
+        },
     },
 });
 
 interface Props extends WithStyles<typeof styles>
 {
+    text: string,
+    icon: JSX.Element,
 };
 
 @observer
-class TopBar extends React.Component<Props, NoState>
+class LeftPanelButton extends React.Component<Props, NoState>
 {
   render()
   {
-    // const T = texts.current.appBar;
     const { classes } = this.props;
+
     return (
         <Grid 
             container 
-            justify="space-between"
-            alignItems="center"            
             direction="row"
             className={classes.root}>
+            <Grid item style={{marginRight: 5}}>
+                {this.props.icon}
+            </Grid>
             <Grid item>
-                <Typography className={classes.logo}>louki</Typography>
+                <Typography>{this.props.text}</Typography>
             </Grid>
         </Grid>
     );
   }
 };
 
-export default withStyles(styles)(TopBar);
+export default withStyles(styles)(LeftPanelButton);
