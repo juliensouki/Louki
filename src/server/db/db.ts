@@ -1,36 +1,63 @@
 import User = require("./schemas/User");
+import Music = require("./schemas/Music");
 
 var mongoose = require("mongoose");
 
 class databaseHandler {
     private url: string = process.env.DATABASE_URL;
-    private users: any = null;
+    private Users: any = null;
+    private Musics: any = null;
     
-    async connect() 
+    connect = async() =>
     {
-        const getCollectionContent = this.getCollectionContent;
-
-        mongoose.connect(this.url, { useNewUrlParser: true, useUnifiedTopology: true }, function(err) {
+        mongoose.connect(this.url, { useNewUrlParser: true, useUnifiedTopology: true }, async(err) => {
             if (err) throw err;
-            console.log("Connected to database");
-            getCollectionContent("users");
+            });
+    }
+    
+    getUsers = (callback: (arg: Array<string>) => void) => {
+        this.getCollectionContent(User)
+        .then((value) => {
+            this.Users = value;
+            callback(this.Users[0].musicPaths);
+        })          
+        .catch((error) => {
+            console.log("Failed to load users : " + error);
         });
     }
 
-    getCollectionContent = (collectionName: string) =>
-    {
-        console.log("Loading " + collectionName + "...");
-        mongoose.connection.db.listCollections({name: collectionName})
-            .next((err, results) => {
-                if (results) {
-                    User.find({}, (err, results) => {
-                        this[collectionName] =  results;
-                        console.log("Successfully loaded" + collectionName);
-                    });
-                }
+    getAllData = () => {
+        this.getData(Music);
+        //get Authors
+        //get Albums
+        //get Musics
+        //get Playlists
+    }
+
+    getData = (model) => {
+        this.getCollectionContent(model)
+        .then((value) => {
+            this[model.collection.collectionName] = value;
+        })          
+        .catch((error) => {
+            console.log("Failed to load " + model.collection.collectionName + " : " + error);
         });
     }
 
+    getCollectionContent = (model) => {
+        return (new Promise(function(resolve, reject) {
+            model.find({})
+            .lean()
+            .then((elements) => {
+                console.log("Succesfully loaded " + model.collection.collectionName);
+                resolve(elements);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    }));
+    }
+    
     get = (field: string) =>
     {
         return this[field];
@@ -41,7 +68,7 @@ class databaseHandler {
         return mongoose.getCollection(collectionName).exists();
     }
 
-    async close() {
+    close = async() => {
         return await mongoose.connection.close();
     }
 }
