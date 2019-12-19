@@ -1,5 +1,6 @@
 import User = require("./schemas/User");
 import Music = require("./schemas/Music");
+import IMusic = require("../../shared/IMusic");
 
 var mongoose = require("mongoose");
 
@@ -7,32 +8,53 @@ class databaseHandler {
     private url: string = process.env.DATABASE_URL;
     private Users: any = null;
     private Musics: any = null;
-    
+
     connect = async() =>
     {
         mongoose.connect(this.url, { useNewUrlParser: true, useUnifiedTopology: true }, async(err) => {
             if (err) throw err;
-            });
+        });
     }
     
-    getUsers = (callback: (arg: Array<string>) => void) => {
+    getUsers = (callback: (paths: Array<string>) => void): void => {
         this.getCollectionContent(User)
         .then((value) => {
             this.Users = value;
-            callback(this.Users[0].musicPaths);
+            this.getMusics(callback);
         })          
         .catch((error) => {
             console.log("Failed to load users : " + error);
         });
     }
 
+    getMusics = (callback: (paths: Array<string>) => void) => {
+        this.getCollectionContent(Music)
+        .then((value) => {
+            this.Musics = value;
+            callback(this.Users[0].musicPaths);
+        })          
+        .catch((error) => {
+            console.log("Failed to load musics : " + error);
+        });
+    }
+
+    addMusicToDatabase = (music: IMusic): void => {
+        Music.create(music);
+    }
+
+    deleteMusic = (path: string) => {
+        this.deleteFromDocument(Music, "path", path);
+    }
+
+    deleteFromDocument = (model, fieldName: string, fieldValue: string): void => {
+        model.find({ [fieldName]: fieldValue }).deleteOne().exec();
+    }
+
     getAllData = () => {
-        this.getData(Music);
         //get Authors
         //get Albums
-        //get Musics
-        //get Playlists
-    }
+        //get Play
+    } 
 
     getData = (model) => {
         this.getCollectionContent(model)
@@ -49,25 +71,19 @@ class databaseHandler {
             model.find({})
             .lean()
             .then((elements) => {
-                console.log("Succesfully loaded " + model.collection.collectionName);
                 resolve(elements);
+                console.log("Succesfully loaded " + model.collection.collectionName);
             })
             .catch((err) => {
                 reject(err);
             });
-    }));
-    }
-    
-    get = (field: string) =>
-    {
-        return this[field];
-    }
-    
-    collectionExists = (collectionName: string): boolean =>
-    {
-        return mongoose.getCollection(collectionName).exists();
+        }));
     }
 
+    get = (item: "Musics" | "Users") => {
+        return this[item];
+    }
+    
     close = async() => {
         return await mongoose.connection.close();
     }

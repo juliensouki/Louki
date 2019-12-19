@@ -1,9 +1,9 @@
-import mongoose = require("mongoose");
-import IMusic = require("../../../shared/IMusic");
+import mongoose, { Schema, Model } from "mongoose";
+import IMusic from "../../../shared/IMusic";
 
 interface IMusicModel extends IMusic, mongoose.Document { }
 
-var musicSchema = new mongoose.Schema({
+var musicSchema: Schema = new mongoose.Schema({
     title: String,
     artists: [Number],
     album: Number,
@@ -11,6 +11,6 @@ var musicSchema = new mongoose.Schema({
     path: String,
 });
 
-const Music = mongoose.model<IMusicModel>("Music", musicSchema);
+const Music: Model<IMusicModel> = mongoose.model<IMusicModel>("Music", musicSchema);
 
 export = Music;
