@@ -1,5 +1,5 @@
-import mongoose = require("mongoose");
-import IUser = require("../../../shared/IUser");
+import mongoose from "mongoose";
+import IUser from "../../../shared/IUser";
 
 interface IUserModel extends IUser, mongoose.Document { }
 
