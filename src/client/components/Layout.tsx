@@ -14,14 +14,14 @@ import NewPlaylist from './pages/new-playlist/NewPlaylist';
 import Playlist from './pages/playlist/Playlist';
 import Settings from './pages/settings/Settings';
 
-
-const styles = (theme: Theme) => createStyles({
-  "@global": {
-    "body": {
-      overflowY: "hidden",
+const styles = (theme: Theme) =>
+  createStyles({
+    '@global': {
+      'body': {
+        overflowY: 'hidden',
+      },
     },
-  },
-});
+  });
 @observer
 class Layout extends React.Component<NoProps, NoState>
 {
@@ -31,21 +31,21 @@ class Layout extends React.Component<NoProps, NoState>
       <React.Fragment>
         <BrowserRouter>
           <React.Fragment>
-            <TopBar/>
-            <LeftPanel/>
-            <MusicBar/>
+            <TopBar />
+            <LeftPanel />
+            <MusicBar />
             <PlaylistPanel>
               <Switch>
-                <Route path={"/"} component={AllMusic} exact/>
-                <Route path={"/all-songs"} component={AllMusic} exact/>
-                <Route path={"/playlist"} component={Playlist} exact/>
-                <Route path={"/new-playlist"} component={NewPlaylist} exact/>
-                <Route path={"/artists"} component={ArtistsOrAlbums} exact/>
-                <Route path={"/albums"} component={ArtistsOrAlbums} exact/>
-                <Route path={"/settings"} component={Settings} exact/>
-                <Route component={AllMusic}/>
+                <Route path={'/'} component={AllMusic} exact />
+                <Route path={'/all-songs'} component={AllMusic} exact />
+                <Route path={'/playlist'} component={Playlist} exact />
+                <Route path={'/new-playlist'} component={NewPlaylist} exact />
+                <Route path={'/artists'} component={ArtistsOrAlbums} exact />
+                <Route path={'/albums'} component={ArtistsOrAlbums} exact />
+                <Route path={'/settings'} component={Settings} exact />
+                <Route component={AllMusic} />
               </Switch>
-            </PlaylistPanel>            
+            </PlaylistPanel>
           </React.Fragment>
         </BrowserRouter>
       </React.Fragment>

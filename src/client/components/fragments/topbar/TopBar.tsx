@@ -11,6 +11,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 import MobileMenu from '../../../store/fragments/left-panel/MobileMenu';
+import { NavLink } from 'react-router-dom';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -118,7 +119,12 @@ class TopBar extends React.Component<Props, NoState>
                         </Grid>
                     </Grid>
                 </Grid>
-            <SettingsIcon className={classes.settingsIcon}/>
+                <NavLink 
+                  className={classes.settingsIcon}
+                  to={'/settings'} 
+                  activeStyle={{ textDecoration: 'none', fontWeight: "bolder", color: "#FFF" }}>
+                  <SettingsIcon />
+                </NavLink>
             </Grid>
         </div>
     );
