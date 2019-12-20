@@ -73,7 +73,8 @@
     "mongoose": "^5.8.1",
     "music-metadata": "^5.2.0",
     "styled-components": "^4.4.1",
-    "tslib": "^1.10.0"
+    "tslib": "^1.10.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
