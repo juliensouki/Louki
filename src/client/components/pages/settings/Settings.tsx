@@ -37,7 +37,7 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 }; // eslint-disable-line
 
 @observer
-class NewPlaylist extends React.Component<Props, NoState> {
+class Settings extends React.Component<Props, NoState> {
   @observable internetChecked: boolean = true;
 
   @action handleChange = () => {
@@ -99,4 +99,4 @@ class NewPlaylist extends React.Component<Props, NoState> {
   }
 }
 
-export default withStyles(styles)(NewPlaylist);
+export default withStyles(styles)(Settings);
