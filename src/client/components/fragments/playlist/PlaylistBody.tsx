@@ -42,21 +42,51 @@ interface Props extends WithStyles<typeof styles>
 @observer
 class PlaylistBody extends React.Component<Props, NoState>
 {
-    render()
-    {
-        const { classes } = this.props;
+  get playlist(): Array<any> 
+  {
+    return [
+      {
+        title: 'A Rush Of Blood to the Head',
+        artist: 'Coldplay',
+        album: 'A Rush Of Blood to the Head',
+        duration: '3:14',
+      },
+      {
+        title: 'Nice dream',
+        artist: 'Radiohead',
+        album: 'Rainbow',
+        duration: '2:55',
+      },
+      {
+        title: 'Time',
+        artist: 'Hans Zimmer',
+        album: 'Inception',
+        duration: '4:13',
+      },
+      {
+        title: 'Nils Frahm',
+        artist: 'Says',
+        album: 'Spaces',
+        duration: '8:03',
+      },
+    ];
+  }
 
-        return (
-            <div className={classes.root}>
-                <ResponsiveAdapter mobile={
-                    <PlaylistBodyMobile playlist={null}/>
-                }
-                desktop={
-                    <PlaylistBodyDesktop playlist={null}/>
-                }/>
-            </div>
-        );
-    }
-};
+  render()
+  {
+      const { classes } = this.props;
+  
+      return (
+          <div className={classes.root}>
+              <ResponsiveAdapter mobile={
+                  <PlaylistBodyMobile playlist={this.playlist}/>
+              }
+              desktop={
+                  <PlaylistBodyDesktop playlist={this.playlist}/>
+              }/>
+          </div>
+      );
+  }
+}
 
 export default withStyles(styles)(PlaylistBody);

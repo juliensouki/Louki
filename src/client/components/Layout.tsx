@@ -38,7 +38,7 @@ class Layout extends React.Component<NoProps, NoState>
               <Switch>
                 <Route path={'/'} component={AllMusic} exact />
                 <Route path={'/all-songs'} component={AllMusic} exact />
-                <Route path={'/playlist'} component={Playlist} exact />
+                <Route path={'/playlist/:id'} component={Playlist} exact />
                 <Route path={'/new-playlist'} component={NewPlaylist} exact />
                 <Route path={'/artists'} component={ArtistsOrAlbums} exact />
                 <Route path={'/albums'} component={ArtistsOrAlbums} exact />

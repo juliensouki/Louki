@@ -66,7 +66,7 @@ class PlaylistBodyDesktop extends React.Component<Props, NoState>
                 {playlist.map(row => (
                     <TableRow key={row.song}>
                         <TableCell style={{color: "#FFF"}} component="th" scope="row">
-                            {row.song}
+                            {row.title}
                         </TableCell>
                         <TableCell style={{color: "#FFF"}}>{row.artist}</TableCell>
                         <TableCell className={classes.tableRow}>{row.album}</TableCell>

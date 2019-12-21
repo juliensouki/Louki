@@ -69,7 +69,7 @@ class PlaylistBodyMobile extends React.Component<Props, NoState>
                             justify="space-between" 
                             className={classes.songInfoContainer}>
                             <Grid item style={{width: "100%"}}>
-                                <Typography className={classes.songName}>{row.song}</Typography>
+                                <Typography className={classes.songName}>{row.title}</Typography>
                             </Grid>
                             <Grid item>
                                 <Typography className={classes.artistName}>{row.artist}</Typography>
