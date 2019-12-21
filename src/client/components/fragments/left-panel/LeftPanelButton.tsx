@@ -5,6 +5,8 @@ import { NavLink } from 'react-router-dom';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
+import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
+
 const styles = (theme: Theme) => createStyles({
     '@global': {
         'a':  { 
@@ -30,18 +32,28 @@ interface Props extends WithStyles<typeof styles>
     text: string,
     icon: JSX.Element,
     routePath: string,
+    playlist?: boolean,
 };
 
 @observer
 class LeftPanelButton extends React.Component<Props, NoState>
 {
+  handleClick = () => {
+    if (this.props.playlist)
+    {
+      CurrentPlaylist.setPlaylist(this.props.text);
+    }
+  }
+
   render()
   {
-    const { classes, routePath } = this.props;
+    const { classes, routePath, playlist, text } = this.props;
+    const url = playlist ? routePath + '/' + text : routePath;
 
     return (
         <NavLink 
-            to={routePath} 
+            to={url} 
+            onClick={this.handleClick}
             activeStyle={{ textDecoration: 'none', fontWeight: "bolder", color: "#FFF" }}>
             <Grid 
             container 

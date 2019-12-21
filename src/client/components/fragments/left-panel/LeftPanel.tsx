@@ -74,15 +74,12 @@ class LeftPanel extends React.Component<Props, NoState> {
 
           <Typography className={classes.sectionTitle}>Playlists</Typography>
           <Grid container direction='column' className={classes.playlistsContainer}>
-            <LeftPanelButton routePath='/playlist' text='Playlist 1' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 2' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 3' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 4' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 5' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 5' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 5' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 5' icon={<QueueMusicIcon />} />
-            <LeftPanelButton routePath='/playlist' text='Playlist 6' icon={<QueueMusicIcon />} />
+            <LeftPanelButton playlist routePath='/playlist' text='playlist-1' icon={<QueueMusicIcon />} />
+            <LeftPanelButton playlist routePath='/playlist' text='playlist-2' icon={<QueueMusicIcon />} />
+            <LeftPanelButton playlist routePath='/playlist' text='playlist-3' icon={<QueueMusicIcon />} />
+            <LeftPanelButton playlist routePath='/playlist' text='playlist-4' icon={<QueueMusicIcon />} />
+            <LeftPanelButton playlist routePath='/playlist' text='playlist-5' icon={<QueueMusicIcon />} />
+            <LeftPanelButton playlist routePath='/playlist' text='playlist-6' icon={<QueueMusicIcon />} />
           </Grid>
           <LeftPanelButton routePath='/new-playlist' text='New Playlist' icon={<PlaylistAddIcon />} />
         </div>

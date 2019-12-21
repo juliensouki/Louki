@@ -97,6 +97,8 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles>
 {
+  subTitle: string,
+  title: string,
 };
 
 @observer
@@ -121,10 +123,10 @@ class PlaylistHeader extends React.Component<Props, NoState>
                     alignItems="flex-start" 
                     justify="space-between">
                     <Grid item>
-                        <Typography className={classes.playlistCategory}>All songs</Typography>
+                        <Typography className={classes.playlistCategory}>{this.props.subTitle}</Typography>
                         <Grid container direction="row" alignItems="center" justify="center">
                             <Grid item>
-                                <Typography className={classes.playlistName}>Your Music</Typography>
+                                <Typography className={classes.playlistName}>{this.props.title}</Typography>
                             </Grid>
                             <Grid item>
                                 <Fab variant="extended" size="medium" className={classes.playlistButton} aria-label="play">
