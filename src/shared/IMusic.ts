@@ -1,4 +1,4 @@
-interface IMusic {
+export default interface IMusic {
   title: string;
   artist: string;
   feat: Array<string>;
@@ -7,5 +7,3 @@ interface IMusic {
   path: string;
   __id: string;
 }
-
-export = IMusic;

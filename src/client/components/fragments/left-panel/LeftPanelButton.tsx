@@ -6,6 +6,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { Grid, Typography } from '@material-ui/core';
 
 import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
+import CurrentArtistOrAlbum from '../../../store/pages/artistsOrAlbums/CurrentArtistOrAlbum';
 
 const styles = (theme: Theme) => createStyles({
     '@global': {
@@ -33,6 +34,7 @@ interface Props extends WithStyles<typeof styles>
     icon: JSX.Element,
     routePath: string,
     playlist?: boolean,
+    showArtist?: boolean,
 };
 
 @observer
@@ -42,6 +44,10 @@ class LeftPanelButton extends React.Component<Props, NoState>
     if (this.props.playlist)
     {
       CurrentPlaylist.setPlaylist(this.props.text);
+    } else if (this.props.showArtist) {
+      CurrentArtistOrAlbum.setArtist(true);
+    } else {
+      CurrentArtistOrAlbum.setArtist(false);
     }
   }
 

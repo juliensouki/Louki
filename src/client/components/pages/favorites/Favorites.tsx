@@ -5,8 +5,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 
 import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
-import CurrentArtistOrAlbum from '../../../store/pages/artistsOrAlbums/CurrentArtistOrAlbum';
-import PlaylistBody from '../../fragments/playlist-artists-or-albums/PlaylistBody';
+import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -19,21 +18,14 @@ interface Props extends WithStyles<typeof styles> {
 };
 
 @observer
-class ArtistsOrAlbums extends React.Component<Props, NoState> {
-  get title(): string {
-    return CurrentArtistOrAlbum.showArtist ? 'Artists' : 'Albums';
-  }
-
-  get subTitle(): string {
-    return CurrentArtistOrAlbum.showArtist ? 'Your artists' : 'Your albums';
-  }
+class Favorites extends React.Component<Props, NoState> {
 
   render() {
     const { classes } = this.props;
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader subTitle={this.subTitle} title={this.title} />
+        <PlaylistHeader subTitle='Your favorite songs' title='Favorites' />
         <SearchContainer />
         <PlaylistBody />
       </div>
@@ -41,4 +33,4 @@ class ArtistsOrAlbums extends React.Component<Props, NoState> {
   }
 }
 
-export default withStyles(styles)(ArtistsOrAlbums);
+export default withStyles(styles)(Favorites);

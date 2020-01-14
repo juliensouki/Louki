@@ -68,7 +68,7 @@ class LeftPanel extends React.Component<Props, NoState> {
         <div className={classes.root}>
           <Typography className={classes.sectionTitle}>Music</Typography>
           <LeftPanelButton routePath='/all-music' text='All Songs' icon={<MusicNoteIcon />} />
-          <LeftPanelButton routePath='/artists' text='Artists' icon={<MicIcon />} />
+          <LeftPanelButton showArtist routePath='/artists' text='Artists' icon={<MicIcon />} />
           <LeftPanelButton routePath='/albums' text='Albums' icon={<AlbumIcon />} />
           <LeftPanelButton routePath='/favorites' text='Favorites' icon={<FavoriteIcon />} />
 

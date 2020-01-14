@@ -10,97 +10,100 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import LoopIcon from '@material-ui/icons/Loop';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import PauseIcon from '@material-ui/icons/Pause';
 
 import MusicPreview from './MusicPreview';
 import ProgressBar from './ProgressBar';
 
-const styles = (theme: Theme) => createStyles({
-  root: {
-      position: "absolute",
+import MusicPlayer from '../../../store/common/MusicPlayer';
+
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      position: 'absolute',
       bottom: 0,
       left: 0,
       height: 80,
-      width: "100%",
+      width: '100%',
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
-  },
-  musicControlsContainer: {
-    width: "calc(100% - 350px)",
-    height: "100%",
-    paddingLeft: 60,
-    paddingRight: 60,
-    [theme.breakpoints.down('md')]: {
-      width: "calc(100% - 80px)",
     },
-  },
-  progerssBarContainer: {
-    width: "50%",
-    maxWidth: 700,
-  },
-  arrowIcon: {
-    fontSize: 40,
-    verticalAlign: "super",
-    transition: "color .5s ease-in-out",
-    '&:hover': {
-      cursor: "pointer",
-      color: theme.palette.primary.light,
+    musicControlsContainer: {
+      width: 'calc(100% - 350px)',
+      height: '100%',
+      paddingLeft: 60,
+      paddingRight: 60,
+      [theme.breakpoints.down('md')]: {
+        width: 'calc(100% - 80px)',
+      },
     },
-  },
-  playPauseIcon: {
-    fontSize: 55,
-    transition: "color .5s ease-in-out",
-    '&:hover': {
-      cursor: "pointer",
-      color: theme.palette.secondary.main,
+    progerssBarContainer: {
+      width: '50%',
+      maxWidth: 700,
     },
-  },
-  controlIcons: {
-    fontSize: 25,
-    transition: "color .5s ease-in-out",
-    marginRight: 15,
-    '&:hover': {
-      cursor: "pointer",
-      color: theme.palette.primary.light,
+    arrowIcon: {
+      fontSize: 40,
+      verticalAlign: 'super',
+      transition: 'color .5s ease-in-out',
+      '&:hover': {
+        cursor: 'pointer',
+        color: theme.palette.primary.light,
+      },
     },
-  }
-});
+    playPauseIcon: {
+      fontSize: 55,
+      transition: 'color .5s ease-in-out',
+      '&:hover': {
+        cursor: 'pointer',
+        color: theme.palette.secondary.main,
+      },
+    },
+    controlIcons: {
+      fontSize: 25,
+      transition: 'color .5s ease-in-out',
+      marginRight: 15,
+      '&:hover': {
+        cursor: 'pointer',
+        color: theme.palette.primary.light,
+      },
+    },
+  });
 
-interface Props extends WithStyles<typeof styles>
-{
-};
+interface IProps extends WithStyles<typeof styles> {} // eslint-disable-line
 
 @observer
-class MusicBarDesktop extends React.Component<Props, NoState>
-{
-  render()
-  {
-    // const T = texts.current.appBar;
+class MusicBarDesktop extends React.Component<IProps, NoState> {
+  render() {
     const { classes } = this.props;
     return (
       <React.Fragment>
-        <Grid container direction="row" className={classes.root}>
+        <Grid container direction='row' className={classes.root}>
           <Grid item>
-            <MusicPreview/>
+            <MusicPreview />
           </Grid>
-          <Grid container alignItems="center" justify="space-between" className={classes.musicControlsContainer}>
+          <Grid container alignItems='center' justify='space-between' className={classes.musicControlsContainer}>
             <Grid item>
-              <SkipPreviousIcon className={classes.arrowIcon}/>
-              <PlayArrowIcon className={classes.playPauseIcon}/>
-              <SkipNextIcon className={classes.arrowIcon}/>
+              <SkipPreviousIcon onClick={MusicPlayer.prevSong} className={classes.arrowIcon} />
+              {!MusicPlayer.playing ? (
+                <PlayArrowIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
+              ) : (
+                <PauseIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
+              )}
+              <SkipNextIcon onClick={MusicPlayer.nextSong} className={classes.arrowIcon} />
             </Grid>
             <Grid item className={classes.progerssBarContainer}>
-              <ProgressBar/>
+              <ProgressBar />
             </Grid>
             <Grid item>
-              <ShuffleIcon className={classes.controlIcons}/>
-              <LoopIcon className={classes.controlIcons}/>
-              <VolumeUpIcon className={classes.controlIcons}/>
+              <ShuffleIcon className={classes.controlIcons} />
+              <LoopIcon className={classes.controlIcons} />
+              <VolumeUpIcon className={classes.controlIcons} />
             </Grid>
           </Grid>
-        </Grid>        
+        </Grid>
       </React.Fragment>
     );
   }
-};
+}
 
 export default withStyles(styles)(MusicBarDesktop);

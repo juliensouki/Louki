@@ -13,20 +13,33 @@ import ArtistsOrAlbums from './pages/artists-or-albums/ArtistsOrAlbums';
 import NewPlaylist from './pages/new-playlist/NewPlaylist';
 import Playlist from './pages/playlist/Playlist';
 import Settings from './pages/settings/Settings';
+import Favorites from './pages/favorites/Favorites';
+
+import MusicsData from '../store/common/MusicsData';
 
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
-      'body': {
+      body: {
         overflowY: 'hidden',
       },
     },
   });
 @observer
-class Layout extends React.Component<NoProps, NoState>
-{
-  render()
-  {
+class Layout extends React.Component<NoProps, NoState> {
+  async componentDidMount() {
+    fetch('/allData')
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        MusicsData.setMusics(data.musics);
+        MusicsData.setAlbums(data.albums);
+        MusicsData.setArtists(data.artists);
+      });
+  }
+
+  render() {
     return (
       <React.Fragment>
         <BrowserRouter>
@@ -38,6 +51,7 @@ class Layout extends React.Component<NoProps, NoState>
               <Switch>
                 <Route path={'/'} component={AllMusic} exact />
                 <Route path={'/all-songs'} component={AllMusic} exact />
+                <Route path={'/favorites'} component={Favorites} exact />
                 <Route path={'/playlist/:id'} component={Playlist} exact />
                 <Route path={'/new-playlist'} component={NewPlaylist} exact />
                 <Route path={'/artists'} component={ArtistsOrAlbums} exact />
