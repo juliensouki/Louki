@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
@@ -61,12 +62,20 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class ProgressBar extends React.Component<IProps, NoState> {
+  handleClick = event => {
+    if (MusicPlayer.audio == null) return;
+    const currentTargetRect = event.currentTarget.getBoundingClientRect();
+    const x = event.pageX - currentTargetRect.left;
+    const width = event.currentTarget.offsetWidth;
+    MusicPlayer.changeTime((100 / width) * x);
+  };
+
   render() {
     const { classes, mobile } = this.props;
     const progress = (MusicPlayer.timePlayed / MusicPlayer.duration) * 100;
 
     return (
-      <div className={classes.progressBackground}>
+      <div onClick={this.handleClick} className={classes.progressBackground}>
         {mobile ? (
           <React.Fragment />
         ) : (

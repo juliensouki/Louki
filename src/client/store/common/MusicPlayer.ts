@@ -35,25 +35,31 @@ class MusicPlayer {
     this.setMusicReady();
   };
 
-  @action pauseOrPlay = (): void => {
+  @action public pauseOrPlay = (): void => {
     if (this.audio == null) return;
     if (this.isPlaying == true) this.audio.pause();
     else this.audio.play();
     this.isPlaying = !this.isPlaying;
   };
 
-  @action nextSong = (): void => {
+  @action public nextSong = (): void => {
     if (this.audio == null) return;
     this.musicPlayingIndex++;
     if (this.musicPlayingIndex == this.currentPlaylist.length) this.musicPlayingIndex = 0;
     this.playMusic(this.musicPlayingIndex);
   };
 
-  @action prevSong = (): void => {
+  @action public prevSong = (): void => {
     if (this.audio == null) return;
     this.musicPlayingIndex--;
     if (this.musicPlayingIndex < 0) this.musicPlayingIndex = this.currentPlaylist.length - 1;
     this.playMusic(this.musicPlayingIndex);
+  };
+
+  @action public changeTime = (timeInPercentage: number) => {
+    if (this.audio == null) return;
+    const newTimeInSec = (this.duration / 100) * timeInPercentage;
+    this.audio.currentTime = newTimeInSec;
   };
 
   @computed get playing(): boolean {
