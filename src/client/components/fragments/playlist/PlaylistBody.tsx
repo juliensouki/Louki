@@ -2,90 +2,62 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 import PlaylistBodyDesktop from './PlaylistBodyDesktop';
 import PlaylistBodyMobile from './PlaylistBodyMobile';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 
-const styles = (theme: Theme) => createStyles({
+import IMusic from '../../../../shared/IMusic';
+
+const styles = (theme: Theme) =>
+  createStyles({
     '@global': {
-        '.MuiTableCell-root': {
-            padding: 8,
-        },
+      '.MuiTableCell-root': {
+        padding: 8,
+      },
     },
     root: {
-        marginLeft: 20,
-        width: "calc(100% - 40px)",
-        height: "calc(100% - 280px)",
-        marginTop: 20,
-        [theme.breakpoints.down("xs")]: {
-            height: "calc(100% - 240px)",
-        }
-    },
-    table: {
+      marginLeft: 20,
+      width: 'calc(100% - 40px)',
+      height: 'calc(100% - 280px)',
+      marginTop: 20,
+      [theme.breakpoints.down('xs')]: {
+        height: 'calc(100% - 240px)',
+      },
     },
     rowTitles: {
-        fontWeight: "bolder",
-        textTransform: "uppercase",
-        fontSize: 16,
-        color: theme.palette.primary.main,
+      fontWeight: 'bolder',
+      textTransform: 'uppercase',
+      fontSize: 16,
+      color: theme.palette.primary.main,
     },
     tableRow: {
-        color: theme.palette.primary.main,        
+      color: theme.palette.primary.main,
     },
-});
+  });
 
-interface Props extends WithStyles<typeof styles>
-{
-};
+interface IProps extends WithStyles<typeof styles> {
+  playlist: Array<IMusic>;
+}
 
 @observer
-class PlaylistBody extends React.Component<Props, NoState>
-{
-  get playlist(): Array<any> 
-  {
-    return [
-      {
-        title: 'A Rush Of Blood to the Head',
-        artist: 'Coldplay',
-        album: 'A Rush Of Blood to the Head',
-        duration: '3:14',
-      },
-      {
-        title: 'Nice dream',
-        artist: 'Radiohead',
-        album: 'Rainbow',
-        duration: '2:55',
-      },
-      {
-        title: 'Time',
-        artist: 'Hans Zimmer',
-        album: 'Inception',
-        duration: '4:13',
-      },
-      {
-        title: 'Nils Frahm',
-        artist: 'Says',
-        album: 'Spaces',
-        duration: '8:03',
-      },
-    ];
-  }
+class PlaylistBody extends React.Component<IProps, NoState> {
+  render() {
+    const { classes, playlist } = this.props;
 
-  render()
-  {
-      const { classes } = this.props;
-  
-      return (
-          <div className={classes.root}>
-              <ResponsiveAdapter mobile={
-                  <PlaylistBodyMobile playlist={this.playlist}/>
-              }
-              desktop={
-                  <PlaylistBodyDesktop playlist={this.playlist}/>
-              }/>
-          </div>
-      );
+    return (
+      <div className={classes.root}>
+        {playlist ? (
+          <ResponsiveAdapter
+            mobile={<PlaylistBodyMobile playlist={playlist} />}
+            desktop={<PlaylistBodyDesktop playlist={playlist} />}
+          />
+        ) : (
+          <Typography>This feature has not been developed yet.</Typography>
+        )}
+      </div>
+    );
   }
 }
 

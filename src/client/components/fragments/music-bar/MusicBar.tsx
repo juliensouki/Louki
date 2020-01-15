@@ -7,28 +7,17 @@ import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 import MusicBarDesktop from './MusicBarDesktop';
 import MusicBarMobile from './MusicBarMobile';
 
-const styles = (theme: Theme) => createStyles({
-});
+const styles = (theme: Theme) => createStyles({});
 
-interface Props extends WithStyles<typeof styles>
-{
-};
+interface Props extends WithStyles<typeof styles> {}; // eslint-disable-line
 
 @observer
-class MusicBar extends React.Component<Props, NoState>
-{
-  render()
-  {
+class MusicBar extends React.Component<Props, NoState> {
+  render() {
     const { classes } = this.props;
 
-    return (
-      <ResponsiveAdapter desktop={
-        <MusicBarDesktop/>
-      } mobile={
-        <MusicBarMobile/>
-      } breakpoint="sm"/>
-    );
+    return <ResponsiveAdapter desktop={<MusicBarDesktop />} mobile={<MusicBarMobile />} breakpoint='sm' />;
   }
-};
+}
 
 export default withStyles(styles)(MusicBar);

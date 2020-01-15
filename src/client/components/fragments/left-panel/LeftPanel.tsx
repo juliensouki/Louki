@@ -25,7 +25,7 @@ const styles = (theme: Theme) =>
       top: 60,
       left: 0,
       height: 'calc(100% - 60px - 80px - 40px)',
-      width: 350,
+      width: 310,
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
       padding: 20,
@@ -47,13 +47,12 @@ const styles = (theme: Theme) =>
       overflowY: 'auto',
       flexWrap: 'unset',
     },
-});
+  });
 
-interface Props extends WithStyles<typeof styles> { 
-};
+interface IProps extends WithStyles<typeof styles> {}; // eslint-disable-line
 
 @observer
-class LeftPanel extends React.Component<Props, NoState> {
+class LeftPanel extends React.Component<IProps, NoState> {
   @observable checked: boolean = true;
 
   render() {
@@ -68,7 +67,7 @@ class LeftPanel extends React.Component<Props, NoState> {
         <div className={classes.root}>
           <Typography className={classes.sectionTitle}>Music</Typography>
           <LeftPanelButton routePath='/all-music' text='All Songs' icon={<MusicNoteIcon />} />
-          <LeftPanelButton routePath='/artists' text='Artists' icon={<MicIcon />} />
+          <LeftPanelButton showArtist routePath='/artists' text='Artists' icon={<MicIcon />} />
           <LeftPanelButton routePath='/albums' text='Albums' icon={<AlbumIcon />} />
           <LeftPanelButton routePath='/favorites' text='Favorites' icon={<FavoriteIcon />} />
 

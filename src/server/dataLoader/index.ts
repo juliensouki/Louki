@@ -26,6 +26,10 @@ export default class DataLoader {
     this.databaseHandler = databaseHandler;
   }
 
+  get = (field: 'users' | 'musics' | 'playlists' | 'artists' | 'albums' | 'currentUser') => {
+    return this[field];
+  };
+
   loadData = (callback: () => void) => {
     const [usersPromise, musicsPromise, playlistsPromise, artistsPromise, albumsPromise] = [
       this.databaseHandler.getCollectionContent(User),
@@ -37,13 +41,14 @@ export default class DataLoader {
 
     Promise.all([usersPromise, musicsPromise, playlistsPromise, artistsPromise, albumsPromise]).then(values => {
       [this.users, this.musics, this.playlists, this.artists, this.albums] = values;
-      callback();
+      this.init(callback);
     });
   };
 
-  init = () => {
+  init = (callback: () => void) => {
     this.selectCurrentUser();
     this.checkForUpdatesInDB();
+    callback();
   };
 
   selectCurrentUser = () => {
