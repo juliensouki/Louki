@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 import PlaylistBodyDesktop from './PlaylistBodyDesktop';
 import PlaylistBodyMobile from './PlaylistBodyMobile';
@@ -47,10 +48,14 @@ class PlaylistBody extends React.Component<IProps, NoState> {
 
     return (
       <div className={classes.root}>
-        <ResponsiveAdapter
-          mobile={<PlaylistBodyMobile playlist={playlist} />}
-          desktop={<PlaylistBodyDesktop playlist={playlist} />}
-        />
+        {playlist ? (
+          <ResponsiveAdapter
+            mobile={<PlaylistBodyMobile playlist={playlist} />}
+            desktop={<PlaylistBodyDesktop playlist={playlist} />}
+          />
+        ) : (
+          <Typography>This feature has not been developed yet.</Typography>
+        )}
       </div>
     );
   }
