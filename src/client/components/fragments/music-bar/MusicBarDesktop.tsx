@@ -95,7 +95,11 @@ class MusicBarDesktop extends React.Component<IProps, NoState> {
               <ProgressBar />
             </Grid>
             <Grid item>
-              <ShuffleIcon className={classes.controlIcons} />
+              <ShuffleIcon
+                className={classes.controlIcons}
+                onClick={MusicPlayer.changeRandom}
+                style={{ color: MusicPlayer.random ? '#FFB13B' : '' }}
+              />
               <LoopIcon className={classes.controlIcons} />
               <VolumeUpIcon className={classes.controlIcons} />
             </Grid>
