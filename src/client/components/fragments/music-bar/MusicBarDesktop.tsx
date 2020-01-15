@@ -15,7 +15,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 import MusicPreview from './MusicPreview';
 import ProgressBar from './ProgressBar';
 
-import MusicPlayer from '../../../store/common/MusicPlayer';
+import MusicPlayer, { MusicLoop } from '../../../store/common/MusicPlayer';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -67,6 +67,19 @@ const styles = (theme: Theme) =>
         color: theme.palette.primary.light,
       },
     },
+    bubbleRepeat: {
+      position: 'absolute',
+      bottom: 0,
+      fontFamilty: 'Roboto',
+      right: 15,
+      height: 13,
+      width: 13,
+      fontSize: 10,
+      textAlign: 'center',
+      borderRadius: '100%',
+      backgroundColor: theme.palette.secondary.main,
+      color: '#FFF',
+    },
   });
 
 interface IProps extends WithStyles<typeof styles> {} // eslint-disable-line
@@ -100,7 +113,14 @@ class MusicBarDesktop extends React.Component<IProps, NoState> {
                 onClick={MusicPlayer.changeRandom}
                 style={{ color: MusicPlayer.random ? '#FFB13B' : '' }}
               />
-              <LoopIcon className={classes.controlIcons} />
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <LoopIcon
+                  className={classes.controlIcons}
+                  onClick={MusicPlayer.changeRepeatMode}
+                  style={{ color: MusicPlayer.repeat == MusicLoop.NO_REPEAT ? '' : '#FFB13B' }}
+                />
+                {MusicPlayer.repeat == MusicLoop.REPEAT_ONE ? <div className={classes.bubbleRepeat}>1</div> : null}
+              </div>
               <VolumeUpIcon className={classes.controlIcons} />
             </Grid>
           </Grid>

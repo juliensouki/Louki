@@ -75,7 +75,7 @@ class ProgressBar extends React.Component<IProps, NoState> {
 
   render() {
     const { classes, mobile } = this.props;
-    const progress = (MusicPlayer.timePlayed / MusicPlayer.duration) * 100;
+    const progress = MusicPlayer.audio == null ? 0 : (MusicPlayer.timePlayed / MusicPlayer.duration) * 100;
 
     return (
       <div onClick={this.handleClick} className={classes.progressBackground}>
