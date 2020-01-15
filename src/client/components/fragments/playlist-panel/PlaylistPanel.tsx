@@ -24,7 +24,7 @@ const styles = (theme: Theme) =>
 interface IProps extends WithStyles<typeof styles> {}; // eslint-disable-line
 
 @observer
-class PlaylistPanel extends React.Component<Props, NoState> {
+class PlaylistPanel extends React.Component<IProps, NoState> {
   render() {
     const { classes, children } = this.props;
 

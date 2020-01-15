@@ -25,6 +25,9 @@ const styles = (theme: Theme) =>
       width: '100%',
       height: 3,
       backgroundColor: theme.palette.primary.contrastText,
+      '&:hover': {
+        cursor: 'pointer',
+      },
       [theme.breakpoints.down('xs')]: {
         height: 6,
       },

@@ -25,7 +25,7 @@ class MusicPlayer {
     this.isPlaying = true;
     this.audio.play();
     this.audio.onended = () => {
-      console.log('Song ended');
+      this.nextSong();
     };
   };
 
@@ -69,6 +69,16 @@ class MusicPlayer {
   @computed get duration(): number {
     if (this.currentPlaylist.length == 0) return 0;
     return this.currentPlaylist[this.musicPlayingIndex].duration;
+  }
+
+  @computed get currentMusicName(): string {
+    if (this.currentPlaylist.length == 0) return 'No song playing';
+    return this.currentPlaylist[this.musicPlayingIndex].title;
+  }
+
+  @computed get currentArtist(): string {
+    if (this.currentPlaylist.length == 0) return '';
+    return this.currentPlaylist[this.musicPlayingIndex].artist;
   }
 }
 

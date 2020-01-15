@@ -4,6 +4,9 @@ import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
+import MusicPlayer from '../../../store/common/MusicPlayer';
+import MusicsData from '../../../store/common/MusicsData';
+
 const textProperties = {
   maxWidth: '250px',
   overflow: 'hidden',
@@ -74,13 +77,15 @@ class MusicPreview extends React.Component<IProps, NoState> {
           className={classes.musicInformationContainer}
         >
           <Grid item>
-            <Typography className={classes.artistAndTitleText}>Coldplay</Typography>
+            <Typography className={classes.artistAndTitleText}>
+              {MusicsData.getArtistNameById(MusicPlayer.currentArtist)}
+            </Typography>
           </Grid>
           <Grid item className={classes.musicTitle}>
-            <Typography className={classes.artistAndTitleText}>A Rush of Blood to The Head</Typography>
+            <Typography className={classes.artistAndTitleText}>{MusicPlayer.currentMusicName}</Typography>
           </Grid>
           <Grid item>
-            <Typography className={classes.fromText}>From : Workout</Typography>
+            <Typography className={classes.fromText}>Louki</Typography>
           </Grid>
         </Grid>
       </Grid>
