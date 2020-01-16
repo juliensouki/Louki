@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   musicPaths: [String],
   history: [Number],
   favorites: [Number],
+  __id: Number,
 });
 
 const User = mongoose.model<IUserModel>('User', userSchema);

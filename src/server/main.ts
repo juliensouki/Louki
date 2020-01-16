@@ -5,19 +5,25 @@ import mongoose from 'mongoose';
 import { apiRouter } from './routes/api-router';
 import { pagesRouter } from './routes/pages-router';
 import { staticsRouter } from './routes/statics-router';
-
 import * as config from './config';
+
+import Playlist from './db/schemas/Playlist';
+import User from './db/schemas/User';
 
 import databaseHandler from './db';
 import dataLoader from './dataLoader';
+import uuid from 'uuid';
+import bodyParser from 'body-parser';
 
 const app = express();
 const dLoader = new dataLoader(databaseHandler);
 
 app.set('view engine', 'ejs');
+app.use(express.json());
 app.use('/assets', express.static(path.join(process.cwd(), 'assets')));
 app.use('/musics', express.static(path.join(process.cwd(), 'musics')));
 app.use('/musics2', express.static(path.join(process.cwd(), 'musics2')));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 databaseHandler.connect();
 
@@ -46,6 +52,25 @@ app.get('/allData', (req, res) => {
     musics: musics,
     artists: artists,
     albums: albums,
+  });
+});
+
+app.post('/createPlaylist', (req, res) => {
+  const name = req.body.name;
+  const description = req.body.description;
+  const creationDate = new Date().getTime();
+  const userId = dLoader.get('currentUser').__id;
+  console.log(dLoader.get('currentUser'));
+  const id = uuid.v4();
+
+  Playlist.create({
+    name: name,
+    picture: '',
+    description: description,
+    musics: [],
+    createdAt: creationDate,
+    createdBy: userId,
+    __id: id,
   });
 });
 

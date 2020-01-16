@@ -8,6 +8,7 @@ import SimpleHeader from '../../fragments/playlist/SimpleHeader';
 
 import PublicIcon from '@material-ui/icons/Public';
 import FolderIcon from '@material-ui/icons/Folder';
+import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -51,12 +52,6 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 
 @observer
 class NewPlaylist extends React.Component<Props, NoState> {
-  @observable description: string = '';
-
-  handleChange = event => {
-    this.description = event.target.value;
-  };
-
   render() {
     const { classes } = this.props;
 
@@ -68,7 +63,15 @@ class NewPlaylist extends React.Component<Props, NoState> {
             <Typography className={classes.title}>Give your new playlist a name :</Typography>
           </Grid>
           <Grid item style={{ marginBottom: 20 }}>
-            <TextField id='standard-basic' style={{ display: 'inline-block' }} label='Playlist name' />
+            <TextField
+              id='standard-basic'
+              value={CreatePlaylistForm.name}
+              onChange={e => {
+                CreatePlaylistForm.setName(e.target.value);
+              }}
+              style={{ display: 'inline-block' }}
+              label='Playlist name'
+            />
           </Grid>
           <Grid item>
             <Typography className={classes.title}>Choose a picture (optionnal) and add a description :</Typography>
@@ -87,15 +90,19 @@ class NewPlaylist extends React.Component<Props, NoState> {
                 label='Add a description'
                 multiline
                 rows='4'
-                value={this.description}
+                value={CreatePlaylistForm.description}
                 className={classes.descriptionInput}
-                onChange={this.handleChange}
+                onChange={e => {
+                  CreatePlaylistForm.setDescription(e.target.value);
+                }}
                 variant='outlined'
               />
             </Grid>
           </Grid>
           <Grid item container direction='column' alignItems='flex-end'>
-            <Button className={classes.button}>Save</Button>
+            <Button onClick={CreatePlaylistForm.send} className={classes.button}>
+              Save
+            </Button>
           </Grid>
         </Grid>
       </React.Fragment>
