@@ -38,6 +38,13 @@ app.get('/currentUser', (req, res) => {
   res.json(user);
 });
 
+app.get('/playlist', (req, res) => {
+  const name = req.query.name;
+  databaseHandler.findOneInDocument(Playlist, 'name', name).then(value => {
+    res.json(value[0]);
+  });
+});
+
 app.get('/allMusics', (req, res) => {
   const musics = dLoader.get('musics');
   res.json(musics);
@@ -55,23 +62,47 @@ app.get('/allData', (req, res) => {
   });
 });
 
+app.get('/allPlaylists', (req, res) => {
+  const playlists = dLoader.get('playlists');
+
+  res.json(playlists);
+});
+
 app.post('/createPlaylist', (req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const creationDate = new Date().getTime();
   const userId = dLoader.get('currentUser').__id;
-  console.log(dLoader.get('currentUser'));
   const id = uuid.v4();
 
-  Playlist.create({
-    name: name,
-    picture: '',
-    description: description,
-    musics: [],
-    createdAt: creationDate,
-    createdBy: userId,
-    __id: id,
+  Playlist.create(
+    {
+      name: name,
+      picture: '',
+      description: description,
+      musics: [],
+      createdAt: creationDate,
+      createdBy: userId,
+      __id: id,
+    },
+    error => {
+      dLoader.loadSpecificData('playlists');
+    },
+  );
+});
+
+app.post('/deletePlaylist', (req, res) => {
+  const id = req.body.playlistId;
+
+  databaseHandler.deleteFromDocument(Playlist, '__id', id).then(() => {
+    dLoader.loadSpecificData('playlists');
   });
+});
+
+app.post('/addMusicToPlaylist', (req, res) => {
+  const { playlistId, musicId } = req.body;
+
+  databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId);
 });
 
 app.use(apiRouter());

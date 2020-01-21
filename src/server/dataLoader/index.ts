@@ -30,6 +30,26 @@ export default class DataLoader {
     return this[field];
   };
 
+  getModel = (modelName: 'users' | 'musics' | 'playlists' | 'artists' | 'albums') => {
+    const modelsArray = [];
+    modelsArray['users'] = User;
+    modelsArray['musics'] = Music;
+    modelsArray['playlists'] = Playlist;
+    modelsArray['artists'] = Artist;
+    modelsArray['albums'] = Album;
+
+    return modelsArray[modelName];
+  };
+
+  loadSpecificData = (data: 'users' | 'musics' | 'playlists' | 'artists' | 'albums') => {
+    const model = this.getModel(data);
+    const modelPromise = this.databaseHandler.getCollectionContent(model);
+
+    modelPromise.then(value => {
+      this[data] = value;
+    });
+  };
+
   loadData = (callback: () => void) => {
     const [usersPromise, musicsPromise, playlistsPromise, artistsPromise, albumsPromise] = [
       this.databaseHandler.getCollectionContent(User),

@@ -15,11 +15,17 @@ class DatabaseHandler {
     );
   };
 
-  deleteFromDocument = (model, fieldName: string, fieldValue: string): void => {
-    model
+  deleteFromDocument = (model, fieldName: string, fieldValue: string) => {
+    return model
       .find({ [fieldName]: fieldValue })
       .deleteOne()
-      .exec();
+      .exec()
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        return err;
+      });
   };
 
   getData = model => {
@@ -42,6 +48,17 @@ class DatabaseHandler {
       .catch(err => {
         return 'error occured';
       });
+  };
+
+  addToArray = async (model, uniqueField: string, uniqueValue: string, arrayToUpdate: string, valueToAdd: string) => {
+    return model.findOneAndUpdate(
+      {
+        [uniqueField]: uniqueValue,
+      },
+      {
+        $push: { [arrayToUpdate]: valueToAdd },
+      },
+    );
   };
 
   findOneInDocument = async (model, field: string, value: string) => {

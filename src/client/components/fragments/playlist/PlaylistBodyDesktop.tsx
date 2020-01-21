@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -7,9 +8,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
 
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PlaylistBlabla from './PlaylistBlabla';
+
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
 import MusicPlayer from '../../../store/common/MusicPlayer';
@@ -39,6 +40,17 @@ const styles = (theme: Theme) =>
     tableRow: {
       color: theme.palette.primary.main,
     },
+    row: {
+      '&:hover': {
+        backgroundColor: '#151414',
+        cursor: 'pointer',
+      },
+    },
+    menuIcon: {
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -47,9 +59,31 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
-  playMusic = (music: IMusic, index: number): void => {
+  @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
+
+  playMusic = (index: number): void => {
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
     MusicPlayer.playMusic(index);
+  };
+
+  handleMenu = (event, index) => {
+    event.stopPropagation();
+    this.arrayOfAnchorEl[index] = event.currentTarget;
+  };
+
+  handleClose = (event, index: number) => {
+    event.stopPropagation();
+    this.arrayOfAnchorEl[index] = null;
+  };
+
+  editInformation = (event, index: number) => {
+    event.stopPropagation();
+    console.log('Editing information of music ' + this.props.playlist[index].title);
+  };
+
+  addMusicToPlaylist = (event, index: number) => {
+    event.stopPropagation();
+    console.log('Adding music ' + this.props.playlist[index].title + ' to playlist [TO_DEFINE_LATER]');
   };
 
   render() {
@@ -70,8 +104,9 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
           {playlist.map((row, index) => (
             <TableRow
               key={row.__id}
+              className={classes.row}
               onClick={() => {
-                this.playMusic(row, index);
+                this.playMusic(index);
               }}
             >
               <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
@@ -81,9 +116,7 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
               <TableCell className={classes.tableRow}>{MusicsData.getAlbumNameById(row.album)}</TableCell>
               <TableCell className={classes.tableRow}>{MusicsData.msTosec(row.duration)}</TableCell>
               <TableCell className={classes.tableRow} align='right'>
-                <IconButton aria-label='options'>
-                  <MoreVertIcon />
-                </IconButton>
+                <PlaylistBlabla music={row} />
               </TableCell>
             </TableRow>
           ))}

@@ -54,7 +54,7 @@ class PlaylistBody extends React.Component<IProps, NoState> {
             desktop={<PlaylistBodyDesktop playlist={playlist} />}
           />
         ) : (
-          <Typography>This feature has not been developed yet.</Typography>
+          <Typography>Cette playlist est encore vide pour le moment</Typography>
         )}
       </div>
     );
