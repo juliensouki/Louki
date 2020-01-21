@@ -60,6 +60,10 @@ class MusicPlayer {
 
   @action public nextSong = (): void => {
     if (this.audio == null) return;
+    else if (this.isOrderRandom) {
+      this.playRandomMusic();
+      return;
+    }
     this.musicPlayingIndex++;
     if (this.musicPlayingIndex == this.currentPlaylist.length) this.musicPlayingIndex = 0;
     this.playMusic(this.musicPlayingIndex);
@@ -67,7 +71,10 @@ class MusicPlayer {
 
   @action public prevSong = (): void => {
     if (this.audio == null) return;
-    else if (this.audio.currentTime > 5) this.audio.currentTime = 0;
+    else if (this.isOrderRandom) {
+      this.playRandomMusic();
+      return;
+    } else if (this.audio.currentTime > 5) this.audio.currentTime = 0;
     else {
       this.musicPlayingIndex--;
       if (this.musicPlayingIndex < 0) this.musicPlayingIndex = this.currentPlaylist.length - 1;
