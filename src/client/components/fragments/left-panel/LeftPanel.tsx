@@ -16,6 +16,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import LeftPanelButton from './LeftPanelButton';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 import MobileMenu from '../../../store/fragments/left-panel/MobileMenu';
+import IPlaylist from '../../../../shared/IPlaylist';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -54,6 +55,17 @@ interface IProps extends WithStyles<typeof styles> {}; // eslint-disable-line
 @observer
 class LeftPanel extends React.Component<IProps, NoState> {
   @observable checked: boolean = true;
+  @observable playlists: Array<IPlaylist> = [];
+
+  async componentDidMount() {
+    fetch('/allPlaylists')
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        this.playlists = data;
+      });
+  }
 
   render() {
     const { classes } = this.props;
@@ -73,12 +85,16 @@ class LeftPanel extends React.Component<IProps, NoState> {
 
           <Typography className={classes.sectionTitle}>Playlists</Typography>
           <Grid container direction='column' className={classes.playlistsContainer}>
-            <LeftPanelButton playlist routePath='/playlist' text='playlist-1' icon={<QueueMusicIcon />} />
-            <LeftPanelButton playlist routePath='/playlist' text='playlist-2' icon={<QueueMusicIcon />} />
-            <LeftPanelButton playlist routePath='/playlist' text='playlist-3' icon={<QueueMusicIcon />} />
-            <LeftPanelButton playlist routePath='/playlist' text='playlist-4' icon={<QueueMusicIcon />} />
-            <LeftPanelButton playlist routePath='/playlist' text='playlist-5' icon={<QueueMusicIcon />} />
-            <LeftPanelButton playlist routePath='/playlist' text='playlist-6' icon={<QueueMusicIcon />} />
+            {this.playlists.map(playlist => (
+              <LeftPanelButton
+                playlist
+                aboutprops={{ playlist: playlist }}
+                key={playlist.__id}
+                routePath='/playlist'
+                text={playlist.name}
+                icon={<QueueMusicIcon />}
+              />
+            ))}
           </Grid>
           <LeftPanelButton routePath='/new-playlist' text='New Playlist' icon={<PlaylistAddIcon />} />
         </div>

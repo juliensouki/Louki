@@ -54,6 +54,23 @@ class MusicsData {
     }
     return '';
   };
+
+  private getMusicFromId = (id: string): IMusic | null => {
+    for (let i = 0; i < this.musics.length; i++) {
+      if (this.musics[i].__id == id) return this.musics[i];
+    }
+    return null;
+  };
+
+  idsToMusics = (ids: Array<string>): Array<IMusic> => {
+    const result: Array<IMusic> = [];
+    ids.forEach(id => {
+      const music = this.getMusicFromId(id);
+      if (music) result.push(music);
+      else console.log('Could not add music ' + id + ' in array');
+    });
+    return result;
+  };
 }
 
 export default new MusicsData();
