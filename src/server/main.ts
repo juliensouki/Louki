@@ -53,6 +53,11 @@ app.get('/currentUser', (req, res) => {
   res.json(user);
 });
 
+app.get('/bookmarks', (req, res) => {
+  const fav = dLoader.get('currentUser').favorites;
+  res.json(fav);
+});
+
 app.get('/playlist', (req, res) => {
   const id = req.query.id;
   databaseHandler.findOneInDocument(Playlist, '__id', id).then(value => {
@@ -81,6 +86,13 @@ app.get('/allPlaylists', (req, res) => {
   const playlists = dLoader.get('playlists');
 
   res.json(playlists);
+});
+
+app.post('/addBookmark', (req, res) => {
+  const id = req.body.musicId;
+  const user = dLoader.get('currentUser');
+
+  databaseHandler.addToArray(User, '__id', user.__id, 'favorites', id);
 });
 
 app.post('/createPlaylist', (req, res) => {

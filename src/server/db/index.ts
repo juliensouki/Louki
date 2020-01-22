@@ -51,14 +51,18 @@ class DatabaseHandler {
   };
 
   addToArray = async (model, uniqueField: string, uniqueValue: string, arrayToUpdate: string, valueToAdd: string) => {
-    return model.findOneAndUpdate(
-      {
-        [uniqueField]: uniqueValue,
-      },
-      {
-        $push: { [arrayToUpdate]: valueToAdd },
-      },
-    );
+    console.log('Check by : [' + uniqueField + '] == ' + uniqueValue);
+    console.log('Adding ' + valueToAdd + ' to [' + arrayToUpdate + ']');
+    return model
+      .findOneAndUpdate(
+        {
+          [uniqueField]: uniqueValue,
+        },
+        {
+          $push: { [arrayToUpdate]: valueToAdd },
+        },
+      )
+      .exec();
   };
 
   findOneInDocument = async (model, field: string, value: string) => {

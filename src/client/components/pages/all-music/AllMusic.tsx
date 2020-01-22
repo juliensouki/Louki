@@ -26,7 +26,7 @@ class AllMusic extends React.Component<IProps, NoState> {
       <div className={classes.root}>
         <PlaylistHeader subTitle='All songs' title='Your Music' />
         <SearchContainer />
-        <PlaylistBody playlist={MusicsData.allMusics} />
+        <PlaylistBody favorites playlist={MusicsData.allMusics} />
       </div>
     );
   }
