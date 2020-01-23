@@ -17,7 +17,7 @@ import MicIcon from '@material-ui/icons/Mic';
 import IArtist from '../../../../shared/IArtist';
 import IAlbum from '../../../../shared/IAlbum';
 import { Page } from '../../pages/artists-or-albums/ArtistsOrAlbums';
-import { NavLink } from 'react-router-dom';
+import MusicsData from '../../../store/common/MusicsData';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -55,7 +55,6 @@ interface IProps extends WithStyles<typeof styles> {
 class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
   render() {
     const { classes, playlist, page } = this.props;
-    console.log(playlist);
 
     return (
       <Table aria-label='simple table'>
@@ -78,9 +77,13 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
               <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
                 {page == Page.ARTISTS ? (row as IArtist).name : (row as IAlbum).title}
               </TableCell>
-              {page == Page.ARTISTS ? <React.Fragment /> : <TableCell style={{ color: '#FFF' }}>TO_DEFINE</TableCell>}
-              <TableCell className={classes.tableRow}>12</TableCell>
-              <TableCell className={classes.tableRow}>22:02</TableCell>
+              {page == Page.ARTISTS ? (
+                <React.Fragment />
+              ) : (
+                <TableCell style={{ color: '#FFF' }}>{MusicsData.getArtistNameById((row as IAlbum).author)}</TableCell>
+              )}
+              <TableCell className={classes.tableRow}>{row.musics.length}</TableCell>
+              <TableCell className={classes.tableRow}>{MusicsData.totalDuration(row.musics)}</TableCell>
               <TableCell className={classes.tableRow} align='right'>
                 <IconButton aria-label='options'>
                   <MoreVertIcon />

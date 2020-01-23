@@ -164,10 +164,11 @@ export default class DataLoader {
   };
 
   createAlbum = (values, albumName, albumId, artistId) => {
+    console.log(artistId);
     const params = {
       title: albumName,
       __id: albumId,
-      artist: artistId,
+      author: artistId,
       musics: [values.__id],
     };
     Album.create(params);
@@ -218,11 +219,18 @@ export default class DataLoader {
     }
   };
 
+  private areThereMusicsToAdd = (): boolean => {
+    for (let i = 0; i < this.musicsToAdd.length; i++) {
+      if (this.musicsToAdd[i] && this.musicsToAdd[i].length > 0) return true;
+    }
+    return false;
+  };
+
   addMusics = () => {
     if (this.musicsToAdd && this.musicsToAdd.length != 0 && this.musicsToAdd[0].length == 0) {
       this.musicsToAdd.splice(0, 1);
     }
-    if (this.musicsToAdd && this.musicsToAdd.length != 0) {
+    if (this.areThereMusicsToAdd()) {
       filesHandler.getMetadataAndAddToDB(this.musicsToAdd[0][0], this.addMusicToDB);
     } else {
       this.musicsToAdd = null;
