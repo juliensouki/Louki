@@ -9,6 +9,7 @@ import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 
 import IMusic from '../../../../shared/IMusic';
+import MusicsData from '../../../store/common/MusicsData';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -29,7 +30,7 @@ class Favorites extends React.Component<IProps, NoState> {
         return res.json();
       })
       .then(data => {
-        this.bookmarks = data;
+        this.bookmarks = MusicsData.idsToMusics(data);
       });
   }
 

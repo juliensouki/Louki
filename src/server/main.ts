@@ -54,8 +54,9 @@ app.get('/currentUser', (req, res) => {
 });
 
 app.get('/bookmarks', (req, res) => {
-  const fav = dLoader.get('currentUser').favorites;
-  res.json(fav);
+  databaseHandler.findOneInDocument(User, 'selected', true).then(value => {
+    res.json(value[0].favorites);
+  });
 });
 
 app.get('/playlist', (req, res) => {
@@ -90,9 +91,8 @@ app.get('/allPlaylists', (req, res) => {
 
 app.post('/addBookmark', (req, res) => {
   const id = req.body.musicId;
-  const user = dLoader.get('currentUser');
 
-  databaseHandler.addToArray(User, '__id', user.__id, 'favorites', id);
+  databaseHandler.addToArray(User, 'selected', true, 'favorites', id);
 });
 
 app.post('/createPlaylist', (req, res) => {

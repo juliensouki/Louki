@@ -50,9 +50,7 @@ class DatabaseHandler {
       });
   };
 
-  addToArray = async (model, uniqueField: string, uniqueValue: string, arrayToUpdate: string, valueToAdd: string) => {
-    console.log('Check by : [' + uniqueField + '] == ' + uniqueValue);
-    console.log('Adding ' + valueToAdd + ' to [' + arrayToUpdate + ']');
+  addToArray = async (model, uniqueField: string, uniqueValue: any, arrayToUpdate: string, valueToAdd: string) => {
     return model
       .findOneAndUpdate(
         {
@@ -65,7 +63,7 @@ class DatabaseHandler {
       .exec();
   };
 
-  findOneInDocument = async (model, field: string, value: string) => {
+  findOneInDocument = async (model, field: string, value: any) => {
     return model
       .find({ [field]: value })
       .exec()
