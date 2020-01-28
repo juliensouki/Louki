@@ -14,6 +14,7 @@ import NewPlaylist from './pages/new-playlist/NewPlaylist';
 import Playlist from './pages/playlist/Playlist';
 import Settings from './pages/settings/Settings';
 import Favorites from './pages/favorites/Favorites';
+import SpecificArtistOrAlbum from './pages/specific-artist-or-album/SpecificArtistOrAlbum';
 
 import MusicsData from '../store/common/MusicsData';
 
@@ -55,7 +56,9 @@ class Layout extends React.Component<NoProps, NoState> {
                 <Route path={'/playlist/:id'} component={Playlist} exact />
                 <Route path={'/new-playlist'} component={NewPlaylist} exact />
                 <Route path={'/artists'} component={ArtistsOrAlbums} exact />
+                <Route path={'/artist/:id'} component={SpecificArtistOrAlbum} exact />
                 <Route path={'/albums'} component={ArtistsOrAlbums} exact />
+                <Route path={'/album/:id'} component={SpecificArtistOrAlbum} exact />
                 <Route path={'/settings'} component={Settings} exact />
                 <Route component={AllMusic} />
               </Switch>

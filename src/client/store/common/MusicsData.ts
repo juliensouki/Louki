@@ -78,7 +78,6 @@ class MusicsData {
       const music = this.getMusicFromId(musicId);
       if (music != null) timeInSec += music.duration;
     });
-    console.log(timeInSec);
     return this.msTosec(timeInSec);
   };
 }

@@ -36,6 +36,7 @@ interface IProps extends WithStyles<typeof styles> {
   playlist?: boolean;
   showArtist?: boolean;
   aboutprops?: any;
+  playlistId?: string;
 }
 
 @observer
@@ -51,8 +52,8 @@ class LeftPanelButton extends React.Component<IProps, NoState> {
   };
 
   render() {
-    const { classes, routePath, playlist, text, aboutprops } = this.props;
-    const url = playlist ? routePath + '/' + text : routePath;
+    const { classes, routePath, playlist, aboutprops, playlistId } = this.props;
+    const url = playlist ? routePath + '/' + playlistId : routePath;
 
     return (
       <NavLink

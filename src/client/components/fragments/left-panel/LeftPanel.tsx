@@ -90,6 +90,7 @@ class LeftPanel extends React.Component<IProps, NoState> {
                 playlist
                 aboutprops={{ playlist: playlist }}
                 key={playlist.__id}
+                playlistId={playlist.__id}
                 routePath='/playlist'
                 text={playlist.name}
                 icon={<QueueMusicIcon />}

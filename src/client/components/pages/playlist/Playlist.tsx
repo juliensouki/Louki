@@ -19,9 +19,9 @@ class Playlist extends React.Component<NoProps, NoState> {
   @observable musics: Array<IMusic> = [];
 
   async componentDidMount() {
-    const playlistName = this.props.location.pathname.split('/playlist/')[1];
+    const playlistId = this.props.location.pathname.split('/playlist/')[1];
 
-    fetch('/playlist?name=' + playlistName)
+    fetch('/playlist?id=' + playlistId)
       .then(res => {
         return res.json();
       })
@@ -37,8 +37,8 @@ class Playlist extends React.Component<NoProps, NoState> {
         <PlaylistHeader
           playlistId={this.playlist == null ? undefined : this.playlist.__id}
           subTitle='Playlist'
-          title={this.playlist != null ? this.playlist.name : 'No name'}
-          description={this.playlist != null ? this.playlist.description : 'No description'}
+          title={this.playlist != null ? this.playlist.name : ''}
+          description={this.playlist != null ? this.playlist.description : ''}
         />
         <SearchContainer />
         <PlaylistBody playlist={this.musics} />
