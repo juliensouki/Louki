@@ -10,4 +10,4 @@ export default function(playlistId: string, musicId: string) {
       musicId: musicId,
     }),
   });
-};
+}

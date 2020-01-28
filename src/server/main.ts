@@ -91,8 +91,12 @@ app.get('/allPlaylists', (req, res) => {
 
 app.post('/addBookmark', (req, res) => {
   const id = req.body.musicId;
-
   databaseHandler.addToArray(User, 'selected', true, 'favorites', id);
+});
+
+app.post('/removeBookmark', (req, res) => {
+  const id = req.body.musicId;
+  databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id);
 });
 
 app.post('/createPlaylist', (req, res) => {
