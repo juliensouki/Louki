@@ -50,18 +50,33 @@ class DatabaseHandler {
       });
   };
 
-  addToArray = async (model, uniqueField: string, uniqueValue: string, arrayToUpdate: string, valueToAdd: string) => {
-    return model.findOneAndUpdate(
-      {
-        [uniqueField]: uniqueValue,
-      },
-      {
-        $push: { [arrayToUpdate]: valueToAdd },
-      },
-    );
+  addToArray = async (model, uniqueField: string, uniqueValue: any, arrayToUpdate: string, valueToAdd: string) => {
+    return model
+      .findOneAndUpdate(
+        {
+          [uniqueField]: uniqueValue,
+        },
+        {
+          $push: { [arrayToUpdate]: valueToAdd },
+        },
+      )
+      .exec();
   };
 
-  findOneInDocument = async (model, field: string, value: string) => {
+  removeFromArray = async (model, uniqueField: string, uniqueValue: any, arrayToUpdate: string, valueToAdd: string) => {
+    return model
+      .findOneAndUpdate(
+        {
+          [uniqueField]: uniqueValue,
+        },
+        {
+          $pull: { [arrayToUpdate]: valueToAdd },
+        },
+      )
+      .exec();
+  };
+
+  findOneInDocument = async (model, field: string, value: any) => {
     return model
       .find({ [field]: value })
       .exec()

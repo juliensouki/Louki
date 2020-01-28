@@ -43,13 +43,27 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
 
   editInformation = event => {
     event.stopPropagation();
-    console.log('Editing information of music ' + this.props.music.title);
+  };
+
+  removeBookmark = event => {
+    event.stopPropagation();
+    const id = this.props.music.__id;
+
+    fetch('/removeBookmark', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json', // eslint-disable-line
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        musicId: id,
+      }),
+    });
   };
 
   addMusicToPlaylist = event => {
     event.stopPropagation();
     this.openPlaylistsModal = true;
-    console.log('Adding music ' + this.props.music.title + ' to playlist [TO_DEFINE_LATER]');
   };
 
   handleCloseModal = () => {
@@ -68,6 +82,7 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
             anchorEl={this.anchorEl}
             addMusicToPlaylist={this.addMusicToPlaylist}
             editInformation={this.editInformation}
+            removeBookmark={this.removeBookmark}
             handleClose={this.handleClose}
           />
         </IconButton>

@@ -3,8 +3,9 @@ interface IUser {
   selected: boolean;
   picture: string;
   musicPaths: Array<string>;
-  history: Array<number>;
-  favorites: Array<number>;
+  history: Array<string>;
+  favorites: Array<string>;
+  __id: string;
 }
 
 export = IUser;

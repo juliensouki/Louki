@@ -8,12 +8,15 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { IconButton } from '@material-ui/core';
 
 import PlaylistBlabla from './PlaylistBlabla';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
 import MusicPlayer from '../../../store/common/MusicPlayer';
+import AddBookmark from '../../../store/functions/bookmarks/AddBookmarks';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -55,6 +58,7 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
   playlist: Array<IMusic>;
+  favorites?: boolean;
 }
 
 @observer
@@ -85,6 +89,11 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
     event.stopPropagation();
   };
 
+  addBookmark = (event, id: string) => {
+    event.stopPropagation();
+    AddBookmark(id);
+  };
+
   render() {
     const { classes, playlist } = this.props;
 
@@ -109,6 +118,15 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
               }}
             >
               <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
+                {this.props.favorites ? (
+                  <IconButton
+                    onClick={event => {
+                      this.addBookmark(event, row.__id);
+                    }}
+                  >
+                    <FavoriteBorderIcon />
+                  </IconButton>
+                ) : null}
                 {row.title}
               </TableCell>
               <TableCell style={{ color: '#FFF' }}>{MusicsData.getArtistNameById(row.artist)}</TableCell>
