@@ -83,7 +83,6 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
 
   addMusicToPlaylist = (event, index: number) => {
     event.stopPropagation();
-    console.log('Adding music ' + this.props.playlist[index].title + ' to playlist [TO_DEFINE_LATER]');
   };
 
   render() {

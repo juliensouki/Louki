@@ -8,7 +8,8 @@ import { staticsRouter } from './routes/statics-router';
 import * as config from './config';
 
 import Playlist from './db/schemas/Playlist';
-import User from './db/schemas/User';
+import Artist from './db/schemas/Artist';
+import Album from './db/schemas/Album';
 
 import databaseHandler from './db';
 import dataLoader from './dataLoader';
@@ -33,14 +34,28 @@ const startServer = () => {
   });
 };
 
+app.get('/artist', (req, res) => {
+  const id = req.query.id;
+  databaseHandler.findOneInDocument(Artist, '__id', id).then(value => {
+    res.json(value[0]);
+  });
+});
+
+app.get('/album', (req, res) => {
+  const id = req.query.id;
+  databaseHandler.findOneInDocument(Album, '__id', id).then(value => {
+    res.json(value[0]);
+  });
+});
+
 app.get('/currentUser', (req, res) => {
   const user = dLoader.get('currentUser');
   res.json(user);
 });
 
 app.get('/playlist', (req, res) => {
-  const name = req.query.name;
-  databaseHandler.findOneInDocument(Playlist, 'name', name).then(value => {
+  const id = req.query.id;
+  databaseHandler.findOneInDocument(Playlist, '__id', id).then(value => {
     res.json(value[0]);
   });
 });

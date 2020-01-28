@@ -71,6 +71,15 @@ class MusicsData {
     });
     return result;
   };
+
+  totalDuration = (musics: Array<string>): string => {
+    let timeInSec = 0;
+    musics.forEach(musicId => {
+      const music = this.getMusicFromId(musicId);
+      if (music != null) timeInSec += music.duration;
+    });
+    return this.msTosec(timeInSec);
+  };
 }
 
 export default new MusicsData();

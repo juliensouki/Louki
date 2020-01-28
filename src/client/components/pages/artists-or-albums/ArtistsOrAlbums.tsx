@@ -1,27 +1,34 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom';
 
 import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
 import CurrentArtistOrAlbum from '../../../store/pages/artistsOrAlbums/CurrentArtistOrAlbum';
 import PlaylistBody from '../../fragments/playlist-artists-or-albums/PlaylistBody';
 
-const styles = (theme: Theme) =>
-  createStyles({
-      root: {
-      width: '100%',
-    },
-});
-
-interface Props extends WithStyles<typeof styles> { 
-};
-
+export enum Page {
+  ARTISTS = '/artists',
+  ALBUMS = '/albums',
+  NOT_DEFINED = '',
+}
 @observer
-class ArtistsOrAlbums extends React.Component<Props, NoState> {
+class ArtistsOrAlbums extends React.Component<NoProps, NoState> {
+  @observable page: Page = Page.NOT_DEFINED;
+
+  componentDidMount() {
+    this.page = this.props.location.pathname;
+  }
+
+  componentDidUpdate() {
+    this.page = this.props.location.pathname;
+  }
+
   get title(): string {
-    return CurrentArtistOrAlbum.showArtist ? 'Artists' : 'Albums';
+    return this.page == Page.ARTISTS ? 'Artists' : 'Albums';
   }
 
   get subTitle(): string {
@@ -29,16 +36,14 @@ class ArtistsOrAlbums extends React.Component<Props, NoState> {
   }
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <div className={classes.root}>
+      <div style={{ width: '100%' }}>
         <PlaylistHeader subTitle={this.subTitle} title={this.title} />
         <SearchContainer />
-        <PlaylistBody />
+        <PlaylistBody page={this.page} />
       </div>
     );
   }
 }
 
-export default withStyles(styles)(ArtistsOrAlbums);
+export default withRouter(ArtistsOrAlbums);
