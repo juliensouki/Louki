@@ -9,6 +9,7 @@ import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 import MusicsData from '../../../store/common/MusicsData';
+import PlaylistData from '../../../store/common/PlaylistData';
 
 import IPlaylist from '../../../../shared/IPlaylist';
 import IMusic from '../../../../shared/IMusic';
@@ -27,6 +28,7 @@ class Playlist extends React.Component<NoProps, NoState> {
       })
       .then(data => {
         this.playlist = data;
+        PlaylistData.setCurrentPlaylist(this.playlist);
         this.musics = MusicsData.idsToMusics(this.playlist.musics);
       });
   }

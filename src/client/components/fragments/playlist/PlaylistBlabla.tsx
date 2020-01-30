@@ -12,6 +12,7 @@ import SelectPlaylistModal from './SelectPlaylistModal';
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
 import MusicPlayer from '../../../store/common/MusicPlayer';
+import PlaylistData from '../../../store/common/PlaylistData';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -61,6 +62,24 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
     });
   };
 
+  removeFromPlaylist = event => {
+    event.stopPropagation();
+    const musicId = this.props.music.__id;
+    const playlistId = PlaylistData.currentPlaylist.__id;
+
+    fetch('/removeSongFromPlaylist', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json', // eslint-disable-line
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playlistId: playlistId,
+        musicId: musicId,
+      }),
+    });
+  };
+
   addMusicToPlaylist = event => {
     event.stopPropagation();
     this.openPlaylistsModal = true;
@@ -84,6 +103,7 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
             editInformation={this.editInformation}
             removeBookmark={this.removeBookmark}
             handleClose={this.handleClose}
+            removeFromPlaylist={this.removeFromPlaylist}
           />
         </IconButton>
       </React.Fragment>

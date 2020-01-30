@@ -10,6 +10,7 @@ import * as config from './config';
 import Playlist from './db/schemas/Playlist';
 import Artist from './db/schemas/Artist';
 import Album from './db/schemas/Album';
+import User from './db/schemas/User';
 
 import databaseHandler from './db';
 import dataLoader from './dataLoader';
@@ -97,6 +98,11 @@ app.post('/addBookmark', (req, res) => {
 app.post('/removeBookmark', (req, res) => {
   const id = req.body.musicId;
   databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id);
+});
+
+app.post('/removeSongFromPlaylist', (req, res) => {
+  const { playlistId, musicId } = req.body;
+  databaseHandler.removeFromArray(Playlist, '__id', playlistId, 'musics', musicId);
 });
 
 app.post('/createPlaylist', (req, res) => {
