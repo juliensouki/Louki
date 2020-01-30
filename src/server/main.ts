@@ -100,11 +100,6 @@ app.post('/removeBookmark', (req, res) => {
   databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id);
 });
 
-app.post('/deletePlaylist', (req, res) => {
-  const id = req.body.playlistId;
-  databaseHandler.deleteFromDocument(Playlist, '__id', id);
-});
-
 app.post('/removeSongFromPlaylist', (req, res) => {
   const { playlistId, musicId } = req.body;
   databaseHandler.removeFromArray(Playlist, '__id', playlistId, 'musics', musicId);
