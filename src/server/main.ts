@@ -124,6 +124,9 @@ app.post('/createPlaylist', (req, res) => {
     },
     error => {
       dLoader.loadSpecificData('playlists');
+      databaseHandler.getCollectionContent(Playlist).then(values => {
+        res.send(values);
+      });
     },
   );
 });

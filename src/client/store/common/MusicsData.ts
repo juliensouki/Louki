@@ -2,11 +2,13 @@ import { observable, action, computed } from 'mobx';
 import IAlbum from '../../../shared/IAlbum';
 import IArtist from '../../../shared/IArtist';
 import IMusic from '../../../shared/IMusic';
+import IPlaylist from '../../../shared/IPlaylist';
 
 class MusicsData {
   @observable private musics: Array<IMusic> = [];
   @observable private artists: Array<IArtist> = [];
   @observable private albums: Array<IAlbum> = [];
+  @observable private playlists: Array<IPlaylist> = [];
 
   @action setMusics = (musics: Array<IMusic>) => {
     this.musics = musics;
@@ -20,6 +22,10 @@ class MusicsData {
     this.albums = albums;
   };
 
+  @action setPlaylists = (playlists: Array<IPlaylist>) => {
+    this.playlists = playlists;
+  };
+
   @computed get allMusics(): Array<IMusic> {
     return this.musics;
   }
@@ -30,6 +36,10 @@ class MusicsData {
 
   @computed get allAlbums(): Array<IAlbum> {
     return this.albums;
+  }
+
+  @computed get allPlaylists(): Array<IPlaylist> {
+    return this.playlists;
   }
 
   msTosec = (seconds: number): string => {
