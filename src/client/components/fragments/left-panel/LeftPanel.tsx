@@ -17,6 +17,7 @@ import LeftPanelButton from './LeftPanelButton';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 import MobileMenu from '../../../store/fragments/left-panel/MobileMenu';
 import IPlaylist from '../../../../shared/IPlaylist';
+import MusicsData from '../../../store/common/MusicsData';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -63,7 +64,7 @@ class LeftPanel extends React.Component<IProps, NoState> {
         return res.json();
       })
       .then(data => {
-        this.playlists = data;
+        MusicsData.setPlaylists(data);
       });
   }
 
@@ -85,7 +86,7 @@ class LeftPanel extends React.Component<IProps, NoState> {
 
           <Typography className={classes.sectionTitle}>Playlists</Typography>
           <Grid container direction='column' className={classes.playlistsContainer}>
-            {this.playlists.map(playlist => (
+            {MusicsData.allPlaylists.map(playlist => (
               <LeftPanelButton
                 playlist
                 aboutprops={{ playlist: playlist }}

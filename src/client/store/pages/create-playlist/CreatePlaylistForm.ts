@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import MusicsData from '../../common/MusicsData';
 
 class CreatePlaylistForm {
   @observable private playlistName: string = '';
@@ -40,7 +41,13 @@ class CreatePlaylistForm {
         name: this.playlistName,
         description: this.playlistDescription,
       }),
-    });
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        MusicsData.setPlaylists(data);
+      });
   };
 }
 
