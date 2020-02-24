@@ -145,6 +145,16 @@ app.post('/addMusicToPlaylist', (req, res) => {
   databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId);
 });
 
+app.post('/updatePlaylist', (req, res) => {
+  const { playlistId, playlistName, playlistDescription } = req.body;
+
+  const jsonUpdate = {
+    name: playlistName,
+    description: playlistDescription,
+  };
+  databaseHandler.updateDocument(Playlist, playlistId, jsonUpdate);
+});
+
 app.use(apiRouter());
 app.use(staticsRouter());
 app.use(pagesRouter());

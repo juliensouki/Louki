@@ -38,9 +38,9 @@ class DatabaseHandler {
       });
   };
 
-  updateDocument = async (model, _id, fieldName: string, newData) => {
+  updateDocument = async (model, id, update: any) => {
     return model
-      .findOneAndUpdate({ _id: _id }, { [fieldName]: newData })
+      .findOneAndUpdate({ __id: id }, update)
       .exec()
       .then(result => {
         return result;
