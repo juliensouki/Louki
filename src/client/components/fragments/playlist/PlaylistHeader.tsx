@@ -2,12 +2,9 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Grid, Button, Fab, Typography } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Grid, Fab, Typography } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-
-import DeletePlaylist from '../../../store/functions/playlists/DeletePlaylist';
-import { useHistory } from 'react-router';
+import PlaylistOptions from './PlaylistOptions';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -97,11 +94,10 @@ const styles = (theme: Theme) =>
       height: 1,
       width: '100%',
     },
-    deleteButton: {
+    playlistOptions: {
       position: 'absolute',
       right: 20,
       top: 20,
-      backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
     },
   });
@@ -115,22 +111,15 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistHeader extends React.Component<IProps, NoState> {
-  handleDeletePlaylist = () => {
-    DeletePlaylist(this.props.playlistId!); // eslint-disable-line
-    const history = useHistory();
-    history.push('/all-music');
-  };
-
   render() {
     const { classes } = this.props;
 
     return (
       <Grid container direction='column' className={classes.root} justify='space-between'>
         {this.props.playlistId ? (
-          <Button className={classes.deleteButton} onClick={this.handleDeletePlaylist}>
-            <DeleteIcon />
-            Delete playlist
-          </Button>
+          <div className={classes.playlistOptions}>
+            <PlaylistOptions />
+          </div>
         ) : null}
         <Grid container item direction='row'>
           <Grid item className={classes.playlistPictureContainer}>

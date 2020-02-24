@@ -3,12 +3,13 @@ import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
-import { Grid, Button, Typography, TextField } from '@material-ui/core/';
+import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 import SimpleHeader from '../../fragments/playlist/SimpleHeader';
+import Notification, { NotificationType } from '../../fragments/notifications/Notification';
 
+import { Grid, Button, Typography, TextField } from '@material-ui/core/';
 import PublicIcon from '@material-ui/icons/Public';
 import FolderIcon from '@material-ui/icons/Folder';
-import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -52,11 +53,33 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 
 @observer
 class NewPlaylist extends React.Component<Props, NoState> {
+  @observable open: boolean = false;
+
+  @action handleClose = (event: React.SyntheticEvent<any, Event>, reason: string) => {
+    if (reason === 'clickaway') return;
+    this.open = false;
+  };
+
+  @action createPlaylist = () => {
+    CreatePlaylistForm.send();
+    this.open = true;
+  };
+
+  get playlistCreationMessage(): string {
+    return 'Playlist "' + CreatePlaylistForm.name + '" was created';
+  }
+
   render() {
     const { classes } = this.props;
 
     return (
       <React.Fragment>
+        <Notification
+          open={this.open}
+          handleClose={this.handleClose}
+          message={this.playlistCreationMessage}
+          type={NotificationType.SUCCESS}
+        />
         <SimpleHeader title='New playlist' />
         <Grid container className={classes.root} direction='column'>
           <Grid item>
@@ -100,7 +123,7 @@ class NewPlaylist extends React.Component<Props, NoState> {
             </Grid>
           </Grid>
           <Grid item container direction='column' alignItems='flex-end'>
-            <Button onClick={CreatePlaylistForm.send} className={classes.button}>
+            <Button onClick={this.createPlaylist} className={classes.button}>
               Save
             </Button>
           </Grid>

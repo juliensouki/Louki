@@ -13,6 +13,8 @@ interface IProps extends WithStyles<typeof styles> {
   removeBookmark: (event) => void;
   editInformation: (event) => void;
   removeFromPlaylist: (event) => void;
+  updatePlaylist: (event) => void;
+  deletePlaylist: (event) => void;
 }
 
 @observer
@@ -59,6 +61,21 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
           }}
         >
           Retirer de la playlist
+        </MenuItem>
+        <MenuItem
+          onClick={event => {
+            this.props.updatePlaylist(event);
+          }}
+        >
+          Modifier playlist
+        </MenuItem>
+        <MenuItem
+          onClick={event => {
+            this.props.handleClose(event);
+            this.props.deletePlaylist(event);
+          }}
+        >
+          Supprimer playlist
         </MenuItem>
       </Menu>
     );

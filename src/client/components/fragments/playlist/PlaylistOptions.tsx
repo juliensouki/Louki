@@ -8,11 +8,12 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import PlaylistMenu from './PlaylistMenu';
 import SelectPlaylistModal from './SelectPlaylistModal';
+import UpdatePlaylistModal from '../update-playlist-modal/UpdatePlaylistModal';
 
 import IMusic from '../../../../shared/IMusic';
-import MusicsData from '../../../store/common/MusicsData';
-import MusicPlayer from '../../../store/common/MusicPlayer';
 import PlaylistData from '../../../store/common/PlaylistData';
+import DeletePlaylist from '../../../store/functions/playlists/DeletePlaylist';
+import { useHistory } from 'react-router';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -24,13 +25,30 @@ const styles = (theme: Theme) =>
   });
 
 interface IProps extends WithStyles<typeof styles> {
-  music: IMusic;
+  music?: IMusic;
 }
 
 @observer
 class PlaylistBlabla extends React.Component<IProps, NoState> {
   @observable anchorEl: HTMLElement | null = null;
   @observable openPlaylistsModal: boolean = false;
+  @observable openUpdatePlaylistModal: boolean = false;
+
+  handleDeletePlaylist = event => {
+    event.stopPropagation();
+    const playlistId = PlaylistData.currentPlaylist.__id;
+
+    DeletePlaylist(playlistId); // eslint-disable-line
+    const history = useHistory();
+    history.push('/all-music');
+    this.anchorEl = null;
+  };
+
+  handleUpdatePlaylist = event => {
+    event.stopPropagation();
+    this.openUpdatePlaylistModal = true;
+    this.anchorEl = null;
+  };
 
   handleMenu = event => {
     event.stopPropagation();
@@ -48,36 +66,38 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
 
   removeBookmark = event => {
     event.stopPropagation();
-    const id = this.props.music.__id;
-
-    fetch('/removeBookmark', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json', // eslint-disable-line
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        musicId: id,
-      }),
-    });
+    if (this.props.music) {
+      const id = this.props.music.__id;
+      fetch('/removeBookmark', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json', // eslint-disable-line
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          musicId: id,
+        }),
+      });
+    }
   };
 
   removeFromPlaylist = event => {
     event.stopPropagation();
-    const musicId = this.props.music.__id;
-    const playlistId = PlaylistData.currentPlaylist.__id;
-
-    fetch('/removeSongFromPlaylist', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json', // eslint-disable-line
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        playlistId: playlistId,
-        musicId: musicId,
-      }),
-    });
+    if (this.props.music) {
+      const musicId = this.props.music.__id;
+      const playlistId = PlaylistData.currentPlaylist.__id;
+      fetch('/removeSongFromPlaylist', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json', // eslint-disable-line
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          playlistId: playlistId,
+          musicId: musicId,
+        }),
+      });
+    }
   };
 
   addMusicToPlaylist = event => {
@@ -89,12 +109,21 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
     this.openPlaylistsModal = false;
   };
 
+  handleCloseUpdateModal = () => {
+    this.openUpdatePlaylistModal = false;
+  };
+
   render() {
     const { classes, music } = this.props;
 
     return (
       <React.Fragment>
-        <SelectPlaylistModal open={this.openPlaylistsModal} handleClose={this.handleCloseModal} musicId={music.__id} />
+        <SelectPlaylistModal
+          open={this.openPlaylistsModal}
+          handleClose={this.handleCloseModal}
+          musicId={music ? music.__id : ''}
+        />
+        <UpdatePlaylistModal open={this.openUpdatePlaylistModal} handleClose={this.handleCloseUpdateModal} />
         <IconButton aria-label='options' onClick={this.handleMenu}>
           <MoreVertIcon className={classes.menuIcon} />
           <PlaylistMenu
@@ -104,6 +133,8 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
             removeBookmark={this.removeBookmark}
             handleClose={this.handleClose}
             removeFromPlaylist={this.removeFromPlaylist}
+            updatePlaylist={this.handleUpdatePlaylist}
+            deletePlaylist={this.handleDeletePlaylist}
           />
         </IconButton>
       </React.Fragment>

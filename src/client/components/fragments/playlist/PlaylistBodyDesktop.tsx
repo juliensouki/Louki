@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { IconButton } from '@material-ui/core';
 
-import PlaylistBlabla from './PlaylistBlabla';
+import PlaylistOptions from './PlaylistOptions';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import IMusic from '../../../../shared/IMusic';
@@ -133,7 +133,7 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
               <TableCell className={classes.tableRow}>{MusicsData.getAlbumNameById(row.album)}</TableCell>
               <TableCell className={classes.tableRow}>{MusicsData.msTosec(row.duration)}</TableCell>
               <TableCell className={classes.tableRow} align='right'>
-                <PlaylistBlabla music={row} />
+                <PlaylistOptions music={row} />
               </TableCell>
             </TableRow>
           ))}
