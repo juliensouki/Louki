@@ -1,4 +1,4 @@
-import { observable, reaction, action, computed } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import IMusic from '../../../shared/IMusic';
 
 export enum MusicLoop {
@@ -15,6 +15,25 @@ class MusicPlayer {
   @observable private isOrderRandom: boolean = false;
   @observable public audio: HTMLAudioElement | null = null;
   @observable private timePlayedInSec: number = 0;
+  @observable private audioLevel: number = 100;
+  @observable private isMute: boolean = false;
+
+  @action muteUnMute = () => {
+    this.isMute = !this.isMute;
+    if (this.isMute == true && this.audio != null) {
+      this.audio.volume = 0;
+    } else if (this.isMute == false && this.audio != null) {
+      this.audio.volume = this.audioLevel / 100;
+    }
+  };
+
+  @action setAudioLevel = (level: number) => {
+    this.audioLevel = level;
+    if (this.audio != null) {
+      this.isMute = false;
+      this.audio.volume = this.audioLevel / 100;
+    }
+  };
 
   @action setCurrentPlaylist = (playlist: Array<IMusic>): void => {
     this.currentPlaylist = playlist;
@@ -25,6 +44,8 @@ class MusicPlayer {
 
     const path = this.currentPlaylist[this.musicPlayingIndex].path.replace('/home/souki/projects/Louki/', '');
     this.audio = new Audio(path);
+
+    this.audio.volume = this.isMute == false ? this.audioLevel / 100 : 0;
 
     this.audio.ontimeupdate = () => {
       this.timePlayedInSec = this.audio.currentTime;
@@ -117,6 +138,10 @@ class MusicPlayer {
     this.isOrderRandom = !this.isOrderRandom;
   };
 
+  @computed get volume(): number {
+    return this.audioLevel;
+  }
+
   @computed get playing(): boolean {
     return this.isPlaying;
   }
@@ -147,6 +172,10 @@ class MusicPlayer {
   @computed get timePlayed(): number {
     if (this.currentPlaylist.length == 0 || this.audio == null) return 0;
     return this.timePlayedInSec;
+  }
+
+  @computed get mute(): boolean {
+    return this.isMute;
   }
 }
 

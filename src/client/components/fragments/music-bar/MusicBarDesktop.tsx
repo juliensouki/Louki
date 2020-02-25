@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
@@ -10,12 +11,15 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import LoopIcon from '@material-ui/icons/Loop';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+
 import PauseIcon from '@material-ui/icons/Pause';
 
 import MusicPreview from './MusicPreview';
 import ProgressBar from './ProgressBar';
 
 import MusicPlayer, { MusicLoop } from '../../../store/common/MusicPlayer';
+import Volume from '../volume-button/Volume';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -86,6 +90,16 @@ interface IProps extends WithStyles<typeof styles> {} // eslint-disable-line
 
 @observer
 class MusicBarDesktop extends React.Component<IProps, NoState> {
+  @observable volumeAnchorEl: HTMLElement | null = null;
+
+  handlePopoverOpen = event => {
+    this.volumeAnchorEl = event.currentTarget;
+  };
+
+  handlePopoverClose = () => {
+    this.volumeAnchorEl = null;
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -121,7 +135,18 @@ class MusicBarDesktop extends React.Component<IProps, NoState> {
                 />
                 {MusicPlayer.repeat == MusicLoop.REPEAT_ONE ? <div className={classes.bubbleRepeat}>1</div> : null}
               </div>
-              <VolumeUpIcon className={classes.controlIcons} />
+              <div
+                style={{ display: 'inline-block' }}
+                onMouseEnter={this.handlePopoverOpen}
+                onMouseLeave={this.handlePopoverClose}
+              >
+                {MusicPlayer.volume == 0 ? (
+                  <VolumeOffIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />
+                ) : (
+                  <VolumeUpIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />
+                )}
+                <Volume anchorEl={this.volumeAnchorEl} handleClose={this.handlePopoverClose} />
+              </div>
             </Grid>
           </Grid>
         </Grid>
