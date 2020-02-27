@@ -18,6 +18,8 @@ import MusicsData from '../../../store/common/MusicsData';
 import MusicPlayer from '../../../store/common/MusicPlayer';
 import AddBookmark from '../../../store/functions/bookmarks/AddBookmarks';
 
+import MusicPlayingIcon from '../../../assets/MusicPlayingIcon';
+
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
@@ -43,6 +45,9 @@ const styles = (theme: Theme) =>
     tableRow: {
       color: theme.palette.primary.main,
     },
+    rowSelected: {
+      backgroundColor: '#151414',
+    },
     row: {
       '&:hover': {
         backgroundColor: '#151414',
@@ -58,7 +63,10 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
   playlist: Array<IMusic>;
-  favorites?: boolean;
+  canAddToFavorites?: boolean;
+  favorites: boolean;
+  customPlaylist?: boolean;
+  allSongs?: boolean;
 }
 
 @observer
@@ -66,6 +74,7 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
   @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
 
   playMusic = (index: number): void => {
+    console.log('ok');
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
     MusicPlayer.playMusic(index);
   };
@@ -95,7 +104,7 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
   };
 
   render() {
-    const { classes, playlist } = this.props;
+    const { classes, playlist, favorites, customPlaylist, allSongs } = this.props;
 
     return (
       <Table aria-label='simple table'>
@@ -112,13 +121,13 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
           {playlist.map((row, index) => (
             <TableRow
               key={row.__id}
-              className={classes.row}
+              className={MusicPlayer.playingMusicId == row.__id ? classes.rowSelected : classes.row}
               onClick={() => {
                 this.playMusic(index);
               }}
             >
               <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
-                {this.props.favorites ? (
+                {this.props.canAddToFavorites ? (
                   <IconButton
                     onClick={event => {
                       this.addBookmark(event, row.__id);
@@ -127,13 +136,19 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
                     <FavoriteBorderIcon />
                   </IconButton>
                 ) : null}
+                {MusicPlayer.playingMusicId == row.__id ? <MusicPlayingIcon /> : null}
                 {row.title}
               </TableCell>
               <TableCell style={{ color: '#FFF' }}>{MusicsData.getArtistNameById(row.artist)}</TableCell>
               <TableCell className={classes.tableRow}>{MusicsData.getAlbumNameById(row.album)}</TableCell>
               <TableCell className={classes.tableRow}>{MusicsData.msTosec(row.duration)}</TableCell>
               <TableCell className={classes.tableRow} align='right'>
-                <PlaylistOptions music={row} />
+                <PlaylistOptions
+                  music={row}
+                  allSongs={allSongs}
+                  removeBookmark={favorites}
+                  musicInPlaylist={customPlaylist}
+                />
               </TableCell>
             </TableRow>
           ))}

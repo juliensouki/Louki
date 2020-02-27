@@ -26,10 +26,14 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
   music?: IMusic;
+  playlist?: boolean;
+  musicInPlaylist?: boolean;
+  removeBookmark?: boolean;
+  allSongs?: boolean;
 }
 
 @observer
-class PlaylistBlabla extends React.Component<IProps, NoState> {
+class PlaylistOptions extends React.Component<IProps, NoState> {
   @observable anchorEl: HTMLElement | null = null;
   @observable openPlaylistsModal: boolean = false;
   @observable openUpdatePlaylistModal: boolean = false;
@@ -86,6 +90,8 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
     if (this.props.music) {
       const musicId = this.props.music.__id;
       const playlistId = PlaylistData.currentPlaylist.__id;
+      console.log(musicId);
+      console.log(playlistId);
       fetch('/removeSongFromPlaylist', {
         method: 'POST',
         headers: {
@@ -114,7 +120,7 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
   };
 
   render() {
-    const { classes, music } = this.props;
+    const { classes, music, playlist, musicInPlaylist, removeBookmark, allSongs } = this.props;
 
     return (
       <React.Fragment>
@@ -128,13 +134,13 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
           <MoreVertIcon className={classes.menuIcon} />
           <PlaylistMenu
             anchorEl={this.anchorEl}
-            addMusicToPlaylist={this.addMusicToPlaylist}
-            editInformation={this.editInformation}
-            removeBookmark={this.removeBookmark}
+            addMusicToPlaylist={allSongs ? this.addMusicToPlaylist : null}
+            editInformation={music ? this.editInformation : null}
+            removeBookmark={removeBookmark ? this.removeBookmark : null}
             handleClose={this.handleClose}
-            removeFromPlaylist={this.removeFromPlaylist}
-            updatePlaylist={this.handleUpdatePlaylist}
-            deletePlaylist={this.handleDeletePlaylist}
+            removeFromPlaylist={musicInPlaylist ? this.removeFromPlaylist : null}
+            updatePlaylist={playlist ? this.handleUpdatePlaylist : null}
+            deletePlaylist={playlist ? this.handleDeletePlaylist : null}
           />
         </IconButton>
       </React.Fragment>
@@ -142,4 +148,4 @@ class PlaylistBlabla extends React.Component<IProps, NoState> {
   }
 }
 
-export default withStyles(styles)(PlaylistBlabla);
+export default withStyles(styles)(PlaylistOptions);

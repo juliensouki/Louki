@@ -39,20 +39,31 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
   playlist: Array<IMusic>;
+  canAddToFavorites?: boolean;
   favorites?: boolean;
+  customPlaylist?: boolean;
+  allSongs?: boolean;
 }
 
 @observer
 class PlaylistBody extends React.Component<IProps, NoState> {
   render() {
-    const { classes, playlist, favorites } = this.props;
+    const { classes, playlist, favorites, customPlaylist, canAddToFavorites, allSongs } = this.props;
 
     return (
       <div className={classes.root}>
         {playlist ? (
           <ResponsiveAdapter
             mobile={<PlaylistBodyMobile playlist={playlist} />}
-            desktop={<PlaylistBodyDesktop favorites={favorites} playlist={playlist} />}
+            desktop={
+              <PlaylistBodyDesktop
+                allSongs={allSongs}
+                favorites={favorites}
+                playlist={playlist}
+                customPlaylist={customPlaylist}
+                canAddToFavorites={canAddToFavorites}
+              />
+            }
           />
         ) : (
           <Typography>Cette playlist est encore vide pour le moment</Typography>

@@ -177,6 +177,11 @@ class MusicPlayer {
   @computed get mute(): boolean {
     return this.isMute;
   }
+
+  @computed get playingMusicId(): string {
+    if (this.currentPlaylist.length == 0) return '';
+    return this.currentPlaylist[this.musicPlayingIndex].__id;
+  }
 }
 
 export default new MusicPlayer();

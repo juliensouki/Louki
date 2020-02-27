@@ -9,12 +9,12 @@ const styles = (theme: Theme) => createStyles({});
 interface IProps extends WithStyles<typeof styles> {
   anchorEl: HTMLElement | null;
   handleClose: (event) => void;
-  addMusicToPlaylist: (event) => void;
-  removeBookmark: (event) => void;
-  editInformation: (event) => void;
-  removeFromPlaylist: (event) => void;
-  updatePlaylist: (event) => void;
-  deletePlaylist: (event) => void;
+  addMusicToPlaylist: (event) => void | null;
+  removeBookmark: (event) => void | null;
+  editInformation: (event) => void | null;
+  removeFromPlaylist: (event) => void | null;
+  updatePlaylist: (event) => void | null;
+  deletePlaylist: (event) => void | null;
 }
 
 @observer
@@ -30,53 +30,65 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
           this.props.handleClose(event);
         }}
       >
-        <MenuItem
-          onClick={event => {
-            this.props.handleClose(event);
-            this.props.addMusicToPlaylist(event);
-          }}
-        >
-          Ajouter à une playlist
-        </MenuItem>
-        <MenuItem
-          onClick={event => {
-            this.props.handleClose(event);
-            this.props.editInformation(event);
-          }}
-        >
-          Modifier
-        </MenuItem>
-        <MenuItem
-          onClick={event => {
-            this.props.handleClose(event);
-            this.props.removeBookmark(event);
-          }}
-        >
-          Enlever des favoris
-        </MenuItem>
-        <MenuItem
-          onClick={event => {
-            this.props.handleClose(event);
-            this.props.removeFromPlaylist(event);
-          }}
-        >
-          Retirer de la playlist
-        </MenuItem>
-        <MenuItem
-          onClick={event => {
-            this.props.updatePlaylist(event);
-          }}
-        >
-          Modifier playlist
-        </MenuItem>
-        <MenuItem
-          onClick={event => {
-            this.props.handleClose(event);
-            this.props.deletePlaylist(event);
-          }}
-        >
-          Supprimer playlist
-        </MenuItem>
+        {this.props.addMusicToPlaylist ? (
+          <MenuItem
+            onClick={event => {
+              this.props.handleClose(event);
+              this.props.addMusicToPlaylist(event);
+            }}
+          >
+            Ajouter à une playlist
+          </MenuItem>
+        ) : null}
+        {this.props.editInformation ? (
+          <MenuItem
+            onClick={event => {
+              this.props.handleClose(event);
+              this.props.editInformation(event);
+            }}
+          >
+            Modifier
+          </MenuItem>
+        ) : null}
+        {this.props.removeBookmark ? (
+          <MenuItem
+            onClick={event => {
+              this.props.handleClose(event);
+              this.props.removeBookmark(event);
+            }}
+          >
+            Enlever des favoris
+          </MenuItem>
+        ) : null}
+        {this.props.removeFromPlaylist ? (
+          <MenuItem
+            onClick={event => {
+              this.props.handleClose(event);
+              this.props.removeFromPlaylist(event);
+            }}
+          >
+            Retirer de la playlist
+          </MenuItem>
+        ) : null}
+        {this.props.updatePlaylist ? (
+          <MenuItem
+            onClick={event => {
+              this.props.updatePlaylist(event);
+            }}
+          >
+            Modifier playlist
+          </MenuItem>
+        ) : null}
+        {this.props.deletePlaylist ? (
+          <MenuItem
+            onClick={event => {
+              this.props.handleClose(event);
+              this.props.deletePlaylist(event);
+            }}
+          >
+            Supprimer playlist
+          </MenuItem>
+        ) : null}
       </Menu>
     );
   }
