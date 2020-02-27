@@ -39,9 +39,9 @@ class Favorites extends React.Component<IProps, NoState> {
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader subTitle='Your favorite songs' title='Favorites' />
+        <PlaylistHeader subTitle='Your favorite songs' title='Favorites' playlist={this.bookmarks} />
         <SearchContainer />
-        <PlaylistBody playlist={this.bookmarks} />
+        <PlaylistBody playlist={this.bookmarks} favorites />
       </div>
     );
   }

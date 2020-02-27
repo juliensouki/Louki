@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import MusicsData from '../../common/MusicsData';
+import { useHistory } from 'react-router';
 
 class CreatePlaylistForm {
   @observable private playlistName: string = '';
@@ -47,6 +48,8 @@ class CreatePlaylistForm {
       })
       .then(data => {
         MusicsData.setPlaylists(data);
+        const history = useHistory();
+        history.push('/all-music');
       });
   };
 }

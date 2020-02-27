@@ -5,6 +5,8 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { Grid, Fab, Typography } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PlaylistOptions from './PlaylistOptions';
+import MusicPlayer from '../../../store/common/MusicPlayer';
+import IMusic from '../../../../shared/IMusic';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -103,6 +105,7 @@ const styles = (theme: Theme) =>
   });
 
 interface IProps extends WithStyles<typeof styles> {
+  playlist?: Array<IMusic>;
   playlistId?: string;
   subTitle: string;
   title: string;
@@ -111,14 +114,19 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistHeader extends React.Component<IProps, NoState> {
+  startPlaylist = (): void => {
+    MusicPlayer.setCurrentPlaylist(this.props.playlist);
+    MusicPlayer.playMusic(0);
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, playlist, description } = this.props;
 
     return (
       <Grid container direction='column' className={classes.root} justify='space-between'>
         {this.props.playlistId ? (
           <div className={classes.playlistOptions}>
-            <PlaylistOptions />
+            <PlaylistOptions playlist />
           </div>
         ) : null}
         <Grid container item direction='row'>
@@ -140,7 +148,13 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
                   <Typography className={classes.playlistName}>{this.props.title}</Typography>
                 </Grid>
                 <Grid item>
-                  <Fab variant='extended' size='medium' className={classes.playlistButton} aria-label='play'>
+                  <Fab
+                    variant='extended'
+                    size='medium'
+                    className={classes.playlistButton}
+                    aria-label='play'
+                    onClick={this.startPlaylist}
+                  >
                     <PlayArrowIcon className={classes.extendedIcon} />
                     Play
                   </Fab>
@@ -149,7 +163,7 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
             </Grid>
             <Grid item style={{ width: '100%' }}>
               <Typography className={classes.playlistDescription}>
-                {this.props.description || 'You have 32 songs'}
+                {description ? description : playlist ? 'You have ' + playlist.length + ' songs' : ''}
               </Typography>
               <Typography className={classes.playlistDescription}>
                 You spent 5 days 12 hours 6 minutes listening to your music.

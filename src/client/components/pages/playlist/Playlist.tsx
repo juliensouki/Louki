@@ -37,13 +37,14 @@ class Playlist extends React.Component<NoProps, NoState> {
     return (
       <div style={{ width: '100%' }}>
         <PlaylistHeader
+          playlist={this.musics}
           playlistId={this.playlist == null ? undefined : this.playlist.__id}
           subTitle='Playlist'
           title={this.playlist != null ? this.playlist.name : ''}
           description={this.playlist != null ? this.playlist.description : ''}
         />
         <SearchContainer />
-        <PlaylistBody playlist={this.musics} />
+        <PlaylistBody playlist={this.musics} customPlaylist />
       </div>
     );
   }
