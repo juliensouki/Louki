@@ -16,7 +16,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
 import MusicPlayer from '../../../store/common/MusicPlayer';
-import AddBookmark from '../../../store/functions/bookmarks/AddBookmarks';
+import BookmarksData from '../../../store/common/BookmarksData';
 
 import MusicPlayingIcon from '../../../assets/MusicPlayingIcon';
 
@@ -74,7 +74,6 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
   @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
 
   playMusic = (index: number): void => {
-    console.log('ok');
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
     MusicPlayer.playMusic(index);
   };
@@ -100,7 +99,7 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
 
   addBookmark = (event, id: string) => {
     event.stopPropagation();
-    AddBookmark(id);
+    BookmarksData.addBookmark(id);
   };
 
   render() {

@@ -9,6 +9,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PlaylistMenu from './PlaylistMenu';
 import SelectPlaylistModal from './SelectPlaylistModal';
 import UpdatePlaylistModal from '../update-playlist-modal/UpdatePlaylistModal';
+import BookmarksData from '../../../store/common/BookmarksData';
 
 import IMusic from '../../../../shared/IMusic';
 import PlaylistData from '../../../store/common/PlaylistData';
@@ -71,17 +72,7 @@ class PlaylistOptions extends React.Component<IProps, NoState> {
   removeBookmark = event => {
     event.stopPropagation();
     if (this.props.music) {
-      const id = this.props.music.__id;
-      fetch('/removeBookmark', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json', // eslint-disable-line
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          musicId: id,
-        }),
-      });
+      BookmarksData.deleteBookmark(this.props.music.__id);
     }
   };
 
@@ -90,8 +81,6 @@ class PlaylistOptions extends React.Component<IProps, NoState> {
     if (this.props.music) {
       const musicId = this.props.music.__id;
       const playlistId = PlaylistData.currentPlaylist.__id;
-      console.log(musicId);
-      console.log(playlistId);
       fetch('/removeSongFromPlaylist', {
         method: 'POST',
         headers: {

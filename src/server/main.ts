@@ -12,6 +12,8 @@ import Artist from './db/schemas/Artist';
 import Album from './db/schemas/Album';
 import User from './db/schemas/User';
 
+import IUser from '../shared/IUser';
+
 import databaseHandler from './db';
 import dataLoader from './dataLoader';
 import uuid from 'uuid';
@@ -76,11 +78,14 @@ app.get('/allData', (req, res) => {
   const musics = dLoader.get('musics');
   const artists = dLoader.get('artists');
   const albums = dLoader.get('albums');
-
-  res.json({
-    musics: musics,
-    artists: artists,
-    albums: albums,
+  databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+    const bookmarks = (values[0] as IUser).favorites;
+    res.json({
+      musics: musics,
+      artists: artists,
+      albums: albums,
+      bookmarks: bookmarks,
+    });
   });
 });
 
@@ -92,12 +97,34 @@ app.get('/allPlaylists', (req, res) => {
 
 app.post('/addBookmark', (req, res) => {
   const id = req.body.musicId;
-  databaseHandler.addToArray(User, 'selected', true, 'favorites', id);
+  databaseHandler.addToArray(User, 'selected', true, 'favorites', id).then(
+    values => {
+      dLoader.loadSpecificData('users');
+      databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+        res.json((values[0] as IUser).favorites);
+      });
+    },
+    error => {
+      console.log(error);
+      res.send(null);
+    },
+  );
 });
 
 app.post('/removeBookmark', (req, res) => {
   const id = req.body.musicId;
-  databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id);
+  databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id).then(
+    values => {
+      dLoader.loadSpecificData('users');
+      databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+        res.json((values[0] as IUser).favorites);
+      });
+    },
+    error => {
+      console.log(error);
+      res.send(null);
+    },
+  );
 });
 
 app.post('/removeSongFromPlaylist', (req, res) => {

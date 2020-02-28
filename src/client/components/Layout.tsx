@@ -16,6 +16,7 @@ import Settings from './pages/settings/Settings';
 import Favorites from './pages/favorites/Favorites';
 import SpecificArtistOrAlbum from './pages/specific-artist-or-album/SpecificArtistOrAlbum';
 
+import BookmarksData from '../store/common/BookmarksData';
 import MusicsData from '../store/common/MusicsData';
 
 const styles = (theme: Theme) =>
@@ -37,6 +38,7 @@ class Layout extends React.Component<NoProps, NoState> {
         MusicsData.setMusics(data.musics);
         MusicsData.setAlbums(data.albums);
         MusicsData.setArtists(data.artists);
+        BookmarksData.setBookmarks(MusicsData.idsToMusics(data.bookmarks));
       });
   }
 
