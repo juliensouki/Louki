@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import { withRouter } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
@@ -10,7 +10,7 @@ import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 
 @observer
-class SpecificArtistOrAlbum extends React.Component<NoProps, NoState> {
+class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState> {
   @observable artistOrAlbumId: string = '';
   @observable artistOrAlbumName: string = '';
   @observable artistOrAlbum: 'artist' | 'album' | '' = '';
@@ -34,9 +34,9 @@ class SpecificArtistOrAlbum extends React.Component<NoProps, NoState> {
   render() {
     return (
       <div style={{ width: '100%' }}>
-        <PlaylistHeader title={this.artistOrAlbumName} subTitle={this.artistOrAlbum} description='To define' />
+        <PlaylistHeader title={this.artistOrAlbumName} subTitle={this.artistOrAlbum} description='' />
         <SearchContainer />
-        <PlaylistBody playlist={this.playlist} />
+        <PlaylistBody playlist={this.playlist} canAddToFavorites allSongs />
       </div>
     );
   }

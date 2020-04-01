@@ -9,9 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
 
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CurrentArtistOrAlbum from '../../../store/pages/artistsOrAlbums/CurrentArtistOrAlbum';
 import AlbumIcon from '@material-ui/icons/Album';
 import MicIcon from '@material-ui/icons/Mic';
@@ -25,7 +23,7 @@ const styles = (theme: Theme) =>
   createStyles({
     '@global': {
       '.MuiTableCell-root': {
-        padding: 8,
+        padding: 14,
       },
     },
     root: {
@@ -81,7 +79,6 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
               {page == Page.ARTISTS ? <React.Fragment /> : <TableCell className={classes.rowTitles}>Artist</TableCell>}
               <TableCell className={classes.rowTitles}>Number of songs</TableCell>
               <TableCell className={classes.rowTitles}>Duration</TableCell>
-              <TableCell align='right'></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -108,11 +105,6 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
                 )}
                 <TableCell className={classes.tableRow}>{row.musics.length}</TableCell>
                 <TableCell className={classes.tableRow}>{MusicsData.totalDuration(row.musics)}</TableCell>
-                <TableCell className={classes.tableRow} align='right'>
-                  <IconButton aria-label='options'>
-                    <MoreVertIcon />
-                  </IconButton>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>

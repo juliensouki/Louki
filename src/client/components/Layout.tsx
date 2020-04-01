@@ -43,12 +43,6 @@ class Layout extends React.Component<NoProps, NoState> {
       });
   }
 
-  /*componentDidUpdate(prevProps) {
-    if (this.props.location.pathname !== prevProps.location.pathname) {
-      this.onRouteChange();
-    }
-  }*/
-
   render() {
     return (
       <BrowserRouter>
