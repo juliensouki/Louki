@@ -1,12 +1,31 @@
 import * as React from 'react';
-import { useLocation } from 'react-router';
+import { observer } from 'mobx-react';
+import { observable } from 'mobx';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+
 import CurrentPlaylist from '../../store/fragments/playlist/CurrentPlaylist';
+import NavigationForm from '../../store/common/NavigationForm';
 import IPlaylist from '../../../shared/IPlaylist';
+@observer
+class RouteChangerHandler extends React.Component<RouteComponentProps, NoState> {
+  @observable previousRoute: string = '';
 
-const RouteChangeHandler = () => {
-  const location = useLocation();
+  componentDidMount() {
+    if (this.props.location.pathname.includes('/playlist/')) {
+      const playlistId = location.pathname.split('/playlist/')[1];
+      this.getPlaylist(playlistId);
+    }
+  }
 
-  async function getPlaylist(playlistId: string) {
+  componentDidUpdate(prevProps: RouteComponentProps) {
+    NavigationForm.setPreviousRoute(prevProps.location.pathname);
+    if (this.props.location.pathname.includes('/playlist/')) {
+      const playlistId = location.pathname.split('/playlist/')[1];
+      this.getPlaylist(playlistId);
+    }
+  }
+
+  getPlaylist = async (playlistId: string) => {
     fetch('/playlist?id=' + playlistId)
       .then(res => {
         return res.json();
@@ -14,16 +33,11 @@ const RouteChangeHandler = () => {
       .then(data => {
         CurrentPlaylist.setPlaylist(data as IPlaylist);
       });
+  };
+
+  render() {
+    return <React.Fragment />;
   }
+}
 
-  React.useEffect(() => {
-    if (location.pathname.includes('/playlist/')) {
-      const playlistId = location.pathname.split('/playlist/')[1];
-      getPlaylist(playlistId);
-    }
-  }, [location.pathname]);
-
-  return <React.Fragment />;
-};
-
-export default RouteChangeHandler;
+export default withRouter(RouteChangerHandler);

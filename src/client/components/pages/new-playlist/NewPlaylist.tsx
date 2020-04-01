@@ -6,6 +6,8 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 import SimpleHeader from '../../fragments/playlist/SimpleHeader';
 import Notification, { NotificationType } from '../../fragments/notifications/Notification';
+import NavigationForm from '../../../store/common/NavigationForm';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Grid, Button, Typography, TextField } from '@material-ui/core/';
 import PublicIcon from '@material-ui/icons/Public';
@@ -52,7 +54,7 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 }; // eslint-disable-line
 
 @observer
-class NewPlaylist extends React.Component<Props, NoState> {
+class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> {
   @observable open: boolean = false;
 
   @action handleClose = (event: React.SyntheticEvent<any, Event>, reason: string) => {
@@ -62,6 +64,7 @@ class NewPlaylist extends React.Component<Props, NoState> {
 
   @action createPlaylist = () => {
     CreatePlaylistForm.send();
+    this.props.history.push(NavigationForm.previousRoute);
     this.open = true;
   };
 
@@ -133,4 +136,4 @@ class NewPlaylist extends React.Component<Props, NoState> {
   }
 }
 
-export default withStyles(styles)(NewPlaylist);
+export default withRouter(withStyles(styles)(NewPlaylist));
