@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import RouteChangeHandler from '../components/utils/RouteChangeHandler';
 
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 
 import TopBar from './fragments/topbar/TopBar';
 import LeftPanel from './fragments/left-panel/LeftPanel';
@@ -42,32 +43,37 @@ class Layout extends React.Component<NoProps, NoState> {
       });
   }
 
+  /*componentDidUpdate(prevProps) {
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      this.onRouteChange();
+    }
+  }*/
+
   render() {
     return (
-      <React.Fragment>
-        <BrowserRouter>
-          <React.Fragment>
-            <TopBar />
-            <LeftPanel />
-            <MusicBar />
-            <PlaylistPanel>
-              <Switch>
-                <Route path={'/'} component={AllMusic} exact />
-                <Route path={'/all-songs'} component={AllMusic} exact />
-                <Route path={'/favorites'} component={Favorites} exact />
-                <Route path={'/playlist/:id'} component={Playlist} exact />
-                <Route path={'/new-playlist'} component={NewPlaylist} exact />
-                <Route path={'/artists'} component={ArtistsOrAlbums} exact />
-                <Route path={'/artist/:id'} component={SpecificArtistOrAlbum} exact />
-                <Route path={'/albums'} component={ArtistsOrAlbums} exact />
-                <Route path={'/album/:id'} component={SpecificArtistOrAlbum} exact />
-                <Route path={'/settings'} component={Settings} exact />
-                <Route component={AllMusic} />
-              </Switch>
-            </PlaylistPanel>
-          </React.Fragment>
-        </BrowserRouter>
-      </React.Fragment>
+      <BrowserRouter>
+        <RouteChangeHandler />
+        <React.Fragment>
+          <TopBar />
+          <LeftPanel />
+          <MusicBar />
+          <PlaylistPanel>
+            <Switch>
+              <Route path={'/'} component={AllMusic} exact />
+              <Route path={'/all-songs'} component={AllMusic} exact />
+              <Route path={'/favorites'} component={Favorites} exact />
+              <Route path={'/playlist/:id'} component={Playlist} exact />
+              <Route path={'/new-playlist'} component={NewPlaylist} exact />
+              <Route path={'/artists'} component={ArtistsOrAlbums} exact />
+              <Route path={'/artist/:id'} component={SpecificArtistOrAlbum} exact />
+              <Route path={'/albums'} component={ArtistsOrAlbums} exact />
+              <Route path={'/album/:id'} component={SpecificArtistOrAlbum} exact />
+              <Route path={'/settings'} component={Settings} exact />
+              <Route component={AllMusic} />
+            </Switch>
+          </PlaylistPanel>
+        </React.Fragment>
+      </BrowserRouter>
     );
   }
 }
