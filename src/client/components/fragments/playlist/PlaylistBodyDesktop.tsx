@@ -17,6 +17,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
 import MusicPlayer from '../../../store/common/MusicPlayer';
+import NavigationForm from '../../../store/common/NavigationForm';
 import BookmarksData from '../../../store/common/BookmarksData';
 
 import MusicPlayingIcon from '../../../assets/MusicPlayingIcon';
@@ -154,7 +155,9 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
                     </IconButton>
                   )
                 ) : null}
-                {MusicPlayer.playingMusicId == row.__id ? <MusicPlayingIcon /> : null}
+                {MusicPlayer.playingMusicId == row.__id && NavigationForm.currentRoute == MusicPlayer.playlistRoute ? (
+                  <MusicPlayingIcon />
+                ) : null}
                 {row.title}
               </TableCell>
               <TableCell style={{ color: '#FFF' }}>{MusicsData.getArtistNameById(row.artist)}</TableCell>
