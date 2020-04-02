@@ -10,6 +10,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 import AddMusicToPlaylist from '../../../store/functions/playlists/AddMusicToPlaylist';
+import MusicsData from '../../../store/common/MusicsData';
 import IPlaylist from '../../../../shared/IPlaylist';
 
 const styles = (theme: Theme) => createStyles({});
@@ -22,18 +23,6 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class SelectPlaylistModal extends React.Component<IProps, NoState> {
-  @observable playlists: Array<IPlaylist> = [];
-
-  async componentDidMount() {
-    fetch('/allPlaylists')
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        this.playlists = data;
-      });
-  }
-
   handleListItemClick = (playlist: IPlaylist) => {
     AddMusicToPlaylist(playlist.__id, this.props.musicId);
   };
@@ -51,7 +40,7 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
       >
         <DialogTitle id='simple-dialog-title'>Choose a playlist</DialogTitle>
         <List>
-          {this.playlists.map(playlist => {
+          {MusicsData.allPlaylists.map(playlist => {
             return (
               <ListItem
                 key={playlist.__id}
