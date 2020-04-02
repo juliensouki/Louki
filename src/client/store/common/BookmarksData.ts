@@ -5,11 +5,11 @@ import MusicsData from './MusicsData';
 class BookmarksData {
   @observable bkmarks: Array<IMusic> = [];
 
-  @action setBookmarks = (bkmarks: Array<IMusic>) => {
+  @action setBookmarks = (bkmarks: Array<IMusic>): void => {
     this.bkmarks = bkmarks;
   };
 
-  @action addBookmark = (musicId: string) => {
+  @action addBookmark = (musicId: string): void => {
     fetch('/addBookmark', {
       method: 'POST',
       headers: {
@@ -28,7 +28,7 @@ class BookmarksData {
       });
   };
 
-  @action deleteBookmark = (musicId: string) => {
+  @action deleteBookmark = (musicId: string): void => {
     fetch('/removeBookmark', {
       method: 'POST',
       headers: {
@@ -46,6 +46,13 @@ class BookmarksData {
         this.bkmarks = MusicsData.idsToMusics(data);
         console.log(this.bkmarks);
       });
+  };
+
+  isInBookmarks = (id: string): boolean => {
+    for (let i = 0; i < this.bkmarks.length; i++) {
+      if (this.bkmarks[i].__id == id) return true;
+    }
+    return false;
   };
 
   @computed get bookmarks(): Array<IMusic> {

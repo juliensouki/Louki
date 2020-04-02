@@ -12,6 +12,7 @@ import { IconButton } from '@material-ui/core';
 
 import PlaylistOptions from './PlaylistOptions';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
@@ -59,6 +60,9 @@ const styles = (theme: Theme) =>
         cursor: 'pointer',
       },
     },
+    fillFavIcon: {
+      color: theme.palette.secondary.main,
+    },
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -102,6 +106,11 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
     BookmarksData.addBookmark(id);
   };
 
+  deleteBookmark = (event, id: string) => {
+    event.stopPropagation();
+    BookmarksData.deleteBookmark(id);
+  };
+
   render() {
     const { classes, playlist, favorites, customPlaylist, allSongs } = this.props;
 
@@ -127,13 +136,23 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
             >
               <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
                 {this.props.canAddToFavorites ? (
-                  <IconButton
-                    onClick={event => {
-                      this.addBookmark(event, row.__id);
-                    }}
-                  >
-                    <FavoriteBorderIcon />
-                  </IconButton>
+                  BookmarksData.isInBookmarks(row.__id) ? (
+                    <IconButton
+                      onClick={event => {
+                        this.deleteBookmark(event, row.__id);
+                      }}
+                    >
+                      <FavoriteIcon className={classes.fillFavIcon} />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      onClick={event => {
+                        this.addBookmark(event, row.__id);
+                      }}
+                    >
+                      <FavoriteBorderIcon />
+                    </IconButton>
+                  )
                 ) : null}
                 {MusicPlayer.playingMusicId == row.__id ? <MusicPlayingIcon /> : null}
                 {row.title}
