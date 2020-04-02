@@ -93,15 +93,6 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
     this.arrayOfAnchorEl[index] = null;
   };
 
-  editInformation = (event, index: number) => {
-    event.stopPropagation();
-    console.log('Editing information of music ' + this.props.playlist[index].title);
-  };
-
-  addMusicToPlaylist = (event, index: number) => {
-    event.stopPropagation();
-  };
-
   addBookmark = (event, id: string) => {
     event.stopPropagation();
     BookmarksData.addBookmark(id);

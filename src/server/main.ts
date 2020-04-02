@@ -177,7 +177,15 @@ app.post('/deletePlaylist', (req, res) => {
 app.post('/addMusicToPlaylist', (req, res) => {
   const { playlistId, musicId } = req.body;
 
-  databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId);
+  databaseHandler.findOneInDocument(Playlist, '__id', playlistId).then(values => {
+    if (values[0].musics.includes(musicId)) {
+      res.sendStatus(403);
+    } else {
+      databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId).then(() => {
+        res.sendStatus(200);
+      });
+    }
+  });
 });
 
 app.post('/updatePlaylist', (req, res) => {
