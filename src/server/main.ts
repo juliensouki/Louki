@@ -13,11 +13,13 @@ import Album from './db/schemas/Album';
 import User from './db/schemas/User';
 
 import IUser from '../shared/IUser';
+import IPlaylist from '../shared/IPlaylist';
 
 import databaseHandler from './db';
 import dataLoader from './dataLoader';
 import uuid from 'uuid';
 import bodyParser from 'body-parser';
+import { __values } from 'tslib';
 
 const app = express();
 const dLoader = new dataLoader(databaseHandler);
@@ -129,7 +131,11 @@ app.post('/removeBookmark', (req, res) => {
 
 app.post('/removeSongFromPlaylist', (req, res) => {
   const { playlistId, musicId } = req.body;
-  databaseHandler.removeFromArray(Playlist, '__id', playlistId, 'musics', musicId);
+  databaseHandler.removeFromArray(Playlist, '__id', playlistId, 'musics', musicId).then(() => {
+    databaseHandler.findOneInDocument(Playlist, '__id', playlistId).then(values => {
+      res.json(values[0] as IPlaylist);
+    });
+  });
 });
 
 app.post('/createPlaylist', (req, res) => {

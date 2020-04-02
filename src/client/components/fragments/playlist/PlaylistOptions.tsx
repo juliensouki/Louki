@@ -13,6 +13,7 @@ import UpdatePlaylistModal from '../update-playlist-modal/UpdatePlaylistModal';
 import BookmarksData from '../../../store/common/BookmarksData';
 
 import IMusic from '../../../../shared/IMusic';
+import IPlaylist from '../../../../shared/IPlaylist';
 import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
 import NavigationForm from '../../../store/common/NavigationForm';
 import DeletePlaylist from '../../../store/functions/playlists/DeletePlaylist';
@@ -92,7 +93,13 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps, NoSt
           playlistId: playlistId,
           musicId: musicId,
         }),
-      });
+      })
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          CurrentPlaylist.setPlaylist(data as IPlaylist);
+        });
     }
   };
 
