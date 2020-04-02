@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
+import { withRouter, RoutePropsComponent } from 'react-router';
 
 import MusicPlayer from '../../../store/common/MusicPlayer';
 import MusicsData from '../../../store/common/MusicsData';
@@ -56,12 +57,16 @@ const styles = (theme: Theme) =>
 interface IProps extends WithStyles<typeof styles> {}; //eslint-disable-line
 
 @observer
-class MusicPreview extends React.Component<IProps, NoState> {
+class MusicPreview extends React.Component<IProps & RoutePropsComponent, NoState> {
+  handleClick = () => {
+    this.props.history.push(MusicPlayer.playlistRoute);
+  };
+
   render() {
     const { classes } = this.props;
 
     return (
-      <Grid container direction='row' className={classes.root}>
+      <Grid container direction='row' className={classes.root} onClick={this.handleClick}>
         <Grid item style={{ height: '100%' }}>
           <img
             src='https://images.genius.com/cd64d6c15657a9d85823d3666969a00d.1000x1000x1.jpg'
@@ -93,4 +98,4 @@ class MusicPreview extends React.Component<IProps, NoState> {
   }
 }
 
-export default withStyles(styles)(MusicPreview);
+export default withRouter(withStyles(styles)(MusicPreview));
