@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 
 class NavigationForm {
   @observable prevRoute: string = '';
+  @observable route: string = '';
 
   @computed get previousRoute(): string {
     return this.prevRoute != '' ? this.prevRoute : '/all-musics';
@@ -9,6 +10,14 @@ class NavigationForm {
 
   @action setPreviousRoute = (prevRoute: string) => {
     this.prevRoute = prevRoute;
+  };
+
+  @computed get currentRoute(): string {
+    return this.route;
+  }
+
+  @action setCurrentRoute = (route: string) => {
+    this.route = route;
   };
 }
 

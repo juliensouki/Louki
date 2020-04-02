@@ -4,8 +4,10 @@ import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Fab, Typography } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PauseIcon from '@material-ui/icons/Pause';
 import PlaylistOptions from './PlaylistOptions';
 import MusicPlayer from '../../../store/common/MusicPlayer';
+import NavigationForm from '../../../store/common/NavigationForm';
 import IMusic from '../../../../shared/IMusic';
 
 const styles = (theme: Theme) =>
@@ -115,12 +117,29 @@ interface IProps extends WithStyles<typeof styles> {
 @observer
 class PlaylistHeader extends React.Component<IProps, NoState> {
   startPlaylist = (): void => {
-    MusicPlayer.setCurrentPlaylist(this.props.playlist);
-    MusicPlayer.playMusic(0);
+    if (MusicPlayer.playlistRoute == NavigationForm.currentRoute) {
+      MusicPlayer.pauseOrPlay();
+    } else {
+      MusicPlayer.setCurrentPlaylist(this.props.playlist);
+      MusicPlayer.playMusic(0);
+    }
   };
 
   render() {
     const { classes, playlist, description } = this.props;
+    let icon: JSX.Element;
+    let buttonText: string;
+
+    if (MusicPlayer.isPlaying && MusicPlayer.playlistRoute == NavigationForm.currentRoute) {
+      icon = <PauseIcon />;
+      buttonText = 'Pause';
+    } else if (MusicPlayer.playlistRoute != NavigationForm.currentRoute) {
+      icon = <PlayArrowIcon />;
+      buttonText = 'Démarrer';
+    } else {
+      icon = <PlayArrowIcon />;
+      buttonText = 'Reprendre';
+    }
 
     return (
       <Grid container direction='column' className={classes.root} justify='space-between'>
@@ -155,8 +174,8 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
                     aria-label='play'
                     onClick={this.startPlaylist}
                   >
-                    <PlayArrowIcon className={classes.extendedIcon} />
-                    Play
+                    {icon}
+                    {buttonText}
                   </Fab>
                 </Grid>
               </Grid>

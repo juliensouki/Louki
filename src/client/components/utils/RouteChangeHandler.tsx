@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import CurrentPlaylist from '../../store/fragments/playlist/CurrentPlaylist';
@@ -8,9 +7,8 @@ import NavigationForm from '../../store/common/NavigationForm';
 import IPlaylist from '../../../shared/IPlaylist';
 @observer
 class RouteChangerHandler extends React.Component<RouteComponentProps, NoState> {
-  @observable previousRoute: string = '';
-
   componentDidMount() {
+    NavigationForm.setCurrentRoute(this.props.location.pathname);
     if (this.props.location.pathname.includes('/playlist/')) {
       const playlistId = location.pathname.split('/playlist/')[1];
       this.getPlaylist(playlistId);
@@ -18,6 +16,7 @@ class RouteChangerHandler extends React.Component<RouteComponentProps, NoState> 
   }
 
   componentDidUpdate(prevProps: RouteComponentProps) {
+    NavigationForm.setCurrentRoute(this.props.location.pathname);
     NavigationForm.setPreviousRoute(prevProps.location.pathname);
     if (this.props.location.pathname.includes('/playlist/')) {
       const playlistId = location.pathname.split('/playlist/')[1];
