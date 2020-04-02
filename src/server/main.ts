@@ -168,7 +168,9 @@ app.post('/deletePlaylist', (req, res) => {
   const id = req.body.playlistId;
 
   databaseHandler.deleteFromDocument(Playlist, '__id', id).then(() => {
-    dLoader.loadSpecificData('playlists');
+    databaseHandler.getCollectionContent(Playlist).then(values => {
+      res.send(values);
+    });
   });
 });
 
