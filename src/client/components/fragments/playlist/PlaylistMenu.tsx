@@ -33,6 +33,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         {this.props.addMusicToPlaylist ? (
           <MenuItem
             onClick={event => {
+              event.stopPropagation();
               this.props.handleClose(event);
               this.props.addMusicToPlaylist(event);
             }}
@@ -43,6 +44,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         {this.props.editInformation ? (
           <MenuItem
             onClick={event => {
+              event.stopPropagation();
               this.props.handleClose(event);
               this.props.editInformation(event);
             }}
@@ -53,6 +55,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         {this.props.removeBookmark ? (
           <MenuItem
             onClick={event => {
+              event.stopPropagation();
               this.props.handleClose(event);
               this.props.removeBookmark(event);
             }}
@@ -63,6 +66,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         {this.props.removeFromPlaylist ? (
           <MenuItem
             onClick={event => {
+              event.stopPropagation();
               this.props.handleClose(event);
               this.props.removeFromPlaylist(event);
             }}
@@ -73,6 +77,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         {this.props.updatePlaylist ? (
           <MenuItem
             onClick={event => {
+              event.stopPropagation();
               this.props.updatePlaylist(event);
             }}
           >
@@ -82,6 +87,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         {this.props.deletePlaylist ? (
           <MenuItem
             onClick={event => {
+              event.stopPropagation();
               this.props.handleClose(event);
               this.props.deletePlaylist(event);
             }}

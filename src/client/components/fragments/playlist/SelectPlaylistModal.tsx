@@ -43,8 +43,7 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
 
     return (
       <Dialog
-        onClose={evevnt => {
-          event.stopPropagation();
+        onClose={() => {
           handleClose();
         }}
         aria-labelledby='simple-dialog-title'
@@ -57,8 +56,10 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
               <ListItem
                 key={playlist.__id}
                 button
-                onClick={() => {
+                onClick={event => {
+                  event.stopPropagation();
                   this.handleListItemClick(playlist);
+                  handleClose();
                 }}
               >
                 <Typography>{playlist.name}</Typography>
