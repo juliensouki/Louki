@@ -78,7 +78,7 @@ const config: Configuration = {
   },
   watchOptions: {
     //IN ORDER TO MAKE WEBPACK POLLING WORK WITH WSL ADD 'WEBPACK__WATCH__USE_POLLING=true' IN .env AT ROOT OF PROJECT
-    poll: (JSON.stringify(process.env.WEBPACK__WATCH__USE_POLLING) != null ? true : false),
+    poll: JSON.stringify(process.env.WEBPACK__WATCH__USE_POLLING) != null ? true : false,
   },
   plugins,
   externals: {

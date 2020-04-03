@@ -5,9 +5,6 @@ import { NavLink } from 'react-router-dom';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
-import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
-import CurrentArtistOrAlbum from '../../../store/pages/artistsOrAlbums/CurrentArtistOrAlbum';
-
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
@@ -41,16 +38,6 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class LeftPanelButton extends React.Component<IProps, NoState> {
-  handleClick = () => {
-    if (this.props.playlist) {
-      CurrentPlaylist.setPlaylist(this.props.text);
-    } else if (this.props.showArtist) {
-      CurrentArtistOrAlbum.setArtist(true);
-    } else {
-      CurrentArtistOrAlbum.setArtist(false);
-    }
-  };
-
   render() {
     const { classes, routePath, playlist, aboutprops, playlistId } = this.props;
     const url = playlist ? routePath + '/' + playlistId : routePath;
@@ -58,7 +45,6 @@ class LeftPanelButton extends React.Component<IProps, NoState> {
     return (
       <NavLink
         to={url}
-        onClick={this.handleClick}
         activeStyle={{ textDecoration: 'none', fontWeight: 'bolder', color: '#FFF' }}
         aboutprops={aboutprops}
       >

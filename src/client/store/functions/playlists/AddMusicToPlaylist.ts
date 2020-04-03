@@ -9,5 +9,7 @@ export default function(playlistId: string, musicId: string) {
       playlistId: playlistId,
       musicId: musicId,
     }),
+  }).then(response => {
+    console.log(response.status);
   });
 }

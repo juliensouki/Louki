@@ -140,7 +140,7 @@ class MusicBarDesktop extends React.Component<IProps, NoState> {
                 onMouseEnter={this.handlePopoverOpen}
                 onMouseLeave={this.handlePopoverClose}
               >
-                {MusicPlayer.volume == 0 ? (
+                {MusicPlayer.volume == 0 || MusicPlayer.mute ? (
                   <VolumeOffIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />
                 ) : (
                   <VolumeUpIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />

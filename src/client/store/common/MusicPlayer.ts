@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import NavigationForm from '../../store/common/NavigationForm';
 import IMusic from '../../../shared/IMusic';
 
 export enum MusicLoop {
@@ -17,6 +18,7 @@ class MusicPlayer {
   @observable private timePlayedInSec: number = 0;
   @observable private audioLevel: number = 100;
   @observable private isMute: boolean = false;
+  @observable private route: string = '';
 
   @action muteUnMute = () => {
     this.isMute = !this.isMute;
@@ -42,10 +44,11 @@ class MusicPlayer {
   @action setMusicReady = (): void => {
     if (this.currentPlaylist.length <= 0) return;
 
-    const path = this.currentPlaylist[this.musicPlayingIndex].path.replace('/home/souki/projects/Louki/', '');
+    const path = this.currentPlaylist[this.musicPlayingIndex].path.replace('/home/souki/projects/Louki/', '/');
     this.audio = new Audio(path);
 
     this.audio.volume = this.isMute == false ? this.audioLevel / 100 : 0;
+    this.audio.crossOrigin = 'anonymous';
 
     this.audio.ontimeupdate = () => {
       this.timePlayedInSec = this.audio.currentTime;
@@ -67,6 +70,7 @@ class MusicPlayer {
   };
 
   @action playMusic = (index: number): void => {
+    this.route = NavigationForm.currentRoute;
     if (this.audio != null) this.audio.pause();
     this.musicPlayingIndex = index;
     this.setMusicReady();
@@ -181,6 +185,10 @@ class MusicPlayer {
   @computed get playingMusicId(): string {
     if (this.currentPlaylist.length == 0) return '';
     return this.currentPlaylist[this.musicPlayingIndex].__id;
+  }
+
+  @computed get playlistRoute(): string {
+    return this.route;
   }
 }
 

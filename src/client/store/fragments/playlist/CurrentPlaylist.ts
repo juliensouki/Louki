@@ -1,15 +1,16 @@
 import { observable, computed, action } from 'mobx';
+import IPlaylist from '../../../../shared/IPlaylist';
 
 class CurrentPlaylist {
-  @observable private playlist: string | null = null;
+  @observable private playlist: IPlaylist | null = null;
 
-  @action setPlaylist = (value: string | null): void => {
-    this.playlist = value;
+  @action setPlaylist = (playlist: IPlaylist) => {
+    this.playlist = playlist;
   };
 
-  @computed get currentPlaylist(): string {
+  @computed get currentPlaylist(): IPlaylist | null {
     return this.playlist;
-  };
+  }
 }
 
 export default new CurrentPlaylist();

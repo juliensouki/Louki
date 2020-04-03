@@ -2,7 +2,7 @@ import React from 'react';
 
 function Icon() {
   return (
-    <svg id='svg-playing' version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" style={{height: 20, marginRight: 15, position: 'relative', top: 5}}>
+    <svg id='svg-playing' version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 100 100" enableBackground="new 0 0 100 100" style={{height: 20, marginRight: 15, position: 'relative', top: 5}}>
     <rect fill="#fff" width="3" height="100" transform="translate(0) rotate(180 3 50)">
       <animate
     attributeName="height"

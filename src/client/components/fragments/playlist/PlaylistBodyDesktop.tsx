@@ -12,11 +12,13 @@ import { IconButton } from '@material-ui/core';
 
 import PlaylistOptions from './PlaylistOptions';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
 import MusicPlayer from '../../../store/common/MusicPlayer';
-import AddBookmark from '../../../store/functions/bookmarks/AddBookmarks';
+import NavigationForm from '../../../store/common/NavigationForm';
+import BookmarksData from '../../../store/common/BookmarksData';
 
 import MusicPlayingIcon from '../../../assets/MusicPlayingIcon';
 
@@ -59,6 +61,9 @@ const styles = (theme: Theme) =>
         cursor: 'pointer',
       },
     },
+    fillFavIcon: {
+      color: theme.palette.secondary.main,
+    },
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -74,7 +79,6 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
   @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
 
   playMusic = (index: number): void => {
-    console.log('ok');
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
     MusicPlayer.playMusic(index);
   };
@@ -89,18 +93,14 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
     this.arrayOfAnchorEl[index] = null;
   };
 
-  editInformation = (event, index: number) => {
-    event.stopPropagation();
-    console.log('Editing information of music ' + this.props.playlist[index].title);
-  };
-
-  addMusicToPlaylist = (event, index: number) => {
-    event.stopPropagation();
-  };
-
   addBookmark = (event, id: string) => {
     event.stopPropagation();
-    AddBookmark(id);
+    BookmarksData.addBookmark(id);
+  };
+
+  deleteBookmark = (event, id: string) => {
+    event.stopPropagation();
+    BookmarksData.deleteBookmark(id);
   };
 
   render() {
@@ -128,15 +128,27 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
             >
               <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
                 {this.props.canAddToFavorites ? (
-                  <IconButton
-                    onClick={event => {
-                      this.addBookmark(event, row.__id);
-                    }}
-                  >
-                    <FavoriteBorderIcon />
-                  </IconButton>
+                  BookmarksData.isInBookmarks(row.__id) ? (
+                    <IconButton
+                      onClick={event => {
+                        this.deleteBookmark(event, row.__id);
+                      }}
+                    >
+                      <FavoriteIcon className={classes.fillFavIcon} />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      onClick={event => {
+                        this.addBookmark(event, row.__id);
+                      }}
+                    >
+                      <FavoriteBorderIcon />
+                    </IconButton>
+                  )
                 ) : null}
-                {MusicPlayer.playingMusicId == row.__id ? <MusicPlayingIcon /> : null}
+                {MusicPlayer.playingMusicId == row.__id && NavigationForm.currentRoute == MusicPlayer.playlistRoute ? (
+                  <MusicPlayingIcon />
+                ) : null}
                 {row.title}
               </TableCell>
               <TableCell style={{ color: '#FFF' }}>{MusicsData.getArtistNameById(row.artist)}</TableCell>

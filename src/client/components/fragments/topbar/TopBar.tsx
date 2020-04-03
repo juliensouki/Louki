@@ -77,16 +77,6 @@ interface IProps extends WithStyles<typeof styles> {}; // eslint-disable-line
 
 @observer
 class TopBar extends React.Component<IProps, NoState> {
-  async componentDidMount() {
-    fetch('/currentUser')
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        UserData.setUser(data);
-      });
-  }
-
   openOrCloseMenu = () => {
     MobileMenu.setOpen(!MobileMenu.isOpen);
   };

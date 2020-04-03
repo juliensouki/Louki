@@ -1,3 +1,5 @@
+import MusicsData from '../../common/MusicsData';
+
 export default function(playlistId: string) {
   fetch('/deletePlaylist', {
     method: 'POST',
@@ -8,5 +10,11 @@ export default function(playlistId: string) {
     body: JSON.stringify({
       playlistId: playlistId,
     }),
-  });
-};
+  })
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      MusicsData.setPlaylists(data);
+    });
+}

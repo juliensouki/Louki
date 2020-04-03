@@ -12,10 +12,14 @@ import Artist from './db/schemas/Artist';
 import Album from './db/schemas/Album';
 import User from './db/schemas/User';
 
+import IUser from '../shared/IUser';
+import IPlaylist from '../shared/IPlaylist';
+
 import databaseHandler from './db';
 import dataLoader from './dataLoader';
 import uuid from 'uuid';
 import bodyParser from 'body-parser';
+import { __values } from 'tslib';
 
 const app = express();
 const dLoader = new dataLoader(databaseHandler);
@@ -42,10 +46,28 @@ app.get('/artist', (req, res) => {
   });
 });
 
+app.get('/artists', (req, res) => {
+  databaseHandler.getCollectionContent(Artist).then(value => {
+    res.json(value);
+  });
+});
+
+app.get('/albums', (req, res) => {
+  databaseHandler.getCollectionContent(Album).then(value => {
+    res.json(value);
+  });
+});
+
 app.get('/album', (req, res) => {
   const id = req.query.id;
   databaseHandler.findOneInDocument(Album, '__id', id).then(value => {
     res.json(value[0]);
+  });
+});
+
+app.get('/playlists', (req, res) => {
+  databaseHandler.getCollectionContent(Playlist).then(value => {
+    res.json(value);
   });
 });
 
@@ -76,11 +98,14 @@ app.get('/allData', (req, res) => {
   const musics = dLoader.get('musics');
   const artists = dLoader.get('artists');
   const albums = dLoader.get('albums');
-
-  res.json({
-    musics: musics,
-    artists: artists,
-    albums: albums,
+  databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+    const bookmarks = (values[0] as IUser).favorites;
+    res.json({
+      musics: musics,
+      artists: artists,
+      albums: albums,
+      bookmarks: bookmarks,
+    });
   });
 });
 
@@ -92,17 +117,43 @@ app.get('/allPlaylists', (req, res) => {
 
 app.post('/addBookmark', (req, res) => {
   const id = req.body.musicId;
-  databaseHandler.addToArray(User, 'selected', true, 'favorites', id);
+  databaseHandler.addToArray(User, 'selected', true, 'favorites', id).then(
+    values => {
+      dLoader.loadSpecificData('users');
+      databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+        res.json((values[0] as IUser).favorites);
+      });
+    },
+    error => {
+      console.log(error);
+      res.send(null);
+    },
+  );
 });
 
 app.post('/removeBookmark', (req, res) => {
   const id = req.body.musicId;
-  databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id);
+  databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id).then(
+    values => {
+      dLoader.loadSpecificData('users');
+      databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+        res.json((values[0] as IUser).favorites);
+      });
+    },
+    error => {
+      console.log(error);
+      res.send(null);
+    },
+  );
 });
 
 app.post('/removeSongFromPlaylist', (req, res) => {
   const { playlistId, musicId } = req.body;
-  databaseHandler.removeFromArray(Playlist, '__id', playlistId, 'musics', musicId);
+  databaseHandler.removeFromArray(Playlist, '__id', playlistId, 'musics', musicId).then(() => {
+    databaseHandler.findOneInDocument(Playlist, '__id', playlistId).then(values => {
+      res.json(values[0] as IPlaylist);
+    });
+  });
 });
 
 app.post('/createPlaylist', (req, res) => {
@@ -135,14 +186,24 @@ app.post('/deletePlaylist', (req, res) => {
   const id = req.body.playlistId;
 
   databaseHandler.deleteFromDocument(Playlist, '__id', id).then(() => {
-    dLoader.loadSpecificData('playlists');
+    databaseHandler.getCollectionContent(Playlist).then(values => {
+      res.send(values);
+    });
   });
 });
 
 app.post('/addMusicToPlaylist', (req, res) => {
   const { playlistId, musicId } = req.body;
 
-  databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId);
+  databaseHandler.findOneInDocument(Playlist, '__id', playlistId).then(values => {
+    if (values[0].musics.includes(musicId)) {
+      res.sendStatus(403);
+    } else {
+      databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId).then(() => {
+        res.sendStatus(200);
+      });
+    }
+  });
 });
 
 app.post('/updatePlaylist', (req, res) => {

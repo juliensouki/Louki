@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
@@ -9,11 +10,13 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PlaylistMenu from './PlaylistMenu';
 import SelectPlaylistModal from './SelectPlaylistModal';
 import UpdatePlaylistModal from '../update-playlist-modal/UpdatePlaylistModal';
+import BookmarksData from '../../../store/common/BookmarksData';
 
 import IMusic from '../../../../shared/IMusic';
-import PlaylistData from '../../../store/common/PlaylistData';
+import IPlaylist from '../../../../shared/IPlaylist';
+import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
+import NavigationForm from '../../../store/common/NavigationForm';
 import DeletePlaylist from '../../../store/functions/playlists/DeletePlaylist';
-import { useHistory } from 'react-router';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -33,18 +36,17 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistOptions extends React.Component<IProps, NoState> {
+class PlaylistOptions extends React.Component<IProps & RouteComponentProps, NoState> {
   @observable anchorEl: HTMLElement | null = null;
   @observable openPlaylistsModal: boolean = false;
   @observable openUpdatePlaylistModal: boolean = false;
 
   handleDeletePlaylist = event => {
     event.stopPropagation();
-    const playlistId = PlaylistData.currentPlaylist.__id;
+    const playlistId = CurrentPlaylist.currentPlaylist.__id;
 
-    DeletePlaylist(playlistId); // eslint-disable-line
-    const history = useHistory();
-    history.push('/all-music');
+    DeletePlaylist(playlistId);
+    this.props.history.push(NavigationForm.previousRoute);
     this.anchorEl = null;
   };
 
@@ -71,17 +73,7 @@ class PlaylistOptions extends React.Component<IProps, NoState> {
   removeBookmark = event => {
     event.stopPropagation();
     if (this.props.music) {
-      const id = this.props.music.__id;
-      fetch('/removeBookmark', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json', // eslint-disable-line
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          musicId: id,
-        }),
-      });
+      BookmarksData.deleteBookmark(this.props.music.__id);
     }
   };
 
@@ -89,9 +81,8 @@ class PlaylistOptions extends React.Component<IProps, NoState> {
     event.stopPropagation();
     if (this.props.music) {
       const musicId = this.props.music.__id;
-      const playlistId = PlaylistData.currentPlaylist.__id;
-      console.log(musicId);
-      console.log(playlistId);
+      const playlistId = CurrentPlaylist.currentPlaylist.__id;
+
       fetch('/removeSongFromPlaylist', {
         method: 'POST',
         headers: {
@@ -102,7 +93,13 @@ class PlaylistOptions extends React.Component<IProps, NoState> {
           playlistId: playlistId,
           musicId: musicId,
         }),
-      });
+      })
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          CurrentPlaylist.setPlaylist(data as IPlaylist);
+        });
     }
   };
 
@@ -148,4 +145,4 @@ class PlaylistOptions extends React.Component<IProps, NoState> {
   }
 }
 
-export default withStyles(styles)(PlaylistOptions);
+export default withRouter(withStyles(styles)(PlaylistOptions));
