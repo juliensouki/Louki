@@ -17,9 +17,6 @@ import Settings from './pages/settings/Settings';
 import Favorites from './pages/favorites/Favorites';
 import SpecificArtistOrAlbum from './pages/specific-artist-or-album/SpecificArtistOrAlbum';
 
-import BookmarksData from '../store/common/BookmarksData';
-import MusicsData from '../store/common/MusicsData';
-
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
@@ -30,19 +27,6 @@ const styles = (theme: Theme) =>
   });
 @observer
 class Layout extends React.Component<NoProps, NoState> {
-  async componentDidMount() {
-    fetch('/allData')
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        MusicsData.setMusics(data.musics);
-        MusicsData.setAlbums(data.albums);
-        MusicsData.setArtists(data.artists);
-        BookmarksData.setBookmarks(MusicsData.idsToMusics(data.bookmarks));
-      });
-  }
-
   render() {
     return (
       <BrowserRouter>

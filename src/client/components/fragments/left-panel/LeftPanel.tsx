@@ -56,17 +56,6 @@ interface IProps extends WithStyles<typeof styles> {}; // eslint-disable-line
 @observer
 class LeftPanel extends React.Component<IProps, NoState> {
   @observable checked: boolean = true;
-  @observable playlists: Array<IPlaylist> = [];
-
-  async componentDidMount() {
-    fetch('/allPlaylists')
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        MusicsData.setPlaylists(data);
-      });
-  }
 
   render() {
     const { classes } = this.props;

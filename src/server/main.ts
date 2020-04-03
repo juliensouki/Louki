@@ -46,6 +46,18 @@ app.get('/artist', (req, res) => {
   });
 });
 
+app.get('/artists', (req, res) => {
+  databaseHandler.getCollectionContent(Artist).then(value => {
+    res.json(value);
+  });
+});
+
+app.get('/albums', (req, res) => {
+  databaseHandler.getCollectionContent(Album).then(value => {
+    res.json(value);
+  });
+});
+
 app.get('/album', (req, res) => {
   const id = req.query.id;
   databaseHandler.findOneInDocument(Album, '__id', id).then(value => {
