@@ -65,6 +65,12 @@ app.get('/album', (req, res) => {
   });
 });
 
+app.get('/playlists', (req, res) => {
+  databaseHandler.getCollectionContent(Playlist).then(value => {
+    res.json(value);
+  });
+});
+
 app.get('/currentUser', (req, res) => {
   const user = dLoader.get('currentUser');
   res.json(user);
