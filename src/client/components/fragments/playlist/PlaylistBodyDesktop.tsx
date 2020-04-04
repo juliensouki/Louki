@@ -21,6 +21,7 @@ import NavigationForm from '../../../store/common/NavigationForm';
 import BookmarksData from '../../../store/common/BookmarksData';
 
 import MusicPlayingIcon from '../../../assets/MusicPlayingIcon';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -75,7 +76,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
+class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps, NoState> {
   @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
 
   playMusic = (index: number): void => {
@@ -96,10 +97,16 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
   addBookmark = (event, id: string) => {
     event.stopPropagation();
     BookmarksData.addBookmark(id);
+    const snackbarOptions = { variant: 'success' as any };
+    const musicName = MusicsData.idToMusic(id).title;
+    this.props.enqueueSnackbar(musicName + ' has been added to favorites ', snackbarOptions);
   };
 
   deleteBookmark = (event, id: string) => {
     event.stopPropagation();
+    const snackbarOptions = { variant: 'success' as any };
+    const musicName = MusicsData.idToMusic(id).title;
+    this.props.enqueueSnackbar(musicName + ' has been removed from favorites ', snackbarOptions);
     BookmarksData.deleteBookmark(id);
   };
 
@@ -170,4 +177,4 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
   }
 }
 
-export default withStyles(styles)(PlaylistBodyDesktop);
+export default withSnackbar(withStyles(styles)(PlaylistBodyDesktop));

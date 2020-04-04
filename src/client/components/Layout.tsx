@@ -23,6 +23,9 @@ const styles = (theme: Theme) =>
       body: {
         overflowY: 'hidden',
       },
+      '.MuiSnackbarContent-root': {
+        color: '#fff',
+      },
     },
   });
 @observer

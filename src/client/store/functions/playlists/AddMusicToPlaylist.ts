@@ -1,5 +1,5 @@
-export default function(playlistId: string, musicId: string) {
-  fetch('/addMusicToPlaylist', {
+export default function(playlistId: string, musicId: string): Promise<Response> {
+  return fetch('/addMusicToPlaylist', {
     method: 'POST',
     headers: {
       'Accept': 'application/json', // eslint-disable-line
@@ -9,7 +9,5 @@ export default function(playlistId: string, musicId: string) {
       playlistId: playlistId,
       musicId: musicId,
     }),
-  }).then(response => {
-    console.log(response.status);
   });
 }
