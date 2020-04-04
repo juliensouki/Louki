@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -12,6 +11,7 @@ import ListItem from '@material-ui/core/ListItem';
 import AddMusicToPlaylist from '../../../store/functions/playlists/AddMusicToPlaylist';
 import MusicsData from '../../../store/common/MusicsData';
 import IPlaylist from '../../../../shared/IPlaylist';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 const styles = (theme: Theme) => createStyles({});
 
@@ -22,9 +22,19 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class SelectPlaylistModal extends React.Component<IProps, NoState> {
+class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, NoState> {
   handleListItemClick = (playlist: IPlaylist) => {
-    AddMusicToPlaylist(playlist.__id, this.props.musicId);
+    AddMusicToPlaylist(playlist.__id, this.props.musicId).then(response => {
+      const musicName = MusicsData.idToMusic(this.props.musicId).title;
+      const playlistName = MusicsData.idToPlaylist(playlist.__id).name;
+      if (response.status == 200) {
+        const snackbarOptions = { variant: 'success' as any };
+        this.props.enqueueSnackbar(musicName + ' has been added to playlist ' + playlistName, snackbarOptions);
+      } else if (response.status == 403) {
+        const snackbarOptions = { variant: 'error' as any };
+        this.props.enqueueSnackbar(musicName + ' is already in ' + playlistName, snackbarOptions);
+      }
+    });
   };
 
   render() {
@@ -61,4 +71,4 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
   }
 }
 
-export default withStyles(styles)(SelectPlaylistModal);
+export default withSnackbar(withStyles(styles)(SelectPlaylistModal));

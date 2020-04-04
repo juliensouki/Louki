@@ -10,7 +10,7 @@ import { LoadAlbums } from './requests/Albums';
 import { LoadArtists } from './requests/Artists';
 import { LoadBookmarks } from './requests/Bookmarks';
 import { LoadMusics } from './requests/Musics';
-
+import { SnackbarProvider } from 'notistack';
 @observer
 export default class App extends React.Component<NoProps, NoState> {
   async componentDidMount() {
@@ -26,7 +26,9 @@ export default class App extends React.Component<NoProps, NoState> {
     if (LoadingForm.loadingIsComplete) {
       return (
         <MuiThemeProvider theme={theme}>
-          <Layout />
+          <SnackbarProvider maxSnack={4} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+            <Layout />
+          </SnackbarProvider>
         </MuiThemeProvider>
       );
     } else return <React.Fragment />;

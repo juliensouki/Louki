@@ -72,6 +72,13 @@ class MusicsData {
     return null;
   };
 
+  private getPlaylistFromId = (id: string): IPlaylist | null => {
+    for (let i = 0; i < this.playlists.length; i++) {
+      if (this.playlists[i].__id == id) return this.playlists[i];
+    }
+    return null;
+  };
+
   idsToMusics = (ids: Array<string>): Array<IMusic> => {
     const result: Array<IMusic> = [];
     ids.forEach(id => {
@@ -80,6 +87,14 @@ class MusicsData {
       else console.log('Could not add music ' + id + ' in array');
     });
     return result;
+  };
+
+  idToMusic = (id: string): IMusic => {
+    return this.getMusicFromId(id);
+  };
+
+  idToPlaylist = (id: string): IPlaylist => {
+    return this.getPlaylistFromId(id);
   };
 
   totalDuration = (musics: Array<string>): string => {

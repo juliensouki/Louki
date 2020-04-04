@@ -16,7 +16,10 @@ import IMusic from '../../../../shared/IMusic';
 import IPlaylist from '../../../../shared/IPlaylist';
 import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
 import NavigationForm from '../../../store/common/NavigationForm';
+import MusicsData from '../../../store/common/MusicsData';
 import DeletePlaylist from '../../../store/functions/playlists/DeletePlaylist';
+
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -36,7 +39,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistOptions extends React.Component<IProps & RouteComponentProps, NoState> {
+class PlaylistOptions extends React.Component<IProps & RouteComponentProps & WithSnackbarProps, NoState> {
   @observable anchorEl: HTMLElement | null = null;
   @observable openPlaylistsModal: boolean = false;
   @observable openUpdatePlaylistModal: boolean = false;
@@ -46,6 +49,10 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps, NoSt
     const playlistId = CurrentPlaylist.currentPlaylist.__id;
 
     DeletePlaylist(playlistId);
+
+    const snackbarOptions = { variant: 'success' as any };
+    const playlistName = MusicsData.idToPlaylist(playlistId).name;
+    this.props.enqueueSnackbar(playlistName + ' has been deleted', snackbarOptions);
     this.props.history.push(NavigationForm.previousRoute);
     this.anchorEl = null;
   };
@@ -74,6 +81,9 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps, NoSt
     event.stopPropagation();
     if (this.props.music) {
       BookmarksData.deleteBookmark(this.props.music.__id);
+      const snackbarOptions = { variant: 'success' as any };
+      const musicName = MusicsData.idToMusic(this.props.music.__id).title;
+      this.props.enqueueSnackbar(musicName + ' has been removed from favorites ', snackbarOptions);
     }
   };
 
@@ -99,6 +109,10 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps, NoSt
         })
         .then(data => {
           CurrentPlaylist.setPlaylist(data as IPlaylist);
+          const snackbarOptions = { variant: 'success' as any };
+          const musicName = MusicsData.idToMusic(musicId).title;
+          const playlistName = MusicsData.idToPlaylist(playlistId).name;
+          this.props.enqueueSnackbar(musicName + ' has been removed from ' + playlistName, snackbarOptions);
         });
     }
   };
@@ -145,4 +159,4 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps, NoSt
   }
 }
 
-export default withRouter(withStyles(styles)(PlaylistOptions));
+export default withSnackbar(withRouter(withStyles(styles)(PlaylistOptions)));
