@@ -46,13 +46,13 @@ app.get('/artist', (req, res) => {
   });
 });
 
-app.get('/artists', (req, res) => {
+app.get('/allArtists', (req, res) => {
   databaseHandler.getCollectionContent(Artist).then(value => {
     res.json(value);
   });
 });
 
-app.get('/albums', (req, res) => {
+app.get('/allAlbums', (req, res) => {
   databaseHandler.getCollectionContent(Album).then(value => {
     res.json(value);
   });

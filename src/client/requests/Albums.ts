@@ -2,7 +2,7 @@ import MusicsData from '../store/common/MusicsData';
 import LoadingForm from '../store/loading/LoadingForm';
 
 export const LoadAlbums = async () => {
-  fetch('/albums')
+  fetch('/allAlbums')
     .then(res => {
       return res.json();
     })
