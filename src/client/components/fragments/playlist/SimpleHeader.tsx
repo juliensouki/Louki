@@ -7,14 +7,14 @@ import { Grid, Typography } from '@material-ui/core/';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      height: 130,
       width: '100%',
-      padding: 30,
+      padding: '2.5em',
     },
     title: {
-      fontSize: 35,
+      fontSize: '3rem',
       textTransform: 'uppercase',
       fontWeight: 'bolder',
+      marginBottom: '0.2em',
       color: theme.palette.primary.light,
     },
     line: {

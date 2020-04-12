@@ -14,13 +14,14 @@ const textProperties = {
   whiteSpace: 'nowrap' as any,
   textOverflow: 'ellipsis',
   lineHeight: 'unset',
+  fontSize: '1.5rem',
 };
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      height: 80,
-      width: 350,
+      height: '100%',
+      width: '17%',
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
       transition: 'background-color .5s ease-in-out',
@@ -33,24 +34,31 @@ const styles = (theme: Theme) =>
       },
     },
     musicImage: {
-      height: '100%',
+      maxWidth: '100%',
     },
     musicTitle: {
       color: theme.palette.primary.light,
     },
     musicInformationContainer: {
       width: 'auto',
-      marginLeft: 10,
+      height: '100%',
+      marginLeft: '1.5em',
       [theme.breakpoints.down('md')]: {
         display: 'none',
       },
     },
     fromText: {
       ...textProperties,
-      fontSize: 13,
+      fontSize: '1.2rem',
     },
     artistAndTitleText: {
       ...textProperties,
+    },
+    pictureConatainer: {
+      [theme.breakpoints.up('md')]: {
+        height: '6.5em',
+        width: '6.5em',
+      },
     },
   });
 
@@ -66,8 +74,8 @@ class MusicPreview extends React.Component<IProps & RoutePropsComponent, NoState
     const { classes } = this.props;
 
     return (
-      <Grid container direction='row' className={classes.root} onClick={this.handleClick}>
-        <Grid item style={{ height: '100%' }}>
+      <Grid container item direction='row' className={classes.root} onClick={this.handleClick}>
+        <Grid item className={classes.pictureConatainer}>
           <img
             src='https://images.genius.com/cd64d6c15657a9d85823d3666969a00d.1000x1000x1.jpg'
             className={classes.musicImage}

@@ -23,7 +23,7 @@ const styles = (theme: Theme) =>
   createStyles({
     '@global': {
       '.MuiTableCell-root': {
-        padding: 14,
+        padding: '1.3em',
       },
     },
     root: {
@@ -40,9 +40,15 @@ const styles = (theme: Theme) =>
       textTransform: 'uppercase',
       fontSize: 16,
       color: theme.palette.primary.main,
+      paddingBottom: '0.8em',
+    },
+    whiteTableRow: {
+      color: '#fff',
+      fontSize: '1.3rem',
     },
     tableRow: {
       color: theme.palette.primary.main,
+      fontSize: '1.3rem',
     },
     row: {
       '&:hover': {
@@ -93,13 +99,13 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
                 <TableCell component='th' scope='row'>
                   {page == Page.ARTISTS ? <MicIcon /> : <AlbumIcon />}
                 </TableCell>
-                <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
+                <TableCell className={classes.whiteTableRow} component='th' scope='row'>
                   {page == Page.ARTISTS ? (row as IArtist).name : (row as IAlbum).title}
                 </TableCell>
                 {page == Page.ARTISTS ? (
                   <React.Fragment />
                 ) : (
-                  <TableCell style={{ color: '#FFF' }}>
+                  <TableCell className={classes.whiteTableRow}>
                     {MusicsData.getArtistNameById((row as IAlbum).author)}
                   </TableCell>
                 )}

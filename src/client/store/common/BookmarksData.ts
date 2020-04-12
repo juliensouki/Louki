@@ -44,7 +44,6 @@ class BookmarksData {
       })
       .then(data => {
         this.bkmarks = MusicsData.idsToMusics(data);
-        console.log(this.bkmarks);
       });
   };
 

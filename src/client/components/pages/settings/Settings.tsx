@@ -20,14 +20,19 @@ const styles = (theme: Theme) =>
     button: {
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
+      fontSize: '1.5rem',
       textTransform: 'none',
     },
     gridContainer: {
-      marginBottom: 40,
+      marginBottom: '3em',
     },
     warning: {
       maxWidth: 300,
-      marginTop: 15,
+      marginTop: '1.5em',
+      fontSize: '1.5rem',
+    },
+    text: {
+      fontSize: '1.5rem',
     },
   });
 
@@ -52,23 +57,23 @@ class Settings extends React.Component<Props, NoState> {
         <SimpleHeader title='Settings' />
         <Grid container className={classes.root} direction='column'>
           <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography>Username</Typography>
-            <Typography>Souki</Typography>
+            <Typography className={classes.text}>Username</Typography>
+            <Typography className={classes.text}>Souki</Typography>
           </Grid>
           <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography>Profile picture : /mnt/c/users/Souki/Pictures/pic.jpg</Typography>
+            <Typography className={classes.text}>Profile picture : /mnt/c/users/Souki/Pictures/pic.jpg</Typography>
             <Button className={classes.button}>
-              <FolderIcon style={{ marginRight: 7 }} /> Browse
+              <FolderIcon style={{ marginRight: '0.7em' }} /> Browse
             </Button>
           </Grid>
           <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography>Music directories : /mnt/c/users/Souki/Music/</Typography>
+            <Typography className={classes.text}>Music directories : /mnt/c/users/Souki/Music/</Typography>
             <Button className={classes.button}>
-              <FolderIcon style={{ marginRight: 7 }} /> Browse
+              <FolderIcon style={{ marginRight: '0.7em' }} /> Browse
             </Button>
           </Grid>
           <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography>Use data from Internet</Typography>
+            <Typography className={classes.text}>Use data from Internet</Typography>
             <Switch
               checked={this.internetChecked}
               onChange={this.handleChange}
@@ -78,7 +83,7 @@ class Settings extends React.Component<Props, NoState> {
           </Grid>
           <Grid className={classes.gridContainer} item container direction='column'>
             <Button className={classes.button} style={{ width: 100 }}>
-              <RotateLeftIcon style={{ marginRight: 7 }} /> Reset
+              <RotateLeftIcon style={{ marginRight: '0.7em' }} /> Reset
             </Button>
             <Typography className={classes.warning}>
               Warning ! Reseting Louki will delete all your playlists and all the data collected about the artists,
@@ -86,11 +91,11 @@ class Settings extends React.Component<Props, NoState> {
             </Typography>
           </Grid>
           <Grid item container direction='row' justify='flex-end'>
-            <Button className={classes.button} style={{ marginRight: 15 }}>
-              <CloseIcon style={{ marginRight: 7 }} /> Cancel
+            <Button className={classes.button} style={{ marginRight: '1.5em' }}>
+              <CloseIcon style={{ marginRight: '0.7em' }} /> Cancel
             </Button>
             <Button className={classes.button}>
-              <SaveIcon style={{ marginRight: 7 }} /> Save
+              <SaveIcon style={{ marginRight: '0.7em' }} /> Save
             </Button>
           </Grid>
         </Grid>

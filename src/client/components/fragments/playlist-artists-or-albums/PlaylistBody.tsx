@@ -12,15 +12,10 @@ import MusicsData from '../../../store/common/MusicsData';
 
 const styles = (theme: Theme) =>
   createStyles({
-    '@global': {
-      '.MuiTableCell-root': {
-        padding: 8,
-      },
-    },
     root: {
-      marginLeft: 20,
-      width: 'calc(100% - 40px)',
-      height: 'calc(100% - 280px)',
+      width: 'calc(100% - 4em)',
+      marginLeft: '2em',
+      height: '100%',
       marginTop: 20,
       [theme.breakpoints.down('xs')]: {
         height: 'calc(100% - 240px)',

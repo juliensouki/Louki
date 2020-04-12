@@ -12,28 +12,12 @@ import IMusic from '../../../../shared/IMusic';
 
 const styles = (theme: Theme) =>
   createStyles({
-    '@global': {
-      '.MuiTableCell-root': {
-        padding: 8,
-      },
-    },
     root: {
-      marginLeft: 20,
-      width: 'calc(100% - 40px)',
-      height: 'calc(100% - 280px)',
-      marginTop: 20,
+      width: 'calc(100% - 4em)',
+      padding: '2em',
       [theme.breakpoints.down('xs')]: {
         height: 'calc(100% - 240px)',
       },
-    },
-    rowTitles: {
-      fontWeight: 'bolder',
-      textTransform: 'uppercase',
-      fontSize: 16,
-      color: theme.palette.primary.main,
-    },
-    tableRow: {
-      color: theme.palette.primary.main,
     },
   });
 

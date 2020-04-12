@@ -41,7 +41,8 @@ const styles = (theme: Theme) =>
     },
     currentTime: {
       ...timeProperties,
-      left: -55,
+      left: '-3em',
+      fontSize: '1.5rem',
       [theme.breakpoints.down('sm')]: {
         left: -35,
         fontSize: 11,
@@ -50,7 +51,8 @@ const styles = (theme: Theme) =>
     },
     totalTime: {
       ...timeProperties,
-      right: -55,
+      fontSize: '1.5rem',
+      right: '-3em',
       [theme.breakpoints.down('sm')]: {
         right: -35,
         fontSize: 11,

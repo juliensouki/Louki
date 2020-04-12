@@ -4,7 +4,12 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) =>
+  createStyles({
+    text: {
+      fontSize: '1.3rem',
+    },
+  });
 
 interface IProps extends WithStyles<typeof styles> {
   anchorEl: HTMLElement | null;
@@ -20,6 +25,8 @@ interface IProps extends WithStyles<typeof styles> {
 @observer
 class PlaylistMenu extends React.Component<IProps, NoState> {
   render() {
+    const { classes } = this.props;
+
     return (
       <Menu
         id='simple-menu'
@@ -32,6 +39,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
       >
         {this.props.addMusicToPlaylist ? (
           <MenuItem
+            className={classes.text}
             onClick={event => {
               event.stopPropagation();
               this.props.handleClose(event);
@@ -43,6 +51,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         ) : null}
         {this.props.editInformation ? (
           <MenuItem
+            className={classes.text}
             onClick={event => {
               event.stopPropagation();
               this.props.handleClose(event);
@@ -54,6 +63,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         ) : null}
         {this.props.removeBookmark ? (
           <MenuItem
+            className={classes.text}
             onClick={event => {
               event.stopPropagation();
               this.props.handleClose(event);
@@ -65,6 +75,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         ) : null}
         {this.props.removeFromPlaylist ? (
           <MenuItem
+            className={classes.text}
             onClick={event => {
               event.stopPropagation();
               this.props.handleClose(event);
@@ -76,6 +87,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         ) : null}
         {this.props.updatePlaylist ? (
           <MenuItem
+            className={classes.text}
             onClick={event => {
               event.stopPropagation();
               this.props.updatePlaylist(event);
@@ -86,6 +98,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
         ) : null}
         {this.props.deletePlaylist ? (
           <MenuItem
+            className={classes.text}
             onClick={event => {
               event.stopPropagation();
               this.props.handleClose(event);

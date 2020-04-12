@@ -33,7 +33,7 @@ const styles = (theme: Theme) =>
       color: theme.palette.primary.main,
     },
     songInfoContainer: {
-      width: 'auto',
+      width: 'calc(100% - 150px)',
       flexGrow: 1,
     },
   });

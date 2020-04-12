@@ -5,13 +5,17 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 
 const styles = (theme: Theme) =>
   createStyles({
+    '@global': {
+      '.loader-grid': {
+        display: 'none',
+      },
+    },
     root: {
-      position: 'absolute',
-      top: 60,
-      left: 350,
-      height: 'calc(100% - 60px - 80px)',
-      width: 'calc(100% - 350px)',
       backgroundColor: 'black',
+      overflowY: 'auto',
+      height: '100%',
+      display: 'inline-block',
+      width: '83%',
       color: '#FFF',
       overflow: 'auto',
       [theme.breakpoints.down('sm')]: {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Fab, Typography } from '@material-ui/core';
@@ -13,17 +14,15 @@ import IMusic from '../../../../shared/IMusic';
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
-      '.MuiFab-extended.MuiFab-sizeMedium': {
-        [theme.breakpoints.down('xs')]: {
-          height: 30,
-        },
+      '.MuiButtonBase-root .MuiSvgIcon-root': {
+        fontSize: '2.5rem !important',
       },
     },
     root: {
-      width: 'calc(100% - 40px)',
-      marginTop: 20,
-      marginLeft: 20,
-      height: 200,
+      width: 'calc(100% - 4em)',
+      position: 'relative',
+      marginTop: '2em',
+      marginLeft: '2em',
       [theme.breakpoints.down('xs')]: {
         height: 150,
       },
@@ -32,8 +31,10 @@ const styles = (theme: Theme) =>
       margin: theme.spacing(1),
     },
     playlistPictureContainer: {
-      height: 180,
-      width: 180,
+      width: '15%',
+      height: 'auto',
+      minWidth: 140,
+      maxWidth: 200,
       marginRight: 20,
       [theme.breakpoints.down('xs')]: {
         display: 'none',
@@ -45,7 +46,7 @@ const styles = (theme: Theme) =>
       width: '100%',
     },
     playlistInfoContainer: {
-      width: 'calc(100% - 200px)',
+      width: 'auto',
       [theme.breakpoints.down('xs')]: {
         width: '100%',
         height: 140,
@@ -53,7 +54,7 @@ const styles = (theme: Theme) =>
     },
     playlistCategory: {
       textTransform: 'uppercase',
-      fontSize: 18,
+      fontSize: '1.7rem',
       color: theme.palette.primary.main,
       [theme.breakpoints.down('xs')]: {
         fontSize: 15,
@@ -61,9 +62,13 @@ const styles = (theme: Theme) =>
     },
     playlistName: {
       color: theme.palette.primary.light,
-      fontSize: 35,
+      fontSize: '3.3rem',
       fontWeight: 'bolder',
       textTransform: 'uppercase',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      maxWidth: 350,
       [theme.breakpoints.down('xs')]: {
         fontSize: 25,
       },
@@ -74,7 +79,7 @@ const styles = (theme: Theme) =>
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
       width: '100%',
-      fontSize: 18,
+      fontSize: '1.7rem',
       [theme.breakpoints.down('xs')]: {
         fontSize: 15,
       },
@@ -82,7 +87,11 @@ const styles = (theme: Theme) =>
     playlistButton: {
       color: theme.palette.primary.light,
       backgroundColor: theme.palette.secondary.main,
-      marginLeft: 15,
+      marginLeft: '1.3em',
+      fontSize: '1.2rem',
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
       [theme.breakpoints.down('xs')]: {
         height: '25 !important',
         fontSize: 15,
@@ -95,13 +104,14 @@ const styles = (theme: Theme) =>
     },
     headerLine: {
       backgroundColor: theme.palette.background.default,
+      marginTop: '2em',
       height: 1,
       width: '100%',
     },
     playlistOptions: {
       position: 'absolute',
-      right: 20,
-      top: 20,
+      right: 0,
+      top: 0,
       color: theme.palette.primary.main,
     },
   });
@@ -116,6 +126,23 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistHeader extends React.Component<IProps, NoState> {
+  @observable ref: React.RefObject<HTMLInputElement> = React.createRef();
+  @observable pictureHeight: number | null = null;
+
+  componentDidMount() {
+    window.addEventListener('resize', this.updatePictureDimensions);
+  }
+
+  componentDidUpdate() {
+    this.updatePictureDimensions();
+  }
+
+  updatePictureDimensions = () => {
+    if (this.ref != null && this.ref.current != null) {
+      this.pictureHeight = this.ref.current.clientWidth;
+    }
+  };
+
   startPlaylist = (): void => {
     if (MusicPlayer.playlistRoute == NavigationForm.currentRoute) {
       MusicPlayer.pauseOrPlay();
@@ -141,6 +168,9 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
       buttonText = 'Reprendre';
     }
 
+    const containerInformationWidth =
+      this.pictureHeight > 0 ? 'calc(100% - 4em - 20px - ' + this.pictureHeight + 'px)' : 'calc(100% - 4em)';
+
     return (
       <Grid container direction='column' className={classes.root} justify='space-between'>
         {this.props.playlistId ? (
@@ -148,10 +178,14 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
             <PlaylistOptions playlist />
           </div>
         ) : null}
-        <Grid container item direction='row'>
-          <Grid item className={classes.playlistPictureContainer}>
+        <Grid container item direction='row' style={{ width: '100%' }}>
+          <div
+            ref={this.ref}
+            className={classes.playlistPictureContainer}
+            style={this.pictureHeight ? { height: this.pictureHeight } : {}}
+          >
             <div className={classes.playlistPicture}></div>
-          </Grid>
+          </div>
           <Grid
             item
             container
@@ -159,6 +193,7 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
             className={classes.playlistInfoContainer}
             alignItems='flex-start'
             justify='space-between'
+            style={{ width: containerInformationWidth }}
           >
             <Grid item>
               <Typography className={classes.playlistCategory}>{this.props.subTitle}</Typography>

@@ -11,6 +11,30 @@
     <body>
         <div class="container">
           <style>
+            /* width */
+            ::-webkit-scrollbar {
+              width: 6px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+              box-shadow: 'unset'; 
+              border-radius: 10px;
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+              background: #2D2D2D; 
+              border-radius: 10px;
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+              background: #2D2D2D; 
+            }
+          </style>
+
+          <style>
             html, body {
               margin: 0;
               height: 100%;
@@ -84,6 +108,7 @@
               } 
             }
           </style>
+          
           <div class="loader-grid">
             <div class="sk-cube sk-cube1"></div>
             <div class="sk-cube sk-cube2"></div>

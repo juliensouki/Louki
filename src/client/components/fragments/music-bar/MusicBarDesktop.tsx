@@ -24,19 +24,16 @@ import Volume from '../volume-button/Volume';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      height: 80,
       width: '100%',
+      height: '6.5em',
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
     },
     musicControlsContainer: {
-      width: 'calc(100% - 350px)',
+      width: '83%',
       height: '100%',
-      paddingLeft: 60,
-      paddingRight: 60,
+      paddingLeft: '4em',
+      paddingRight: '4em',
       [theme.breakpoints.down('md')]: {
         width: 'calc(100% - 80px)',
       },
@@ -46,7 +43,9 @@ const styles = (theme: Theme) =>
       maxWidth: 700,
     },
     arrowIcon: {
-      fontSize: 40,
+      position: 'relative',
+      top: '-0.1em',
+      fontSize: '3rem',
       verticalAlign: 'super',
       transition: 'color .5s ease-in-out',
       '&:hover': {
@@ -55,7 +54,7 @@ const styles = (theme: Theme) =>
       },
     },
     playPauseIcon: {
-      fontSize: 55,
+      fontSize: '5rem',
       transition: 'color .5s ease-in-out',
       '&:hover': {
         cursor: 'pointer',
@@ -63,9 +62,9 @@ const styles = (theme: Theme) =>
       },
     },
     controlIcons: {
-      fontSize: 25,
+      fontSize: '2.3rem',
       transition: 'color .5s ease-in-out',
-      marginRight: 15,
+      marginRight: '0.5em',
       '&:hover': {
         cursor: 'pointer',
         color: theme.palette.primary.light,
@@ -102,55 +101,52 @@ class MusicBarDesktop extends React.Component<IProps, NoState> {
 
   render() {
     const { classes } = this.props;
+
     return (
-      <React.Fragment>
-        <Grid container direction='row' className={classes.root}>
+      <Grid container direction='row' className={classes.root}>
+        <MusicPreview />
+        <Grid container alignItems='center' justify='space-between' className={classes.musicControlsContainer}>
           <Grid item>
-            <MusicPreview />
+            <SkipPreviousIcon onClick={MusicPlayer.prevSong} className={classes.arrowIcon} />
+            {!MusicPlayer.playing ? (
+              <PlayArrowIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
+            ) : (
+              <PauseIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
+            )}
+            <SkipNextIcon onClick={MusicPlayer.nextSong} className={classes.arrowIcon} />
           </Grid>
-          <Grid container alignItems='center' justify='space-between' className={classes.musicControlsContainer}>
-            <Grid item>
-              <SkipPreviousIcon onClick={MusicPlayer.prevSong} className={classes.arrowIcon} />
-              {!MusicPlayer.playing ? (
-                <PlayArrowIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
-              ) : (
-                <PauseIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
-              )}
-              <SkipNextIcon onClick={MusicPlayer.nextSong} className={classes.arrowIcon} />
-            </Grid>
-            <Grid item className={classes.progerssBarContainer}>
-              <ProgressBar />
-            </Grid>
-            <Grid item>
-              <ShuffleIcon
+          <Grid item className={classes.progerssBarContainer}>
+            <ProgressBar />
+          </Grid>
+          <Grid item>
+            <ShuffleIcon
+              className={classes.controlIcons}
+              onClick={MusicPlayer.changeRandom}
+              style={{ color: MusicPlayer.random ? '#FFB13B' : '' }}
+            />
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <LoopIcon
                 className={classes.controlIcons}
-                onClick={MusicPlayer.changeRandom}
-                style={{ color: MusicPlayer.random ? '#FFB13B' : '' }}
+                onClick={MusicPlayer.changeRepeatMode}
+                style={{ color: MusicPlayer.repeat == MusicLoop.NO_REPEAT ? '' : '#FFB13B' }}
               />
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <LoopIcon
-                  className={classes.controlIcons}
-                  onClick={MusicPlayer.changeRepeatMode}
-                  style={{ color: MusicPlayer.repeat == MusicLoop.NO_REPEAT ? '' : '#FFB13B' }}
-                />
-                {MusicPlayer.repeat == MusicLoop.REPEAT_ONE ? <div className={classes.bubbleRepeat}>1</div> : null}
-              </div>
-              <div
-                style={{ display: 'inline-block' }}
-                onMouseEnter={this.handlePopoverOpen}
-                onMouseLeave={this.handlePopoverClose}
-              >
-                {MusicPlayer.volume == 0 || MusicPlayer.mute ? (
-                  <VolumeOffIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />
-                ) : (
-                  <VolumeUpIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />
-                )}
-                <Volume anchorEl={this.volumeAnchorEl} handleClose={this.handlePopoverClose} />
-              </div>
-            </Grid>
+              {MusicPlayer.repeat == MusicLoop.REPEAT_ONE ? <div className={classes.bubbleRepeat}>1</div> : null}
+            </div>
+            <div
+              style={{ display: 'inline-block' }}
+              onMouseEnter={this.handlePopoverOpen}
+              onMouseLeave={this.handlePopoverClose}
+            >
+              {MusicPlayer.volume == 0 || MusicPlayer.mute ? (
+                <VolumeOffIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />
+              ) : (
+                <VolumeUpIcon onClick={MusicPlayer.muteUnMute} className={classes.controlIcons} />
+              )}
+              <Volume anchorEl={this.volumeAnchorEl} handleClose={this.handlePopoverClose} />
+            </div>
           </Grid>
         </Grid>
-      </React.Fragment>
+      </Grid>
     );
   }
 }

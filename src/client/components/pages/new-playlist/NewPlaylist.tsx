@@ -18,33 +18,44 @@ const styles = (theme: Theme) =>
     '@global': {
       '.MuiOutlinedInput-root': {
         width: '100%',
+        fontSize: '1.3rem !important',
         maxWidth: 600,
+      },
+      '.MuiInputBase-input': {
+        fontSize: '1.3rem !important',
       },
     },
     root: {
-      padding: 30,
-      paddingTop: 10,
+      padding: '2.5em',
+      paddingTop: '1em',
       color: theme.palette.primary.main,
     },
     button: {
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
       textTransform: 'none',
-      marginLeft: 10,
-      marginRight: 10,
+      marginLeft: '1em',
+      marginRight: '1em',
+      fontSize: '1.3rem',
     },
     title: {
       color: theme.palette.primary.light,
-      marginBottom: 20,
-      marginTop: 15,
+      marginBottom: '2em',
+      marginTop: '1.5em',
+      fontSize: '1.3rem',
     },
     icon: {
       verticalAlign: 'middle',
+      position: 'relative',
+      top: '-0.1em',
     },
     descriptionInput: {
       display: 'inline-block',
       color: theme.palette.primary.main,
       width: '100%',
+    },
+    resizeText: {
+      fontSize: '1.3rem',
     },
   });
 
@@ -88,10 +99,16 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
           <Grid item>
             <Typography className={classes.title}>Give your new playlist a name :</Typography>
           </Grid>
-          <Grid item style={{ marginBottom: 20 }}>
+          <Grid item style={{ marginBottom: '2em' }}>
             <TextField
               id='standard-basic'
               value={CreatePlaylistForm.name}
+              InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+              InputProps={{
+                classes: {
+                  input: classes.resizeText,
+                },
+              }}
               onChange={e => {
                 CreatePlaylistForm.setName(e.target.value);
               }}
@@ -101,22 +118,30 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
           </Grid>
           <Grid item>
             <Typography className={classes.title}>Choose a picture (optionnal) and add a description :</Typography>
-            <Typography style={{ display: 'inline-block' }}>You can either choose a picture from </Typography>
+            <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}>
+              You can either choose a picture from
+            </Typography>
             <Button className={classes.button} style={{ display: 'inline-block' }}>
               <FolderIcon className={classes.icon} /> your computer
             </Button>
-            <Typography style={{ display: 'inline-block' }}> or from </Typography>
+            <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}> or from </Typography>
             <Button className={classes.button} style={{ display: 'inline-block' }}>
               <PublicIcon className={classes.icon} /> Internet
             </Button>
             <br />
-            <Grid item style={{ marginTop: 40, width: '100%' }}>
+            <Grid item style={{ marginTop: '3.5em', width: '100%' }}>
               <TextField
                 id='filled-multiline-static'
                 label='Add a description'
                 multiline
                 rows='4'
                 value={CreatePlaylistForm.description}
+                InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+                InputProps={{
+                  classes: {
+                    input: classes.resizeText,
+                  },
+                }}
                 className={classes.descriptionInput}
                 onChange={e => {
                   CreatePlaylistForm.setDescription(e.target.value);

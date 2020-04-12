@@ -18,10 +18,7 @@ import UserData from '../../../store/common/UserData';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      height: 60,
+      height: '6em',
       width: '100%',
       backgroundColor: theme.palette.background.default,
       color: '#FFF',
@@ -36,31 +33,32 @@ const styles = (theme: Theme) =>
       paddingRight: 20,
     },
     logo: {
-      fontSize: 30,
       textTransform: 'uppercase',
       fontWeight: 'lighter',
     },
     profilePicture: {
       borderRadius: '100%',
-      height: 40,
-      width: 40,
+      height: '4rem',
+      width: '4rem',
       backgroundColor: theme.palette.secondary.main,
-      marginLeft: 15,
+      marginLeft: '1.5em',
     },
     userName: {
+      fontSize: '1.5rem',
       color: theme.palette.primary.main,
     },
     settingsIcon: {
-      position: 'absolute',
-      fontSize: 30,
-      top: 15,
-      right: '15%',
+      fontSize: '2.5rem !important',
       color: theme.palette.primary.main,
       transition: 'color .5s ease-in-out',
       '&:hover': {
         cursor: 'pointer',
         color: theme.palette.primary.light,
       },
+    },
+    settingsIconContainer: {
+      position: 'absolute',
+      right: '15%',
       [theme.breakpoints.down('md')]: {
         right: '25%',
       },
@@ -97,7 +95,11 @@ class TopBar extends React.Component<IProps, NoState> {
           <Grid item>
             <ResponsiveAdapter
               breakpoint='sm'
-              desktop={<Typography className={classes.logo}>louki</Typography>}
+              desktop={
+                <Typography variant='h3' className={classes.logo}>
+                  louki
+                </Typography>
+              }
               mobile={this.menuIcon}
             />
           </Grid>
@@ -112,11 +114,11 @@ class TopBar extends React.Component<IProps, NoState> {
             </Grid>
           </Grid>
           <NavLink
-            className={classes.settingsIcon}
             to={'/settings'}
+            className={classes.settingsIconContainer}
             activeStyle={{ textDecoration: 'none', fontWeight: 'bolder', color: '#FFF' }}
           >
-            <SettingsIcon />
+            <SettingsIcon className={classes.settingsIcon} />
           </NavLink>
         </Grid>
       </div>

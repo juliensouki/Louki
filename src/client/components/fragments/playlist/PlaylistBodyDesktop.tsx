@@ -27,26 +27,31 @@ const styles = (theme: Theme) =>
   createStyles({
     '@global': {
       '.MuiTableCell-root': {
-        padding: 8,
-      },
-    },
-    root: {
-      marginLeft: 20,
-      width: 'calc(100% - 40px)',
-      height: 'calc(100% - 280px)',
-      marginTop: 20,
-      [theme.breakpoints.down('xs')]: {
-        height: 'calc(100% - 240px)',
+        padding: '0.2em',
       },
     },
     rowTitles: {
       fontWeight: 'bolder',
       textTransform: 'uppercase',
-      fontSize: 16,
+      fontSize: '1.5rem',
       color: theme.palette.primary.main,
+      paddingBottom: '0.8em',
+    },
+    whiteTableRow: {
+      color: '#fff',
+      fontSize: '1.3rem',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      maxWidth: 300,
     },
     tableRow: {
       color: theme.palette.primary.main,
+      fontSize: '1.3rem',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      maxWidth: 300,
     },
     rowSelected: {
       backgroundColor: '#151414',
@@ -133,7 +138,7 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps, No
                 this.playMusic(index);
               }}
             >
-              <TableCell style={{ color: '#FFF' }} component='th' scope='row'>
+              <TableCell className={classes.whiteTableRow} component='th' scope='row'>
                 {this.props.canAddToFavorites ? (
                   BookmarksData.isInBookmarks(row.__id) ? (
                     <IconButton
@@ -158,12 +163,12 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps, No
                 ) : null}
                 {row.title}
               </TableCell>
-              <TableCell style={{ color: '#FFF' }}>{MusicsData.getArtistNameById(row.artist)}</TableCell>
+              <TableCell className={classes.whiteTableRow}>{MusicsData.getArtistNameById(row.artist)}</TableCell>
               <TableCell className={classes.tableRow}>{MusicsData.getAlbumNameById(row.album)}</TableCell>
               <TableCell className={classes.tableRow}>{MusicsData.msTosec(row.duration)}</TableCell>
               <TableCell className={classes.tableRow} align='right'>
                 <PlaylistOptions
-                  music={row}
+                  music={row as IMusic}
                   allSongs={allSongs}
                   removeBookmark={favorites}
                   musicInPlaylist={customPlaylist}
