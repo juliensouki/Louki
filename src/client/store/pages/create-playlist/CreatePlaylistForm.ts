@@ -4,15 +4,20 @@ import { useHistory } from 'react-router';
 
 class CreatePlaylistForm {
   @observable private playlistName: string = '';
-  @observable private pictureUrl: string = '';
+  @observable private url: string = '';
+  @observable private file: File | null = null;
   @observable private playlistDescription: string = '';
 
   @action setName = (name: string) => {
     this.playlistName = name;
   };
 
-  @action setPicture = (pictureUrl: string) => {
-    this.pictureUrl = pictureUrl;
+  @action setPictureUrl = (url: string) => {
+    this.url = url;
+  };
+
+  @action setPicture = (file: File) => {
+    this.file = file;
   };
 
   @action setDescription = (description: string) => {
@@ -23,8 +28,12 @@ class CreatePlaylistForm {
     return this.playlistName;
   }
 
-  @computed get picture(): string {
-    return this.pictureUrl;
+  @computed get pictureUrl(): string {
+    return this.url;
+  }
+
+  @computed get pictureFile(): File | null {
+    return this.file;
   }
 
   @computed get description(): string {
@@ -34,14 +43,7 @@ class CreatePlaylistForm {
   @action send = () => {
     fetch('/createPlaylist', {
       method: 'POST',
-      headers: {
-        'Accept': 'application/json', // eslint-disable-line
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: this.playlistName,
-        description: this.playlistDescription,
-      }),
+      body: this.file[0],
     })
       .then(res => {
         return res.json();
