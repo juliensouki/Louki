@@ -8,7 +8,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Button, Typography } from '@material-ui/core';
 
 import PlaylistOptions from './PlaylistOptions';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -22,6 +22,7 @@ import BookmarksData from '../../../store/common/BookmarksData';
 
 import MusicPlayingIcon from '../../../assets/MusicPlayingIcon';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -70,6 +71,14 @@ const styles = (theme: Theme) =>
     fillFavIcon: {
       color: theme.palette.secondary.main,
     },
+    button: {
+      backgroundColor: theme.palette.background.default,
+      color: theme.palette.primary.main,
+      textTransform: 'none',
+      marginLeft: '1em',
+      marginRight: '1em',
+      fontSize: '1.3rem',
+    },
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -78,10 +87,13 @@ interface IProps extends WithStyles<typeof styles> {
   favorites: boolean;
   customPlaylist?: boolean;
   allSongs?: boolean;
+  emptyPlaylistText: string;
+  emptyPlaylistButtonText: string;
+  emptyPlaylistRedirectRoute: string;
 }
 
 @observer
-class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps, NoState> {
+class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & RouteComponentProps, NoState> {
   @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
 
   playMusic = (index: number): void => {
@@ -115,71 +127,94 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps, No
     BookmarksData.deleteBookmark(id);
   };
 
-  render() {
-    const { classes, playlist, favorites, customPlaylist, allSongs } = this.props;
+  redirectHome = () => {
+    this.props.history.push(this.props.emptyPlaylistRedirectRoute);
+  };
 
-    return (
-      <Table aria-label='simple table'>
-        <TableHead className={classes.rowTitles}>
-          <TableRow>
-            <TableCell className={classes.rowTitles}>Song</TableCell>
-            <TableCell className={classes.rowTitles}>Artist</TableCell>
-            <TableCell className={classes.rowTitles}>Album</TableCell>
-            <TableCell className={classes.rowTitles}>Duration</TableCell>
-            <TableCell align='right'></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {playlist.map((row, index) => (
-            <TableRow
-              key={row.__id}
-              className={MusicPlayer.playingMusicId == row.__id ? classes.rowSelected : classes.row}
-              onClick={() => {
-                this.playMusic(index);
-              }}
-            >
-              <TableCell className={classes.whiteTableRow} component='th' scope='row'>
-                {this.props.canAddToFavorites ? (
-                  BookmarksData.isInBookmarks(row.__id) ? (
-                    <IconButton
-                      onClick={event => {
-                        this.deleteBookmark(event, row.__id);
-                      }}
-                    >
-                      <FavoriteIcon className={classes.fillFavIcon} />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      onClick={event => {
-                        this.addBookmark(event, row.__id);
-                      }}
-                    >
-                      <FavoriteBorderIcon />
-                    </IconButton>
-                  )
-                ) : null}
-                {MusicPlayer.playingMusicId == row.__id && NavigationForm.currentRoute == MusicPlayer.playlistRoute ? (
-                  <MusicPlayingIcon />
-                ) : null}
-                {row.title}
-              </TableCell>
-              <TableCell className={classes.whiteTableRow}>{MusicsData.getArtistNameById(row.artist)}</TableCell>
-              <TableCell className={classes.tableRow}>{MusicsData.getAlbumNameById(row.album)}</TableCell>
-              <TableCell className={classes.tableRow}>{MusicsData.msTosec(row.duration)}</TableCell>
-              <TableCell className={classes.tableRow} align='right'>
-                <PlaylistOptions
-                  music={row as IMusic}
-                  allSongs={allSongs}
-                  removeBookmark={favorites}
-                  musicInPlaylist={customPlaylist}
-                />
-              </TableCell>
+  render() {
+    const {
+      classes,
+      playlist,
+      favorites,
+      customPlaylist,
+      allSongs,
+      emptyPlaylistText,
+      emptyPlaylistButtonText,
+    } = this.props;
+
+    if (playlist.length == 0) {
+      return (
+        <React.Fragment>
+          <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>{emptyPlaylistText}</Typography>
+          <Button className={classes.button} onClick={this.redirectHome}>
+            {emptyPlaylistButtonText}
+          </Button>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <Table aria-label='simple table'>
+          <TableHead className={classes.rowTitles}>
+            <TableRow>
+              <TableCell className={classes.rowTitles}>Song</TableCell>
+              <TableCell className={classes.rowTitles}>Artist</TableCell>
+              <TableCell className={classes.rowTitles}>Album</TableCell>
+              <TableCell className={classes.rowTitles}>Duration</TableCell>
+              <TableCell align='right'></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
+          </TableHead>
+          <TableBody>
+            {playlist.map((row, index) => (
+              <TableRow
+                key={row.__id}
+                className={MusicPlayer.playingMusicId == row.__id ? classes.rowSelected : classes.row}
+                onClick={() => {
+                  this.playMusic(index);
+                }}
+              >
+                <TableCell className={classes.whiteTableRow} component='th' scope='row'>
+                  {this.props.canAddToFavorites ? (
+                    BookmarksData.isInBookmarks(row.__id) ? (
+                      <IconButton
+                        onClick={event => {
+                          this.deleteBookmark(event, row.__id);
+                        }}
+                      >
+                        <FavoriteIcon className={classes.fillFavIcon} />
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        onClick={event => {
+                          this.addBookmark(event, row.__id);
+                        }}
+                      >
+                        <FavoriteBorderIcon />
+                      </IconButton>
+                    )
+                  ) : null}
+                  {MusicPlayer.playingMusicId == row.__id && NavigationForm.currentRoute == MusicPlayer.playlistRoute ? (
+                    <MusicPlayingIcon />
+                  ) : null}
+                  {row.title}
+                </TableCell>
+                <TableCell className={classes.whiteTableRow}>{MusicsData.getArtistNameById(row.artist)}</TableCell>
+                <TableCell className={classes.tableRow}>{MusicsData.getAlbumNameById(row.album)}</TableCell>
+                <TableCell className={classes.tableRow}>{MusicsData.msTosec(row.duration)}</TableCell>
+                <TableCell className={classes.tableRow} align='right'>
+                  <PlaylistOptions
+                    music={row as IMusic}
+                    allSongs={allSongs}
+                    removeBookmark={favorites}
+                    musicInPlaylist={customPlaylist}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      );
+    }
   }
 }
 
-export default withSnackbar(withStyles(styles)(PlaylistBodyDesktop));
+export default withRouter(withSnackbar(withStyles(styles)(PlaylistBodyDesktop)));

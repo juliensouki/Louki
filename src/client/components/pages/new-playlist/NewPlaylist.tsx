@@ -6,8 +6,6 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 import MusicsData from '../../../store/common/MusicsData';
 import SimpleHeader from '../../fragments/playlist/SimpleHeader';
-import NavigationForm from '../../../store/common/NavigationForm';
-import IPlaylist from '../../../../shared/IPlaylist';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Grid, IconButton, Button, Typography, TextField } from '@material-ui/core/';
