@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
-import { Redirect } from 'react-router';
+import { action } from 'mobx';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -9,6 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { Typography, Button } from '@material-ui/core';
 
 import CurrentArtistOrAlbum from '../../../store/pages/artistsOrAlbums/CurrentArtistOrAlbum';
 import AlbumIcon from '@material-ui/icons/Album';
@@ -56,6 +57,14 @@ const styles = (theme: Theme) =>
         cursor: 'pointer',
       },
     },
+    button: {
+      backgroundColor: theme.palette.background.default,
+      color: theme.palette.primary.main,
+      textTransform: 'none',
+      marginLeft: '1em',
+      marginRight: '1em',
+      fontSize: '1.3rem',
+    },
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -64,18 +73,31 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
-  @observable url: string | null = null;
-
+class PlaylistBodyDesktop extends React.Component<IProps & RouteComponentProps, NoState> {
   @action redirectToSpecificArtistOrAlbum = (item: IArtist | IAlbum) => {
     const page = this.props.page == Page.ARTISTS ? 'artist' : 'album';
-    this.url = '/' + page + '/' + item.__id;
+    this.props.history.push('/' + page + '/' + item.__id);
+  };
+
+  redirectHome = () => {
+    this.props.history.push('/all-music');
   };
 
   render() {
     const { classes, playlist, page } = this.props;
 
-    if (this.url == null) {
+    if (playlist.lenght == 0) {
+      return (
+        <React.Fragment>
+          <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>
+            You dont have any {this.props.page == Page.ARTISTS ? 'artist' : 'album'} yet
+          </Typography>
+          <Button className={classes.button} onClick={this.redirectHome}>
+            All songs
+          </Button>
+        </React.Fragment>
+      );
+    } else {
       return (
         <Table aria-label='simple table'>
           <TableHead className={classes.rowTitles}>
@@ -116,8 +138,8 @@ class PlaylistBodyDesktop extends React.Component<IProps, NoState> {
           </TableBody>
         </Table>
       );
-    } else return <Redirect to={this.url} push />;
+    }
   }
 }
 
-export default withStyles(styles)(PlaylistBodyDesktop);
+export default withRouter(withStyles(styles)(PlaylistBodyDesktop));

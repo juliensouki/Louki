@@ -32,7 +32,7 @@ class ArtistsOrAlbums extends React.Component<RouteComponentProps, NoState> {
   }
 
   get subTitle(): string {
-    return CurrentArtistOrAlbum.showArtist ? 'Your artists' : 'Your albums';
+    return this.page == Page.ARTISTS ? 'Your artists' : 'Your albums';
   }
 
   render() {
