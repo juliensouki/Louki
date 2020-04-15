@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { computed } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
@@ -31,6 +32,33 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistBody extends React.Component<IProps, NoState> {
+  @computed get emptyPlaylistText(): string {
+    if (this.props.allSongs) {
+      return 'You don\'t have any song yet. Please check in your settings that you added at least one music folder';
+    } else if (this.props.favorites) {
+      return 'You don\'t have any favorite song yet';
+    }
+    return 'This playist is currently empty';
+  }
+
+  @computed get emptyPlaylistButtonText(): string {
+    if (this.props.allSongs) {
+      return 'Settings';
+    } else if (this.props.favorites) {
+      return 'All songs';
+    }
+    return 'All songs';
+  }
+
+  @computed get emptyPlaylistRedirectRoute(): string {
+    if (this.props.allSongs) {
+      return '/settings';
+    } else if (this.props.favorites) {
+      return '/all-music';
+    }
+    return '/all-music';
+  }
+
   render() {
     const { classes, playlist, favorites, customPlaylist, canAddToFavorites, allSongs } = this.props;
 
@@ -46,6 +74,9 @@ class PlaylistBody extends React.Component<IProps, NoState> {
                 playlist={playlist}
                 customPlaylist={customPlaylist}
                 canAddToFavorites={canAddToFavorites}
+                emptyPlaylistText={this.emptyPlaylistText}
+                emptyPlaylistButtonText={this.emptyPlaylistButtonText}
+                emptyPlaylistRedirectRoute={this.emptyPlaylistRedirectRoute}
               />
             }
           />
