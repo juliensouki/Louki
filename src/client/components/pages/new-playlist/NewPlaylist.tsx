@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
@@ -102,18 +102,28 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
     }
   };
 
+  @action handleFileChange = () => {
+    const fileInput = document.getElementById('hidden-file-input');
+    if (fileInput != null) {
+      CreatePlaylistForm.setPicture((fileInput as HTMLInputElement).files[0]);
+    }
+  };
+
+  @computed get pictureSelectedText(): string {
+    const fileInput = document.getElementById('hidden-file-input');
+    if (CreatePlaylistForm.pictureFile == null) {
+      return 'No picture selected yet.';
+    }
+    return 'Current picture : ' + CreatePlaylistForm.pictureFile.name;
+  }
+
   render() {
     const { classes } = this.props;
 
     return (
       <React.Fragment>
         <SimpleHeader title='New playlist' />
-        <form
-          method='POST'
-          encType='multipart/form-data'
-          action='/createPlaylist'
-          id='new-playlist-form'
-        >
+        <form method='POST' encType='multipart/form-data' action='/createPlaylist' id='new-playlist-form'>
           <Grid container className={classes.root} direction='column'>
             <Grid item>
               <Typography className={classes.title}>Give your new playlist a name :</Typography>
@@ -147,13 +157,20 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                 className={classes.button}
                 style={{ display: 'inline-block' }}
               >
-                <input id='hidden-file-input' type='file' name='playlist-picture' style={{ display: 'none' }} />
+                <input
+                  id='hidden-file-input'
+                  type='file'
+                  name='playlist-picture'
+                  style={{ display: 'none' }}
+                  onChange={this.handleFileChange}
+                />
                 <FolderIcon className={classes.icon} /> your computer
               </Button>
               <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}> or from </Typography>
               <Button type='button' className={classes.button} style={{ display: 'inline-block' }}>
                 <PublicIcon className={classes.icon} /> Internet
               </Button>
+              <Typography style={{ fontSize: '1.3rem' }}>{this.pictureSelectedText}</Typography>
               <br />
               <Grid item style={{ marginTop: '3.5em', width: '100%' }}>
                 <TextField

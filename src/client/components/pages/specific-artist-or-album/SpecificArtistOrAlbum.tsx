@@ -32,9 +32,10 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
   }
 
   render() {
+    const image = this.artistOrAlbum == 'artist' ? '/assets/images/artists.png' : '/assets/images/albums.png';
     return (
       <div style={{ width: '100%' }}>
-        <PlaylistHeader title={this.artistOrAlbumName} subTitle={this.artistOrAlbum} description='' />
+        <PlaylistHeader title={this.artistOrAlbumName} subTitle={this.artistOrAlbum} description='' image={image} />
         <SearchContainer />
         <PlaylistBody playlist={this.playlist} canAddToFavorites allSongs />
       </div>

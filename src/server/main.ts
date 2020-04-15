@@ -179,7 +179,6 @@ app.post('/removeSongFromPlaylist', (req, res) => {
 });
 
 app.post('/createPlaylist', upload.single('playlist-picture'), (req, res) => {
-  console.log(req.body);
   const name = req.body['playlist-name'];
   const description = req.body['playlist-description'];
   const file = (req as any).file;

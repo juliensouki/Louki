@@ -24,7 +24,12 @@ class AllMusic extends React.Component<IProps, NoState> {
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader subTitle='All songs' title='Your Music' playlist={MusicsData.allMusics} />
+        <PlaylistHeader
+          subTitle='All songs'
+          title='Your Music'
+          playlist={MusicsData.allMusics}
+          image='/assets/images/all-musics.png'
+        />
         <SearchContainer />
         <PlaylistBody canAddToFavorites playlist={MusicsData.allMusics} allSongs />
       </div>

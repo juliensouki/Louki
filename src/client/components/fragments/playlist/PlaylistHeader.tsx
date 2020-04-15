@@ -121,6 +121,7 @@ interface IProps extends WithStyles<typeof styles> {
   playlistId?: string;
   subTitle: string;
   title: string;
+  image: string;
   description?: string;
 }
 
@@ -153,7 +154,7 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
   };
 
   render() {
-    const { classes, playlist, description } = this.props;
+    const { classes, playlist, description, image } = this.props;
     let icon: JSX.Element;
     let buttonText: string;
 
@@ -184,7 +185,7 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
             className={classes.playlistPictureContainer}
             style={this.pictureHeight ? { height: this.pictureHeight } : {}}
           >
-            <div className={classes.playlistPicture}></div>
+            <img src={image} className={classes.playlistPicture}></img>
           </div>
           <Grid
             item
