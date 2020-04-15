@@ -10,8 +10,9 @@ import NavigationForm from '../../../store/common/NavigationForm';
 import IPlaylist from '../../../../shared/IPlaylist';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import { Grid, Button, Typography, TextField } from '@material-ui/core/';
+import { Grid, IconButton, Button, Typography, TextField } from '@material-ui/core/';
 import PublicIcon from '@material-ui/icons/Public';
+import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 
 const styles = (theme: Theme) =>
@@ -117,6 +118,10 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
     return 'Current picture : ' + CreatePlaylistForm.pictureFile.name;
   }
 
+  @action cancelImage = () => {
+    CreatePlaylistForm.setPicture(null);
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -170,7 +175,16 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
               <Button type='button' className={classes.button} style={{ display: 'inline-block' }}>
                 <PublicIcon className={classes.icon} /> Internet
               </Button>
-              <Typography style={{ fontSize: '1.3rem' }}>{this.pictureSelectedText}</Typography>
+              <div>
+                <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>
+                  {this.pictureSelectedText}
+                </Typography>
+                {CreatePlaylistForm.pictureFile != null ? (
+                  <IconButton style={{ display: 'inline-block' }} onClick={this.cancelImage}>
+                    <CloseIcon />
+                  </IconButton>
+                ) : null}
+              </div>
               <br />
               <Grid item style={{ marginTop: '3.5em', width: '100%' }}>
                 <TextField

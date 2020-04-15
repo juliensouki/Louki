@@ -16,7 +16,7 @@ class CreatePlaylistForm {
     this.url = url;
   };
 
-  @action setPicture = (file: File) => {
+  @action setPicture = (file: File | null) => {
     this.file = file;
   };
 
