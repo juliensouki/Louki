@@ -24,6 +24,10 @@ const styles = (theme: Theme) =>
       '.MuiInputBase-input': {
         fontSize: '1.3rem !important',
       },
+      '.MuiFormHelperText-root': {
+        color: 'red',
+        fontSize: '1.3rem',
+      },
     },
     root: {
       padding: '2.5em',
@@ -66,13 +70,8 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 
 @observer
 class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> {
-  @observable open: boolean = false;
-  @observable redirect: boolean = false;
-
-  @action handleClose = (event: React.SyntheticEvent<any, Event>, reason: string) => {
-    if (reason === 'clickaway') return;
-    this.open = false;
-  };
+  @observable nameHelper: string = '';
+  @observable descriptionHelper: string = '';
 
   openFileExplorer = () => {
     const fileInput = document.getElementById('hidden-file-input');
@@ -81,10 +80,14 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
     }
   };
 
+  formValidation = (): boolean => {
+    return CreatePlaylistForm.name.length > 0 && CreatePlaylistForm.description.length > 0;
+  };
+
   handleRedirect = event => {
     event.stopPropagation();
     const form = document.getElementById('new-playlist-form');
-    if (form != null) {
+    if (form != null && this.formValidation()) {
       const data = new FormData(form as HTMLFormElement);
 
       fetch('/createPlaylist', {
@@ -98,6 +101,13 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
           MusicsData.setPlaylists(data);
           this.props.history.push('/all-music');
         });
+    } else {
+      if (CreatePlaylistForm.name.length == 0) {
+        this.nameHelper = 'You must give your playlist a name';
+      }
+      if (CreatePlaylistForm.description.length == 0) {
+        this.descriptionHelper = 'You must give your playlist a description';
+      }
     }
   };
 
@@ -136,6 +146,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                 id='standard-basic'
                 value={CreatePlaylistForm.name}
                 name='playlist-name'
+                helperText={this.nameHelper}
                 InputLabelProps={{ style: { fontSize: '1.3rem' } }}
                 InputProps={{
                   classes: {
@@ -143,6 +154,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                   },
                 }}
                 onChange={e => {
+                  this.nameHelper = '';
                   CreatePlaylistForm.setName(e.target.value);
                 }}
                 style={{ display: 'inline-block' }}
@@ -191,6 +203,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                   name='playlist-description'
                   multiline
                   rows='4'
+                  helperText={this.descriptionHelper}
                   value={CreatePlaylistForm.description}
                   InputLabelProps={{ style: { fontSize: '1.3rem' } }}
                   InputProps={{
@@ -200,6 +213,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                   }}
                   className={classes.descriptionInput}
                   onChange={e => {
+                    this.descriptionHelper = '';
                     CreatePlaylistForm.setDescription(e.target.value);
                   }}
                   variant='outlined'
