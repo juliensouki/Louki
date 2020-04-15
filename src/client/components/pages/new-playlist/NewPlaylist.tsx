@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
+import MusicsData from '../../../store/common/MusicsData';
 import SimpleHeader from '../../fragments/playlist/SimpleHeader';
-import Notification, { NotificationType } from '../../fragments/notifications/Notification';
 import NavigationForm from '../../../store/common/NavigationForm';
+import IPlaylist from '../../../../shared/IPlaylist';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Grid, Button, Typography, TextField } from '@material-ui/core/';
@@ -67,20 +68,53 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 @observer
 class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> {
   @observable open: boolean = false;
+  @observable redirect: boolean = false;
 
   @action handleClose = (event: React.SyntheticEvent<any, Event>, reason: string) => {
     if (reason === 'clickaway') return;
     this.open = false;
   };
 
-  @action createPlaylist = () => {
-    CreatePlaylistForm.send();
-    this.props.history.push(NavigationForm.previousRoute);
-    this.open = true;
+  openFileExplorer = () => {
+    const fileInput = document.getElementById('hidden-file-input');
+    if (fileInput) {
+      fileInput.click();
+    }
   };
 
-  get playlistCreationMessage(): string {
-    return 'Playlist "' + CreatePlaylistForm.name + '" was created';
+  handleRedirect = event => {
+    event.stopPropagation();
+    const form = document.getElementById('new-playlist-form');
+    if (form != null) {
+      const data = new FormData(form as HTMLFormElement);
+
+      fetch('/createPlaylist', {
+        method: 'POST',
+        body: data,
+      })
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          MusicsData.setPlaylists(data);
+          this.props.history.push('/all-music');
+        });
+    }
+  };
+
+  @action handleFileChange = () => {
+    const fileInput = document.getElementById('hidden-file-input');
+    if (fileInput != null) {
+      CreatePlaylistForm.setPicture((fileInput as HTMLInputElement).files[0]);
+    }
+  };
+
+  @computed get pictureSelectedText(): string {
+    const fileInput = document.getElementById('hidden-file-input');
+    if (CreatePlaylistForm.pictureFile == null) {
+      return 'No picture selected yet.';
+    }
+    return 'Current picture : ' + CreatePlaylistForm.pictureFile.name;
   }
 
   render() {
@@ -88,74 +122,85 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
 
     return (
       <React.Fragment>
-        <Notification
-          open={this.open}
-          handleClose={this.handleClose}
-          message={this.playlistCreationMessage}
-          type={NotificationType.SUCCESS}
-        />
         <SimpleHeader title='New playlist' />
-        <Grid container className={classes.root} direction='column'>
-          <Grid item>
-            <Typography className={classes.title}>Give your new playlist a name :</Typography>
-          </Grid>
-          <Grid item style={{ marginBottom: '2em' }}>
-            <TextField
-              id='standard-basic'
-              value={CreatePlaylistForm.name}
-              InputLabelProps={{ style: { fontSize: '1.3rem' } }}
-              InputProps={{
-                classes: {
-                  input: classes.resizeText,
-                },
-              }}
-              onChange={e => {
-                CreatePlaylistForm.setName(e.target.value);
-              }}
-              style={{ display: 'inline-block' }}
-              label='Playlist name'
-            />
-          </Grid>
-          <Grid item>
-            <Typography className={classes.title}>Choose a picture (optionnal) and add a description :</Typography>
-            <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}>
-              You can either choose a picture from
-            </Typography>
-            <Button className={classes.button} style={{ display: 'inline-block' }}>
-              <FolderIcon className={classes.icon} /> your computer
-            </Button>
-            <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}> or from </Typography>
-            <Button className={classes.button} style={{ display: 'inline-block' }}>
-              <PublicIcon className={classes.icon} /> Internet
-            </Button>
-            <br />
-            <Grid item style={{ marginTop: '3.5em', width: '100%' }}>
+        <form method='POST' encType='multipart/form-data' action='/createPlaylist' id='new-playlist-form'>
+          <Grid container className={classes.root} direction='column'>
+            <Grid item>
+              <Typography className={classes.title}>Give your new playlist a name :</Typography>
+            </Grid>
+            <Grid item style={{ marginBottom: '2em' }}>
               <TextField
-                id='filled-multiline-static'
-                label='Add a description'
-                multiline
-                rows='4'
-                value={CreatePlaylistForm.description}
+                id='standard-basic'
+                value={CreatePlaylistForm.name}
+                name='playlist-name'
                 InputLabelProps={{ style: { fontSize: '1.3rem' } }}
                 InputProps={{
                   classes: {
                     input: classes.resizeText,
                   },
                 }}
-                className={classes.descriptionInput}
                 onChange={e => {
-                  CreatePlaylistForm.setDescription(e.target.value);
+                  CreatePlaylistForm.setName(e.target.value);
                 }}
-                variant='outlined'
+                style={{ display: 'inline-block' }}
+                label='Playlist name'
               />
             </Grid>
+            <Grid item>
+              <Typography className={classes.title}>Choose a picture (optionnal) and add a description :</Typography>
+              <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}>
+                You can either choose a picture from
+              </Typography>
+              <Button
+                type='button'
+                onClick={this.openFileExplorer}
+                className={classes.button}
+                style={{ display: 'inline-block' }}
+              >
+                <input
+                  id='hidden-file-input'
+                  type='file'
+                  name='playlist-picture'
+                  style={{ display: 'none' }}
+                  onChange={this.handleFileChange}
+                />
+                <FolderIcon className={classes.icon} /> your computer
+              </Button>
+              <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}> or from </Typography>
+              <Button type='button' className={classes.button} style={{ display: 'inline-block' }}>
+                <PublicIcon className={classes.icon} /> Internet
+              </Button>
+              <Typography style={{ fontSize: '1.3rem' }}>{this.pictureSelectedText}</Typography>
+              <br />
+              <Grid item style={{ marginTop: '3.5em', width: '100%' }}>
+                <TextField
+                  id='filled-multiline-static'
+                  label='Add a description'
+                  name='playlist-description'
+                  multiline
+                  rows='4'
+                  value={CreatePlaylistForm.description}
+                  InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+                  InputProps={{
+                    classes: {
+                      input: classes.resizeText,
+                    },
+                  }}
+                  className={classes.descriptionInput}
+                  onChange={e => {
+                    CreatePlaylistForm.setDescription(e.target.value);
+                  }}
+                  variant='outlined'
+                />
+              </Grid>
+            </Grid>
+            <Grid item container direction='column' alignItems='flex-end'>
+              <Button className={classes.button} onClick={this.handleRedirect}>
+                Save
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item container direction='column' alignItems='flex-end'>
-            <Button onClick={this.createPlaylist} className={classes.button}>
-              Save
-            </Button>
-          </Grid>
-        </Grid>
+        </form>
       </React.Fragment>
     );
   }

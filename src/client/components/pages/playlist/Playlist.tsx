@@ -17,12 +17,21 @@ class Playlist extends React.Component<RouteComponentProps, NoState> {
     const playlist: IPlaylist = CurrentPlaylist.currentPlaylist;
     const musics: Array<IMusic> = playlist != null ? MusicsData.idsToMusics(playlist.musics) : [];
 
+    const defaultPlaylistImage = '/assets/images/playlist.png';
+
     return (
       <div style={{ width: '100%' }}>
         <PlaylistHeader
           playlist={musics}
           playlistId={playlist == null ? undefined : playlist.__id}
           subTitle='Playlist'
+          image={
+            playlist == null
+              ? defaultPlaylistImage
+              : playlist.picture != ''
+              ? '/' + playlist.picture
+              : defaultPlaylistImage
+          }
           title={playlist != null ? playlist.name : ''}
           description={playlist != null ? playlist.description : ''}
         />

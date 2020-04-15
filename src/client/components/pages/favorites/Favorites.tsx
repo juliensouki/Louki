@@ -25,7 +25,12 @@ class Favorites extends React.Component<IProps, NoState> {
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader subTitle='Your favorite songs' title='Favorites' playlist={BookmarksData.bookmarks} />
+        <PlaylistHeader
+          subTitle='Your favorite songs'
+          title='Favorites'
+          playlist={BookmarksData.bookmarks}
+          image='/assets/images/favorites.png'
+        />
         <SearchContainer />
         <PlaylistBody playlist={BookmarksData.bookmarks} favorites />
       </div>

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
@@ -16,7 +16,7 @@ export enum Page {
   NOT_DEFINED = '',
 }
 @observer
-class ArtistsOrAlbums extends React.Component<NoProps, NoState> {
+class ArtistsOrAlbums extends React.Component<RouteComponentProps, NoState> {
   @observable page: Page = Page.NOT_DEFINED;
 
   componentDidMount() {
@@ -36,9 +36,11 @@ class ArtistsOrAlbums extends React.Component<NoProps, NoState> {
   }
 
   render() {
+    const image = this.page == Page.ARTISTS ? '/assets/images/artists.png' : '/assets/images/albums.png';
+
     return (
       <div style={{ width: '100%' }}>
-        <PlaylistHeader subTitle={this.subTitle} title={this.title} />
+        <PlaylistHeader subTitle={this.subTitle} title={this.title} image={image} />
         <SearchContainer />
         <PlaylistBody page={this.page} />
       </div>

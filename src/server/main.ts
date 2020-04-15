@@ -20,9 +20,25 @@ import dataLoader from './dataLoader';
 import uuid from 'uuid';
 import bodyParser from 'body-parser';
 import { __values } from 'tslib';
+import multer from 'multer';
 
 const app = express();
-const dLoader = new dataLoader(databaseHandler);
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server); // it was require('socket.io')(server);
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'assets/uploads/');
+  },
+  filename: (req, file, cb) => {
+    const name = req.body['playlist-name'];
+    const extension = file['mimetype'].split('image/')[1];
+    console.log(extension);
+    cb(null, name + '.' + extension);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -31,11 +47,17 @@ app.use('/musics', express.static(path.join(process.cwd(), 'musics')));
 app.use('/musics2', express.static(path.join(process.cwd(), 'musics2')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const dLoader = new dataLoader(databaseHandler);
 databaseHandler.connect();
 
+const socketsArray = {};
+
 const startServer = () => {
-  app.listen(config.SERVER_PORT, () => {
+  server.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
+    io.on('connect', socket => {
+      console.log('A client connected');
+    });
   });
 };
 
@@ -156,17 +178,19 @@ app.post('/removeSongFromPlaylist', (req, res) => {
   });
 });
 
-app.post('/createPlaylist', (req, res) => {
-  const name = req.body.name;
-  const description = req.body.description;
+app.post('/createPlaylist', upload.single('playlist-picture'), (req, res) => {
+  const name = req.body['playlist-name'];
+  const description = req.body['playlist-description'];
+  const file = (req as any).file;
   const creationDate = new Date().getTime();
   const userId = dLoader.get('currentUser').__id;
   const id = uuid.v4();
+  const extension = file['mimetype'].split('image/')[1];
 
   Playlist.create(
     {
       name: name,
-      picture: '',
+      picture: 'assets/uploads/' + name + '.' + extension,
       description: description,
       musics: [],
       createdAt: creationDate,
