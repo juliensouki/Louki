@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import texts from '../../../lang/fragments/options';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -26,6 +27,7 @@ interface IProps extends WithStyles<typeof styles> {
 class PlaylistMenu extends React.Component<IProps, NoState> {
   render() {
     const { classes } = this.props;
+    const T = texts.current;
 
     return (
       <Menu
@@ -46,7 +48,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
               this.props.addMusicToPlaylist(event);
             }}
           >
-            Ajouter à une playlist
+            {T.addPlaylist}
           </MenuItem>
         ) : null}
         {this.props.editInformation ? (
@@ -58,7 +60,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
               this.props.editInformation(event);
             }}
           >
-            Modifier
+            {T.edit}
           </MenuItem>
         ) : null}
         {this.props.removeBookmark ? (
@@ -70,7 +72,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
               this.props.removeBookmark(event);
             }}
           >
-            Enlever des favoris
+            {T.removeBookmark}
           </MenuItem>
         ) : null}
         {this.props.removeFromPlaylist ? (
@@ -82,7 +84,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
               this.props.removeFromPlaylist(event);
             }}
           >
-            Retirer de la playlist
+            {T.removeFromPlaylist}
           </MenuItem>
         ) : null}
         {this.props.updatePlaylist ? (
@@ -93,7 +95,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
               this.props.updatePlaylist(event);
             }}
           >
-            Modifier playlist
+            {T.editPlaylist}
           </MenuItem>
         ) : null}
         {this.props.deletePlaylist ? (
@@ -105,7 +107,7 @@ class PlaylistMenu extends React.Component<IProps, NoState> {
               this.props.deletePlaylist(event);
             }}
           >
-            Supprimer playlist
+            {T.deletePlaylist}
           </MenuItem>
         ) : null}
       </Menu>

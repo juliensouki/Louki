@@ -8,6 +8,7 @@ import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 
 import BookmarksData from '../../../store/common/BookmarksData';
+import texts from '../../../lang/pages/favorites';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -22,15 +23,11 @@ interface IProps extends WithStyles<typeof styles> {}; // eslint-disable-line
 class Favorites extends React.Component<IProps, NoState> {
   render() {
     const { classes } = this.props;
+    const T = texts.current;
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader
-          subTitle='Your favorite songs'
-          title='Favorites'
-          playlist={BookmarksData.bookmarks}
-          image='/assets/images/favorites.png'
-        />
+        <PlaylistHeader {...T.playlistHeader} playlist={BookmarksData.bookmarks} image='/assets/images/favorites.png' />
         <SearchContainer />
         <PlaylistBody playlist={BookmarksData.bookmarks} favorites />
       </div>

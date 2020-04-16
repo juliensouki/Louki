@@ -9,7 +9,6 @@ import MusicPlayer from '../../../store/common/MusicPlayer';
 import MusicsData from '../../../store/common/MusicsData';
 
 const textProperties = {
-  maxWidth: '250px',
   overflow: 'hidden',
   whiteSpace: 'nowrap' as any,
   textOverflow: 'ellipsis',
@@ -53,6 +52,7 @@ const styles = (theme: Theme) =>
     },
     artistAndTitleText: {
       ...textProperties,
+      maxWidth: 'calc(17vw - 6.5em)',
     },
     pictureConatainer: {
       [theme.breakpoints.up('md')]: {
@@ -89,7 +89,7 @@ class MusicPreview extends React.Component<IProps & RoutePropsComponent, NoState
           justify='center'
           className={classes.musicInformationContainer}
         >
-          <Grid item>
+          <Grid item style={{ width: 'calc(17vw - 8em)' }}>
             <Typography className={classes.artistAndTitleText}>
               {MusicsData.getArtistNameById(MusicPlayer.currentArtist)}
             </Typography>

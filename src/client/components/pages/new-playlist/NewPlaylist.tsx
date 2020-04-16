@@ -12,6 +12,7 @@ import { Grid, IconButton, Button, Typography, TextField } from '@material-ui/co
 import PublicIcon from '@material-ui/icons/Public';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
+import texts from '../../../lang/pages/new-playlist';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -86,6 +87,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
 
   handleRedirect = event => {
     event.stopPropagation();
+    const T = texts.current;
     const form = document.getElementById('new-playlist-form');
     if (form != null && this.formValidation()) {
       const data = new FormData(form as HTMLFormElement);
@@ -103,10 +105,10 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
         });
     } else {
       if (CreatePlaylistForm.name.length == 0) {
-        this.nameHelper = 'You must give your playlist a name';
+        this.nameHelper = T.nameInput.helper;
       }
       if (CreatePlaylistForm.description.length == 0) {
-        this.descriptionHelper = 'You must give your playlist a description';
+        this.descriptionHelper = T.descriptionInput.helper;
       }
     }
   };
@@ -120,10 +122,12 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
 
   @computed get pictureSelectedText(): string {
     const fileInput = document.getElementById('hidden-file-input');
+    const T = texts.current;
+
     if (CreatePlaylistForm.pictureFile == null) {
-      return 'No picture selected yet.';
+      return T.noPicture;
     }
-    return 'Current picture : ' + CreatePlaylistForm.pictureFile.name;
+    return T.currentPicture + ' : ' + CreatePlaylistForm.pictureFile.name;
   }
 
   @action cancelImage = () => {
@@ -132,14 +136,15 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
 
   render() {
     const { classes } = this.props;
+    const T = texts.current;
 
     return (
       <React.Fragment>
-        <SimpleHeader title='New playlist' />
+        <SimpleHeader title={T.title} />
         <form method='POST' encType='multipart/form-data' action='/createPlaylist' id='new-playlist-form'>
           <Grid container className={classes.root} direction='column'>
             <Grid item>
-              <Typography className={classes.title}>Give your new playlist a name :</Typography>
+              <Typography className={classes.title}>{T.chooseName} :</Typography>
             </Grid>
             <Grid item style={{ marginBottom: '2em' }}>
               <TextField
@@ -158,14 +163,12 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                   CreatePlaylistForm.setName(e.target.value);
                 }}
                 style={{ display: 'inline-block' }}
-                label='Playlist name'
+                label={T.nameInput.placeholder}
               />
             </Grid>
             <Grid item>
-              <Typography className={classes.title}>Choose a picture (optionnal) and add a description :</Typography>
-              <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}>
-                You can either choose a picture from
-              </Typography>
+              <Typography className={classes.title}>{T.choosePicture} :</Typography>
+              <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}>{T.chooseFrom}</Typography>
               <Button
                 type='button'
                 onClick={this.openFileExplorer}
@@ -179,11 +182,11 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                   style={{ display: 'none' }}
                   onChange={this.handleFileChange}
                 />
-                <FolderIcon className={classes.icon} /> your computer
+                <FolderIcon className={classes.icon} /> {T.yourComputer}
               </Button>
-              <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}> or from </Typography>
+              <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}> {T.orFrom} </Typography>
               <Button type='button' className={classes.button} style={{ display: 'inline-block' }}>
-                <PublicIcon className={classes.icon} /> Internet
+                <PublicIcon className={classes.icon} /> {T.internet}
               </Button>
               <div>
                 <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>
@@ -199,7 +202,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
               <Grid item style={{ marginTop: '3.5em', width: '100%' }}>
                 <TextField
                   id='filled-multiline-static'
-                  label='Add a description'
+                  label={T.descriptionInput.placeholder}
                   name='playlist-description'
                   multiline
                   rows='4'
@@ -222,7 +225,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
             </Grid>
             <Grid item container direction='column' alignItems='flex-end'>
               <Button className={classes.button} onClick={this.handleRedirect}>
-                Save
+                {T.save}
               </Button>
             </Grid>
           </Grid>

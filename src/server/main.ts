@@ -137,6 +137,20 @@ app.get('/allPlaylists', (req, res) => {
   res.json(playlists);
 });
 
+app.post('/updateUserSettings', (req, res) => {
+  const { id, settings } = req.body;
+
+  const jsonUpdate = {
+    settings: settings,
+  };
+
+  databaseHandler.updateDocument(User, id, jsonUpdate).then(() => {
+    databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+      res.json(values[0] as IUser);
+    });
+  });
+});
+
 app.post('/addBookmark', (req, res) => {
   const id = req.body.musicId;
   databaseHandler.addToArray(User, 'selected', true, 'favorites', id).then(
