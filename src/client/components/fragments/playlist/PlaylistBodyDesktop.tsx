@@ -24,6 +24,8 @@ import MusicPlayingIcon from '../../../assets/MusicPlayingIcon';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
+import texts from '../../../lang/fragments/playlist/playlist-body';
+
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
@@ -116,14 +118,14 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & R
     BookmarksData.addBookmark(id);
     const snackbarOptions = { variant: 'success' as any };
     const musicName = MusicsData.idToMusic(id).title;
-    this.props.enqueueSnackbar(musicName + ' has been added to favorites ', snackbarOptions);
+    this.props.enqueueSnackbar(texts.current.addBookmarkNotif(musicName), snackbarOptions);
   };
 
   deleteBookmark = (event, id: string) => {
     event.stopPropagation();
     const snackbarOptions = { variant: 'success' as any };
     const musicName = MusicsData.idToMusic(id).title;
-    this.props.enqueueSnackbar(musicName + ' has been removed from favorites ', snackbarOptions);
+    this.props.enqueueSnackbar(texts.current.removeBookmarkNotif(musicName), snackbarOptions);
     BookmarksData.deleteBookmark(id);
   };
 
@@ -142,7 +144,9 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & R
       emptyPlaylistButtonText,
     } = this.props;
 
-    if (playlist.length == 0) {
+    const T = texts.current;
+
+    if (playlist == null || playlist.length == 0) {
       return (
         <React.Fragment>
           <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>{emptyPlaylistText}</Typography>
@@ -156,10 +160,10 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & R
         <Table aria-label='simple table'>
           <TableHead className={classes.rowTitles}>
             <TableRow>
-              <TableCell className={classes.rowTitles}>Song</TableCell>
-              <TableCell className={classes.rowTitles}>Artist</TableCell>
-              <TableCell className={classes.rowTitles}>Album</TableCell>
-              <TableCell className={classes.rowTitles}>Duration</TableCell>
+              <TableCell className={classes.rowTitles}>{T.song}</TableCell>
+              <TableCell className={classes.rowTitles}>{T.artist}</TableCell>
+              <TableCell className={classes.rowTitles}>{T.album}</TableCell>
+              <TableCell className={classes.rowTitles}>{T.duration}</TableCell>
               <TableCell align='right'></TableCell>
             </TableRow>
           </TableHead>

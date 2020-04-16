@@ -50,6 +50,18 @@ class DatabaseHandler {
       });
   };
 
+  updateFieldInDocument = async (model, id, field: string, value: any) => {
+    return model
+      .findOneAndUpdate({ __id: id }, { name: 'Souki' })
+      .exec()
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        return 'error occured';
+      });
+  };
+
   addToArray = async (model, uniqueField: string, uniqueValue: any, arrayToUpdate: string, valueToAdd: string) => {
     return model
       .findOneAndUpdate(

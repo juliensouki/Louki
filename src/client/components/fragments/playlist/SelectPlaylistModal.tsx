@@ -13,6 +13,8 @@ import MusicsData from '../../../store/common/MusicsData';
 import IPlaylist from '../../../../shared/IPlaylist';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
+import texts from '../../../lang/fragments/select-playlist-modal';
+
 const styles = (theme: Theme) => createStyles({});
 
 interface IProps extends WithStyles<typeof styles> {
@@ -29,10 +31,10 @@ class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, No
       const playlistName = MusicsData.idToPlaylist(playlist.__id).name;
       if (response.status == 200) {
         const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(musicName + ' has been added to playlist ' + playlistName, snackbarOptions);
+        this.props.enqueueSnackbar(texts.current.addedToPlaylistNotif(musicName, playlistName), snackbarOptions);
       } else if (response.status == 403) {
         const snackbarOptions = { variant: 'error' as any };
-        this.props.enqueueSnackbar(musicName + ' is already in ' + playlistName, snackbarOptions);
+        this.props.enqueueSnackbar(texts.current.alreadyInPlaylistNotif(musicName, playlistName), snackbarOptions);
       }
     });
   };

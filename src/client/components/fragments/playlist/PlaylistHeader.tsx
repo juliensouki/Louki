@@ -11,6 +11,8 @@ import MusicPlayer from '../../../store/common/MusicPlayer';
 import NavigationForm from '../../../store/common/NavigationForm';
 import IMusic from '../../../../shared/IMusic';
 
+import texts from '../../../lang/fragments/playlist/playlist-header';
+
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
@@ -123,6 +125,7 @@ interface IProps extends WithStyles<typeof styles> {
   title: string;
   image: string;
   description?: string;
+  noStartButton?: boolean;
 }
 
 @observer
@@ -154,19 +157,20 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
   };
 
   render() {
-    const { classes, playlist, description, image } = this.props;
+    const { classes, playlist, description, image, noStartButton } = this.props;
+    const T = texts.current;
     let icon: JSX.Element;
     let buttonText: string;
 
     if (MusicPlayer.isPlaying && MusicPlayer.playlistRoute == NavigationForm.currentRoute) {
       icon = <PauseIcon />;
-      buttonText = 'Pause';
+      buttonText = T.pause;
     } else if (MusicPlayer.playlistRoute != NavigationForm.currentRoute) {
       icon = <PlayArrowIcon />;
-      buttonText = 'Démarrer';
+      buttonText = T.play;
     } else {
       icon = <PlayArrowIcon />;
-      buttonText = 'Reprendre';
+      buttonText = T.continue;
     }
 
     const containerInformationWidth =
@@ -202,27 +206,27 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
                 <Grid item>
                   <Typography className={classes.playlistName}>{this.props.title}</Typography>
                 </Grid>
-                <Grid item>
-                  <Fab
-                    variant='extended'
-                    size='medium'
-                    className={classes.playlistButton}
-                    aria-label='play'
-                    onClick={this.startPlaylist}
-                  >
-                    {icon}
-                    {buttonText}
-                  </Fab>
-                </Grid>
+                {noStartButton ? null : (
+                  <Grid item>
+                    <Fab
+                      variant='extended'
+                      size='medium'
+                      className={classes.playlistButton}
+                      aria-label='play'
+                      onClick={this.startPlaylist}
+                    >
+                      {icon}
+                      {buttonText}
+                    </Fab>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
             <Grid item style={{ width: '100%' }}>
               <Typography className={classes.playlistDescription}>
-                {description ? description : playlist ? 'You have ' + playlist.length + ' songs' : ''}
+                {description ? description : playlist ? T.nbMusics(playlist.length) : ''}
               </Typography>
-              <Typography className={classes.playlistDescription}>
-                You spent 5 days 12 hours 6 minutes listening to your music.
-              </Typography>
+              <Typography className={classes.playlistDescription}>{T.hardcodedStat}</Typography>
             </Grid>
           </Grid>
         </Grid>

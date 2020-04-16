@@ -1,4 +1,6 @@
 import { observable, computed, action } from 'mobx';
+import UserForm from '../common/UserData';
+import SettingsForm from '../pages/settings/SettingsForm';
 
 class LoadingForm {
   @observable everythingLoaded: boolean = false;
@@ -25,6 +27,8 @@ class LoadingForm {
 
   @action userHasLoaded = () => {
     this.loadedUser = true;
+    SettingsForm.setUserId(UserForm.id);
+    SettingsForm.setSettings(UserForm.settings);
     this.checkThatEverythingHasLoaded();
   };
 

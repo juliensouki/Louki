@@ -19,6 +19,7 @@ import NavigationForm from '../../../store/common/NavigationForm';
 import MusicsData from '../../../store/common/MusicsData';
 import DeletePlaylist from '../../../store/functions/playlists/DeletePlaylist';
 
+import texts from '../../../lang/fragments/options';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 const styles = (theme: Theme) =>
@@ -52,7 +53,7 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps & Wit
 
     const snackbarOptions = { variant: 'success' as any };
     const playlistName = MusicsData.idToPlaylist(playlistId).name;
-    this.props.enqueueSnackbar(playlistName + ' has been deleted', snackbarOptions);
+    this.props.enqueueSnackbar(texts.current.playlistHasBeenDeletedNotif(playlistName), snackbarOptions);
     this.props.history.push(NavigationForm.previousRoute);
     this.anchorEl = null;
   };
@@ -83,7 +84,7 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps & Wit
       BookmarksData.deleteBookmark(this.props.music.__id);
       const snackbarOptions = { variant: 'success' as any };
       const musicName = MusicsData.idToMusic(this.props.music.__id).title;
-      this.props.enqueueSnackbar(musicName + ' has been removed from favorites ', snackbarOptions);
+      this.props.enqueueSnackbar(texts.current.removeBookmarkNotif(musicName), snackbarOptions);
     }
   };
 
@@ -112,7 +113,7 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps & Wit
           const snackbarOptions = { variant: 'success' as any };
           const musicName = MusicsData.idToMusic(musicId).title;
           const playlistName = MusicsData.idToPlaylist(playlistId).name;
-          this.props.enqueueSnackbar(musicName + ' has been removed from ' + playlistName, snackbarOptions);
+          this.props.enqueueSnackbar(texts.current.removedFromPlaylistNotif(musicName, playlistName), snackbarOptions);
         });
     }
   };

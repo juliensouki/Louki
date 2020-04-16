@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import NavigationForm from '../../store/common/NavigationForm';
 import IMusic from '../../../shared/IMusic';
+import texts from '../../lang/fragments/music-preview';
 
 export enum MusicLoop {
   NO_REPEAT = 0,
@@ -156,7 +157,7 @@ class MusicPlayer {
   }
 
   @computed get currentMusicName(): string {
-    if (this.currentPlaylist.length == 0 || this.audio == null) return 'No song playing';
+    if (this.currentPlaylist.length == 0 || this.audio == null) return texts.current.noSong;
     return this.currentPlaylist[this.musicPlayingIndex].title;
   }
 

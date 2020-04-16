@@ -11,9 +11,13 @@ import IPlaylist from '../../../../shared/IPlaylist';
 
 import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
 import MusicsData from '../../../store/common/MusicsData';
+
+import texts from '../../../lang/pages/custom-playlist';
 @observer
 class Playlist extends React.Component<RouteComponentProps, NoState> {
   render() {
+    const T = texts.current;
+
     const playlist: IPlaylist = CurrentPlaylist.currentPlaylist;
     const musics: Array<IMusic> = playlist != null ? MusicsData.idsToMusics(playlist.musics) : [];
 
@@ -24,7 +28,7 @@ class Playlist extends React.Component<RouteComponentProps, NoState> {
         <PlaylistHeader
           playlist={musics}
           playlistId={playlist == null ? undefined : playlist.__id}
-          subTitle='Playlist'
+          subTitle={T.playlistHeader.subTitle}
           image={
             playlist == null
               ? defaultPlaylistImage

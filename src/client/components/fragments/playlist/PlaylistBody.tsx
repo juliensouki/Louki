@@ -3,13 +3,13 @@ import { observer } from 'mobx-react';
 import { computed } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
 
 import PlaylistBodyDesktop from './PlaylistBodyDesktop';
 import PlaylistBodyMobile from './PlaylistBodyMobile';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 
 import IMusic from '../../../../shared/IMusic';
+import texts from '../../../lang/fragments/playlist/playlist-body';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -33,21 +33,25 @@ interface IProps extends WithStyles<typeof styles> {
 @observer
 class PlaylistBody extends React.Component<IProps, NoState> {
   @computed get emptyPlaylistText(): string {
+    const T = texts.current;
+
     if (this.props.allSongs) {
-      return 'You don\'t have any song yet. Please check in your settings that you added at least one music folder';
+      return T.allMusics.emptyText;
     } else if (this.props.favorites) {
-      return 'You don\'t have any favorite song yet';
+      return T.favorites.emptyText;
     }
-    return 'This playist is currently empty';
+    return T.custom.emptyText;
   }
 
   @computed get emptyPlaylistButtonText(): string {
+    const T = texts.current;
+
     if (this.props.allSongs) {
-      return 'Settings';
+      return T.allMusics.emptyButton;
     } else if (this.props.favorites) {
-      return 'All songs';
+      return T.favorites.emptyButton;
     }
-    return 'All songs';
+    return T.custom.emptyButton;
   }
 
   @computed get emptyPlaylistRedirectRoute(): string {
@@ -64,25 +68,21 @@ class PlaylistBody extends React.Component<IProps, NoState> {
 
     return (
       <div className={classes.root}>
-        {playlist ? (
-          <ResponsiveAdapter
-            mobile={<PlaylistBodyMobile playlist={playlist} />}
-            desktop={
-              <PlaylistBodyDesktop
-                allSongs={allSongs}
-                favorites={favorites}
-                playlist={playlist}
-                customPlaylist={customPlaylist}
-                canAddToFavorites={canAddToFavorites}
-                emptyPlaylistText={this.emptyPlaylistText}
-                emptyPlaylistButtonText={this.emptyPlaylistButtonText}
-                emptyPlaylistRedirectRoute={this.emptyPlaylistRedirectRoute}
-              />
-            }
-          />
-        ) : (
-          <Typography>Cette playlist est encore vide pour le moment</Typography>
-        )}
+        <ResponsiveAdapter
+          mobile={<PlaylistBodyMobile playlist={playlist} />}
+          desktop={
+            <PlaylistBodyDesktop
+              allSongs={allSongs}
+              favorites={favorites}
+              playlist={playlist}
+              customPlaylist={customPlaylist}
+              canAddToFavorites={canAddToFavorites}
+              emptyPlaylistText={this.emptyPlaylistText}
+              emptyPlaylistButtonText={this.emptyPlaylistButtonText}
+              emptyPlaylistRedirectRoute={this.emptyPlaylistRedirectRoute}
+            />
+          }
+        />
       </div>
     );
   }

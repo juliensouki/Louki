@@ -8,4 +8,4 @@ interface IPlaylist {
   __id: string;
 }
 
-export = IPlaylist;
+export default IPlaylist;

@@ -8,6 +8,8 @@ import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 import MusicsData from '../../../store/common/MusicsData';
 
+import texts from '../../../lang/pages/all-songs';
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -21,15 +23,11 @@ interface IProps extends WithStyles<typeof styles> {} // eslint-disable-line
 class AllMusic extends React.Component<IProps, NoState> {
   render() {
     const { classes } = this.props;
+    const T = texts.current;
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader
-          subTitle='All songs'
-          title='Your Music'
-          playlist={MusicsData.allMusics}
-          image='/assets/images/all-musics.png'
-        />
+        <PlaylistHeader {...T.playlistHeader} playlist={MusicsData.allMusics} image='/assets/images/all-musics.png' />
         <SearchContainer />
         <PlaylistBody canAddToFavorites playlist={MusicsData.allMusics} allSongs />
       </div>

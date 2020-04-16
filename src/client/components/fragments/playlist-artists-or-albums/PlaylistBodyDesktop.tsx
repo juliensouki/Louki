@@ -20,6 +20,8 @@ import IAlbum from '../../../../shared/IAlbum';
 import { Page } from '../../pages/artists-or-albums/ArtistsOrAlbums';
 import MusicsData from '../../../store/common/MusicsData';
 
+import texts from '../../../lang/fragments/playlist/playlist-body-artists-or-albums';
+
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
@@ -85,15 +87,16 @@ class PlaylistBodyDesktop extends React.Component<IProps & RouteComponentProps, 
 
   render() {
     const { classes, playlist, page } = this.props;
+    const T = texts.current;
 
     if (playlist.lenght == 0) {
       return (
         <React.Fragment>
           <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>
-            You dont have any {this.props.page == Page.ARTISTS ? 'artist' : 'album'} yet
+            {this.props.page == Page.ARTISTS ? T.artists.emptyText : T.albums.emptyText}
           </Typography>
           <Button className={classes.button} onClick={this.redirectHome}>
-            All songs
+            {this.props.page == Page.ARTISTS ? T.artists.emptyButton : T.albums.emptyButton}
           </Button>
         </React.Fragment>
       );
@@ -103,10 +106,14 @@ class PlaylistBodyDesktop extends React.Component<IProps & RouteComponentProps, 
           <TableHead className={classes.rowTitles}>
             <TableRow>
               <TableCell className={classes.rowTitles}></TableCell>
-              <TableCell className={classes.rowTitles}>{CurrentArtistOrAlbum.showArtist ? 'Name' : 'Title'}</TableCell>
-              {page == Page.ARTISTS ? <React.Fragment /> : <TableCell className={classes.rowTitles}>Artist</TableCell>}
-              <TableCell className={classes.rowTitles}>Number of songs</TableCell>
-              <TableCell className={classes.rowTitles}>Duration</TableCell>
+              <TableCell className={classes.rowTitles}>{page == Page.ARTISTS ? T.artist : T.albums.title}</TableCell>
+              {page == Page.ARTISTS ? (
+                <React.Fragment />
+              ) : (
+                <TableCell className={classes.rowTitles}>{T.artist}</TableCell>
+              )}
+              <TableCell className={classes.rowTitles}>{T.nbSongs}</TableCell>
+              <TableCell className={classes.rowTitles}>{T.duration}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

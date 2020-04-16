@@ -1,4 +1,10 @@
-interface IUser {
+import { Language } from './Languages';
+
+export interface AccountSettings { // eslint-disable-line
+  language: Language;
+}
+
+export default interface IUser {
   name: string;
   selected: boolean;
   picture: string;
@@ -6,6 +12,6 @@ interface IUser {
   history: Array<string>;
   favorites: Array<string>;
   __id: string;
-}
 
-export = IUser;
+  settings: AccountSettings;
+}

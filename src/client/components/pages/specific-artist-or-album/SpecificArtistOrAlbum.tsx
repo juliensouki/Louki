@@ -9,6 +9,8 @@ import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 
+import texts from '../../../lang/pages/specific-artist-or-album';
+
 @observer
 class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState> {
   @observable artistOrAlbumId: string = '';
@@ -33,9 +35,11 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
 
   render() {
     const image = this.artistOrAlbum == 'artist' ? '/assets/images/artists.png' : '/assets/images/albums.png';
+    const subTitle = this.artistOrAlbum == 'artist' ? texts.current.artist : texts.current.album;
+
     return (
       <div style={{ width: '100%' }}>
-        <PlaylistHeader title={this.artistOrAlbumName} subTitle={this.artistOrAlbum} description='' image={image} />
+        <PlaylistHeader title={this.artistOrAlbumName} subTitle={subTitle} description='' image={image} />
         <SearchContainer />
         <PlaylistBody playlist={this.playlist} canAddToFavorites allSongs />
       </div>

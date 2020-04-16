@@ -18,6 +18,8 @@ import MusicsData from '../../../store/common/MusicsData';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
+import texts from '../../../lang/fragments/left-panel';
+
 const styles = (theme: Theme) =>
   createStyles({
     desktopContainer: {
@@ -63,6 +65,7 @@ class LeftPanel extends React.Component<IProps, NoState> {
 
   render() {
     const { classes } = this.props;
+    const T = texts.current;
 
     return (
       <ResponsiveAdapter
@@ -71,13 +74,13 @@ class LeftPanel extends React.Component<IProps, NoState> {
         mobile={<Slide direction='right' in={MobileMenu.isOpen} mountOnEnter unmountOnExit />}
       >
         <div className={classes.root}>
-          <Typography className={classes.sectionTitle}>Music</Typography>
-          <LeftPanelButton routePath='/all-music' text='All Songs' icon={MusicNoteIcon} />
-          <LeftPanelButton showArtist routePath='/artists' text='Artists' icon={MicIcon} />
-          <LeftPanelButton routePath='/albums' text='Albums' icon={AlbumIcon} />
-          <LeftPanelButton routePath='/favorites' text='Favorites' icon={FavoriteIcon} />
+          <Typography className={classes.sectionTitle}>{T.music.title}</Typography>
+          <LeftPanelButton routePath='/all-music' text={T.music.allSongs} icon={MusicNoteIcon} />
+          <LeftPanelButton showArtist routePath='/artists' text={T.music.artists} icon={MicIcon} />
+          <LeftPanelButton routePath='/albums' text={T.music.albums} icon={AlbumIcon} />
+          <LeftPanelButton routePath='/favorites' text={T.music.favorites} icon={FavoriteIcon} />
 
-          <Typography className={classes.sectionTitle}>Playlists</Typography>
+          <Typography className={classes.sectionTitle}>{T.playlists.title}</Typography>
           <Grid container direction='column' className={classes.playlistsContainer}>
             {MusicsData.allPlaylists.map(playlist => (
               <LeftPanelButton
@@ -91,7 +94,7 @@ class LeftPanel extends React.Component<IProps, NoState> {
               />
             ))}
           </Grid>
-          <LeftPanelButton routePath='/new-playlist' text='New Playlist' icon={PlaylistAddIcon} />
+          <LeftPanelButton routePath='/new-playlist' text={T.playlists.newPlaylist} icon={PlaylistAddIcon} />
         </div>
       </ResponsiveAdapter>
     );
