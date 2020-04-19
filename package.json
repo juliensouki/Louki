@@ -72,6 +72,7 @@
     "mobx-react": "^6.1.4",
     "mongoose": "^5.8.1",
     "music-metadata": "^5.2.0",
+    "pixabay-api": "^1.0.4",
     "styled-components": "^4.4.1",
     "tslib": "^1.10.0",
     "uuid": "^3.3.3"
