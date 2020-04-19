@@ -9,6 +9,7 @@ import SimpleHeader from '../../fragments/playlist/SimpleHeader';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Grid, IconButton, Button, Typography, TextField } from '@material-ui/core/';
+import AddPictureModal from '../../fragments/add-picture-modal/AddPlaylistModal';
 import PublicIcon from '@material-ui/icons/Public';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -62,6 +63,12 @@ const styles = (theme: Theme) =>
     resizeText: {
       fontSize: '1.3rem',
     },
+    currentPictureText: {
+      maxWidth: 400,
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+    },
   });
 
 interface Props extends WithStyles<typeof styles> // eslint-disable-line
@@ -73,6 +80,17 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> {
   @observable nameHelper: string = '';
   @observable descriptionHelper: string = '';
+  @observable open: boolean = false;
+
+  componentDidMount() {
+    this.nameHelper = '';
+    this.descriptionHelper = '';
+    this.open = false;
+    CreatePlaylistForm.setName('');
+    CreatePlaylistForm.setDescription('');
+    CreatePlaylistForm.setPicture('');
+    CreatePlaylistForm.setPictureUrl('');
+  }
 
   openFileExplorer = () => {
     const fileInput = document.getElementById('hidden-file-input');
@@ -91,6 +109,10 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
     const form = document.getElementById('new-playlist-form');
     if (form != null && this.formValidation()) {
       const data = new FormData(form as HTMLFormElement);
+
+      if (CreatePlaylistForm.pictureUrl) {
+        data.append('pictureUrl', CreatePlaylistForm.pictureUrl);
+      }
 
       fetch('/createPlaylist', {
         method: 'POST',
@@ -121,17 +143,27 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
   };
 
   @computed get pictureSelectedText(): string {
-    const fileInput = document.getElementById('hidden-file-input');
     const T = texts.current;
 
-    if (CreatePlaylistForm.pictureFile == null) {
+    if (!CreatePlaylistForm.pictureFile && CreatePlaylistForm.pictureUrl == '') {
       return T.noPicture;
+    } else if (CreatePlaylistForm.pictureUrl != '') {
+      return T.currentPicture + CreatePlaylistForm.pictureUrl;
     }
-    return T.currentPicture + ' : ' + CreatePlaylistForm.pictureFile.name;
+    return T.currentPicture + CreatePlaylistForm.pictureFile.name;
   }
 
   @action cancelImage = () => {
     CreatePlaylistForm.setPicture(null);
+    CreatePlaylistForm.setPictureUrl('');
+  };
+
+  @action handleOpenModal = () => {
+    this.open = true;
+  };
+
+  @action handleCloseModal = () => {
+    this.open = false;
   };
 
   render() {
@@ -140,8 +172,18 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
 
     return (
       <React.Fragment>
+        <AddPictureModal open={this.open} onClose={this.handleCloseModal} />
         <SimpleHeader title={T.title} />
-        <form method='POST' encType='multipart/form-data' action='/createPlaylist' id='new-playlist-form'>
+        <form
+          method='POST'
+          encType='multipart/form-data'
+          action='/createPlaylist'
+          id='new-playlist-form'
+          onSubmit={e => {
+            e.preventDefault();
+            return false;
+          }}
+        >
           <Grid container className={classes.root} direction='column'>
             <Grid item>
               <Typography className={classes.title}>{T.chooseName} :</Typography>
@@ -185,15 +227,26 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                 <FolderIcon className={classes.icon} /> {T.yourComputer}
               </Button>
               <Typography style={{ display: 'inline-block', fontSize: '1.3rem' }}> {T.orFrom} </Typography>
-              <Button type='button' className={classes.button} style={{ display: 'inline-block' }}>
+              <Button
+                type='button'
+                className={classes.button}
+                style={{ display: 'inline-block' }}
+                onClick={this.handleOpenModal}
+              >
                 <PublicIcon className={classes.icon} /> {T.internet}
               </Button>
               <div>
-                <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>
+                <Typography
+                  className={classes.currentPictureText}
+                  style={{ fontSize: '1.3rem', display: 'inline-block' }}
+                >
                   {this.pictureSelectedText}
                 </Typography>
-                {CreatePlaylistForm.pictureFile != null ? (
-                  <IconButton style={{ display: 'inline-block' }} onClick={this.cancelImage}>
+                {CreatePlaylistForm.pictureFile || CreatePlaylistForm.pictureUrl != '' ? (
+                  <IconButton
+                    style={{ position: 'relative', top: '-0.3em', display: 'inline-block' }}
+                    onClick={this.cancelImage}
+                  >
                     <CloseIcon />
                   </IconButton>
                 ) : null}

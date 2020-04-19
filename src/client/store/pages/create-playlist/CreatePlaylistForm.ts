@@ -39,21 +39,6 @@ class CreatePlaylistForm {
   @computed get description(): string {
     return this.playlistDescription;
   }
-
-  @action send = () => {
-    fetch('/createPlaylist', {
-      method: 'POST',
-      body: this.file[0],
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        MusicsData.setPlaylists(data);
-        const history = useHistory();
-        history.push('/all-music');
-      });
-  };
 }
 
 export default new CreatePlaylistForm();

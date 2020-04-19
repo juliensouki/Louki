@@ -21,8 +21,10 @@ import uuid from 'uuid';
 import bodyParser from 'body-parser';
 import { __values } from 'tslib';
 import multer from 'multer';
+import { searchImages } from 'pixabay-api';
 
 const app = express();
+
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server); // it was require('socket.io')(server);
 
@@ -45,6 +47,7 @@ app.use(express.json());
 app.use('/assets', express.static(path.join(process.cwd(), 'assets')));
 app.use('/musics', express.static(path.join(process.cwd(), 'musics')));
 app.use('/musics2', express.static(path.join(process.cwd(), 'musics2')));
+app.use('/scripts', express.static(path.join(process.cwd(), 'musics2')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const dLoader = new dataLoader(databaseHandler);
@@ -60,6 +63,17 @@ const startServer = () => {
     });
   });
 };
+
+app.get('/getResults', (req, res) => {
+  const search = req.query.search;
+  searchImages(process.env.PIXABAY_KEY, search).then(results => {
+    const images = [];
+    for (let i = 0; i < results.hits.length; i++) {
+      images.push(results.hits[i].webformatURL);
+    }
+    res.send(images);
+  });
+});
 
 app.get('/artist', (req, res) => {
   const id = req.query.id;
@@ -199,12 +213,20 @@ app.post('/createPlaylist', upload.single('playlist-picture'), (req, res) => {
   const creationDate = new Date().getTime();
   const userId = dLoader.get('currentUser').__id;
   const id = uuid.v4();
-  const extension = file['mimetype'].split('image/')[1];
+
+  let filePath;
+
+  if (file) {
+    const extension = file['mimetype'].split('image/')[1];
+    filePath = '/assets/uploads/' + name + '.' + extension;
+  } else {
+    filePath = req.body.pictureUrl;
+  }
 
   Playlist.create(
     {
       name: name,
-      picture: 'assets/uploads/' + name + '.' + extension,
+      picture: filePath,
       description: description,
       musics: [],
       createdAt: creationDate,
