@@ -71,6 +71,7 @@ class DatabaseHandler {
         {
           $push: { [arrayToUpdate]: valueToAdd },
         },
+        { new: true },
       )
       .exec();
   };

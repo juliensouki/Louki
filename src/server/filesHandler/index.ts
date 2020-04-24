@@ -19,7 +19,6 @@ class FilesHandler {
     music: string,
     callback: (values: any, artists: Array<string>, album: string) => void,
   ): void => {
-    console.log(music);
     mm.parseFile(music)
       .then(metadata => {
         const artists = this.getFieldInMetadata(metadata, ['common', 'artists']);

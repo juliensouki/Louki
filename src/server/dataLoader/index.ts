@@ -1,10 +1,13 @@
 import User from '../db/schemas/User';
 import Music from '../db/schemas/Music';
 import Artist from '../db/schemas/Artist';
-import Playlist from '../db/schemas/Playlist';
 import Album from '../db/schemas/Album';
+import Playlist from '../db/schemas/Playlist';
+import IAlbum from '../../shared/IAlbum';
+import IArtist from '../../shared/IArtist';
 import filesHandler from '../filesHandler';
 import uuid from 'uuid';
+import { Mongoose } from 'mongoose';
 
 export default class DataLoader {
   private databaseHandler: any;
@@ -21,6 +24,10 @@ export default class DataLoader {
   //COUNTERS FOR LOGS
   private addedMusics = 0;
   private deletedMusics = 0;
+  private addedArtists = 0;
+  private deletedArtists = 0;
+  private addedAlbums = 0;
+  private deletedAlbums = 0;
 
   constructor(databaseHandler) {
     this.databaseHandler = databaseHandler;
@@ -30,25 +37,7 @@ export default class DataLoader {
     return this[field];
   };
 
-  getModel = (modelName: 'users' | 'musics' | 'playlists' | 'artists' | 'albums') => {
-    const modelsArray = [];
-    modelsArray['users'] = User;
-    modelsArray['musics'] = Music;
-    modelsArray['playlists'] = Playlist;
-    modelsArray['artists'] = Artist;
-    modelsArray['albums'] = Album;
-
-    return modelsArray[modelName];
-  };
-
-  loadSpecificData = (data: 'users' | 'musics' | 'playlists' | 'artists' | 'albums') => {
-    const model = this.getModel(data);
-    const modelPromise = this.databaseHandler.getCollectionContent(model);
-
-    modelPromise.then(value => {
-      this[data] = value;
-    });
-  };
+  loadSpecificData = (data: 'users' | 'musics' | 'playlists' | 'artists' | 'albums') => {};
 
   loadData = (callback: () => void) => {
     const [usersPromise, musicsPromise, playlistsPromise, artistsPromise, albumsPromise] = [
@@ -67,7 +56,9 @@ export default class DataLoader {
 
   init = (callback: () => void) => {
     this.selectCurrentUser();
-    this.checkForUpdatesInDB();
+    const filesArray: Array<Array<string>> = filesHandler.getArrayOfFiles(this.currentUser.musicPaths);
+    this.musicsToAdd = this.checkForMusicUpdates(filesArray);
+    this.addMusics();
     callback();
   };
 
@@ -80,15 +71,49 @@ export default class DataLoader {
     }
   };
 
+  checkIfArtistOrAlbumMustBeDeleted = (array, id: string): number => {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].musics.includes(id)) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  removeSongFromArtistOrAlbum = (model, array, index, id) => {
+    this.databaseHandler.removeFromArray(model, '__id', array[index].__id, 'musics', id);
+  };
+
+  checkForMusicUpdates = (arrayOfPaths: Array<Array<string>>) => {
+    if (this.musics) {
+      this.musics.forEach(music => {
+        if (!arrayOfPaths || !arrayOfPaths.some(row => row.includes(music.path))) {
+          this.deleteMusic(music.path);
+          const artistIndex = this.checkIfArtistOrAlbumMustBeDeleted(this.artists, music.__id);
+          const albumIndex = this.checkIfArtistOrAlbumMustBeDeleted(this.albums, music.__id);
+          if (artistIndex != -1 && this.artists[artistIndex].musics.length == 1) {
+            this.databaseHandler.deleteFromDocument(Artist, '__id', this.artists[artistIndex].__id);
+            this.deletedArtists++;
+          } else if (artistIndex != -1) {
+            this.removeSongFromArtistOrAlbum(Artist, this.artists, artistIndex, music.__id);
+          }
+          if (albumIndex != -1 && this.albums[albumIndex].musics.length == 1) {
+            this.databaseHandler.deleteFromDocument(Album, '__id', this.albums[albumIndex].__id);
+            this.deletedAlbums++;
+          } else if (albumIndex != -1 && music.album) {
+            this.removeSongFromArtistOrAlbum(Album, this.albums, albumIndex, music.__id);
+          }
+        } else {
+          arrayOfPaths = this.removePathFromArray(arrayOfPaths, music.path);
+        }
+      });
+    }
+    return arrayOfPaths;
+  };
+
   deleteMusic = (path: string) => {
     this.deletedMusics++;
     this.databaseHandler.deleteFromDocument(Music, 'path', path);
-  };
-
-  updateNumberOfAddedSongs = (array: Array<Array<string>>): void => {
-    array.forEach(row => {
-      this.addedMusics += row.length;
-    });
   };
 
   removePathFromArray = (arrayOfPaths: Array<Array<string>>, musicPath: string): Array<Array<string>> => {
@@ -105,120 +130,6 @@ export default class DataLoader {
     return arrayOfPaths;
   };
 
-  checkAlbumAndArtist = music => {
-    const albumPromise = this.databaseHandler.findOneInDocument(Album, '__id', music.album);
-    const artistPromise = this.databaseHandler.findOneInDocument(Artist, '__id', music.artist);
-
-    Promise.all([albumPromise, artistPromise]).then(values => {
-      const album = values[0][0];
-      const artist = values[1][0];
-
-      if (album && album.musics.length == 1) {
-        this.databaseHandler.deleteFromDocument(Album, '__id', album.__id);
-      } else if (album) {
-        album.musics = album.musics.filter(albumMusic => albumMusic !== music.__id);
-        this.databaseHandler.updateDocument(Album, album._id, 'musics', album.musics);
-      }
-      if (artist && artist.musics.length == 1) {
-        this.databaseHandler.deleteFromDocument(Artist, '__id', artist.__id);
-      } else if (artist) {
-        artist.musics = artist.musics.filter(artistMusic => artistMusic !== music.__id);
-        this.databaseHandler.updateDocument(Artist, artist._id, 'musics', artist.musics);
-      }
-    });
-  };
-
-  checkForMusicUpdates = (arrayOfPaths: Array<Array<string>>) => {
-    if (this.musics) {
-      this.musics.forEach(music => {
-        if (!arrayOfPaths || !arrayOfPaths.some(row => row.includes(music.path))) {
-          this.deleteMusic(music.path);
-          this.checkAlbumAndArtist(music);
-        } else {
-          arrayOfPaths = this.removePathFromArray(arrayOfPaths, music.path);
-        }
-      });
-    }
-    this.updateNumberOfAddedSongs(arrayOfPaths);
-    return arrayOfPaths;
-  };
-
-  checkIfArtistOrAlbumExists = (albumOrArtistName: string, arrayToCheck: any): string => {
-    if (!arrayToCheck || arrayToCheck.length == 0) {
-      return '';
-    }
-    for (let i = 0; i < arrayToCheck.length; i++) {
-      if ((arrayToCheck[i].title || arrayToCheck[i].name) == albumOrArtistName) return arrayToCheck[i].__id;
-    }
-    return '';
-  };
-
-  createArtist = (values, artistName, artistId, albumId) => {
-    const params = {
-      name: artistName,
-      __id: artistId,
-      albums: albumId != '' ? [albumId] : [],
-      musics: [values.__id],
-    };
-    Artist.create(params);
-  };
-
-  createAlbum = (values, albumName, albumId, artistId) => {
-    console.log(artistId);
-    const params = {
-      title: albumName,
-      __id: albumId,
-      author: artistId,
-      musics: [values.__id],
-    };
-    Album.create(params);
-  };
-
-  updateArtistOrAlbum = (model, id: string, musicId: string) => {
-    const resultPromise = this.databaseHandler.findOneInDocument(model, '__id', id);
-    resultPromise.then(result => {
-      const albumOrArtist = JSON.parse(JSON.stringify(result[0]));
-      albumOrArtist.musics.push(musicId);
-      this.databaseHandler.updateDocument(model, result[0]._id, 'musics', albumOrArtist.musics);
-    });
-  };
-
-  addMusicToDB = (values, artists: Array<string>, album: string) => {
-    let createAlbum: boolean = false;
-    let albumId: string = '';
-    let artistId: string = '';
-
-    if (album) {
-      albumId = this.checkIfArtistOrAlbumExists(album, this.albums);
-      if (albumId == '') {
-        albumId = uuid.v4();
-        createAlbum = true;
-      } else {
-        this.updateArtistOrAlbum(Album, albumId, values.__id);
-      }
-    }
-    artistId = this.checkIfArtistOrAlbumExists(artists[0], this.artists);
-    if (artistId == '') {
-      artistId = uuid.v4();
-      this.createArtist(values, artists[0], artistId, albumId);
-    } else {
-      this.updateArtistOrAlbum(Artist, artistId, values.__id);
-    }
-    if (createAlbum) this.createAlbum(values, album, albumId, artistId);
-    values.album = albumId != '' ? albumId : '';
-    values.artist = artistId;
-    Music.create(values).then(() => {
-      this.loadData(this.updateMusicsToAdd);
-    });
-  };
-
-  updateMusicsToAdd = () => {
-    if (this.musicsToAdd && this.musicsToAdd[0].length > 0) {
-      this.musicsToAdd[0].splice(0, 1);
-      this.addMusics();
-    }
-  };
-
   private areThereMusicsToAdd = (): boolean => {
     for (let i = 0; i < this.musicsToAdd.length; i++) {
       if (this.musicsToAdd[i] && this.musicsToAdd[i].length > 0) return true;
@@ -227,27 +138,108 @@ export default class DataLoader {
   };
 
   addMusics = () => {
-    if (this.musicsToAdd && this.musicsToAdd.length != 0 && this.musicsToAdd[0].length == 0) {
-      this.musicsToAdd.splice(0, 1);
-    }
     if (this.areThereMusicsToAdd()) {
       filesHandler.getMetadataAndAddToDB(this.musicsToAdd[0][0], this.addMusicToDB);
     } else {
-      this.musicsToAdd = null;
       this.showLogs();
+      this.musicsToAdd = null;
     }
   };
 
-  checkForUpdatesInDB = () => {
-    const filesArray: Array<Array<string>> = filesHandler.getArrayOfFiles(this.currentUser.musicPaths);
-    this.musicsToAdd = this.checkForMusicUpdates(filesArray);
+  createArtist = (musicId, artistName, artistId, albumId): Promise<any> => {
+    const params = {
+      name: artistName,
+      __id: artistId,
+      albums: albumId != '' ? [albumId] : [],
+      musics: [musicId],
+    };
+    this.addedArtists++;
+    return Artist.create(params);
+  };
 
-    this.addMusics();
+  createAlbum = (musicsId, albumName, albumId, artistId): Promise<any> => {
+    const params = {
+      title: albumName,
+      __id: albumId,
+      author: artistId,
+      musics: [musicsId],
+    };
+    this.addedAlbums++;
+    return Album.create(params);
+  };
+
+  checkIfArtistOrAlbumExists = (albumOrArtistName: string, arrayToCheck: any): string | null => {
+    if (!arrayToCheck || arrayToCheck.length == 0) {
+      return null;
+    }
+    for (let i = 0; i < arrayToCheck.length; i++) {
+      if ((arrayToCheck[i].title || arrayToCheck[i].name) == albumOrArtistName) return arrayToCheck[i].__id;
+    }
+    return null;
+  };
+
+  updateArtistOrAlbum = (model, id: string, musicId: string) => {
+    return this.databaseHandler.addToArray(model, '__id', id, 'musics', musicId);
+  };
+
+  createMusic = values => {
+    Music.create(values).then(() => {
+      this.addedMusics++;
+      if (this.musicsToAdd.length > 0 && this.musicsToAdd[0].length > 0) {
+        this.musicsToAdd[0].shift();
+        if (this.musicsToAdd && this.musicsToAdd.length != 0 && this.musicsToAdd[0].length == 0) {
+          this.musicsToAdd.splice(0, 1);
+        }
+      }
+      this.addMusics();
+    });
+  };
+
+  addMusicToDB = (values, artist: Array<string>, album: string) => {
+    let artistId = this.checkIfArtistOrAlbumExists(artist[0], this.artists);
+    let albumId = this.checkIfArtistOrAlbumExists(album, this.albums);
+    const promisesArray = [];
+
+    if (artistId == null) {
+      artistId = uuid.v4();
+      promisesArray.push(this.createArtist(values.__id, artist[0], artistId, 0)); // will soon remomve unused albumId
+    } else {
+      promisesArray.push(this.updateArtistOrAlbum(Artist, artistId, values.__id));
+    }
+    if (albumId == null && album != '') {
+      albumId = uuid.v4();
+      promisesArray.push(this.createAlbum(values.__id, album, albumId, artistId));
+    } else {
+      promisesArray.push(this.updateArtistOrAlbum(Album, albumId, values.__id));
+    }
+    values.artist = artistId;
+    values.album = albumId;
+    Promise.all(promisesArray).then(promisesReturnValues => {
+      if (promisesReturnValues[0] != null) {
+        this.artists.push(promisesReturnValues[0]);
+      }
+      if (promisesReturnValues[1] != null) {
+        this.albums.push(promisesReturnValues[1]);
+      }
+      this.createMusic(values);
+    });
   };
 
   showLogs = () => {
     console.log(
-      'Updated database (added ' + this.addedMusics + ' musics and deleted ' + this.deletedMusics + ' musics)',
+      'Updated database :\n\tAdded ' +
+        this.addedMusics +
+        ' music(s) and deleted ' +
+        this.deletedMusics +
+        ' music(s)\n\tAdded ' +
+        this.addedArtists +
+        ' artist(s) and deleted ' +
+        this.deletedArtists +
+        ' artist(s)\n\tAdded ' +
+        this.addedAlbums +
+        ' album(s) and deleted ' +
+        this.deletedAlbums +
+        ' album(s)',
     );
   };
 }
