@@ -10,7 +10,7 @@ const playlistSchema = new mongoose.Schema({
   musics: [String],
   createdAt: Date,
   createdBy: Number,
-  __id: String,
+  __id: { type: String, unique: true },
 });
 
 const playlist = mongoose.model<IPlaylistModel>('playlist', playlistSchema);

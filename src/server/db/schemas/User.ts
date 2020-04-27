@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   musicPaths: [String],
   history: [String],
   favorites: [String],
-  __id: String,
+  __id: { type: String, unique: true },
   settings: {
     language: String,
   },

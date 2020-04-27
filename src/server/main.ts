@@ -11,6 +11,7 @@ import Playlist from './db/schemas/Playlist';
 import Artist from './db/schemas/Artist';
 import Album from './db/schemas/Album';
 import User from './db/schemas/User';
+import Music from './db/schemas/Music';
 
 import IUser from '../shared/IUser';
 import IPlaylist from '../shared/IPlaylist';
@@ -26,7 +27,7 @@ import { searchImages } from 'pixabay-api';
 const app = express();
 
 const server = require('http').createServer(app);
-const io = require('socket.io').listen(server); // it was require('socket.io')(server);
+const io = require('socket.io').listen(server);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -50,12 +51,11 @@ app.use('/musics2', express.static(path.join(process.cwd(), 'musics2')));
 app.use('/scripts', express.static(path.join(process.cwd(), 'musics2')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const dLoader = new dataLoader(databaseHandler);
+const dLoader = new dataLoader(databaseHandler, io);
 databaseHandler.connect();
 
-const socketsArray = {};
-
 const startServer = () => {
+  console.log('Starting server');
   server.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
     io.on('connect', socket => {
@@ -66,7 +66,7 @@ const startServer = () => {
 
 app.get('/getResults', (req, res) => {
   const search = req.query.search;
-  searchImages(process.env.PIXABAY_KEY, search).then(results => {
+  searchImages(process.env.PIXABAY_KEY, search as string).then(results => {
     const images = [];
     for (let i = 0; i < results.hits.length; i++) {
       images.push(results.hits[i].webformatURL);
@@ -108,8 +108,7 @@ app.get('/playlists', (req, res) => {
 });
 
 app.get('/currentUser', (req, res) => {
-  const user = dLoader.get('currentUser');
-  res.json(user);
+  res.json(dLoader.loggedUser);
 });
 
 app.get('/bookmarks', (req, res) => {
@@ -126,14 +125,15 @@ app.get('/playlist', (req, res) => {
 });
 
 app.get('/allMusics', (req, res) => {
-  const musics = dLoader.get('musics');
-  res.json(musics);
+  databaseHandler.getCollectionContent(Music).then(musics => {
+    res.json(musics);
+  });
 });
 
-app.get('/allData', (req, res) => {
-  const musics = dLoader.get('musics');
-  const artists = dLoader.get('artists');
-  const albums = dLoader.get('albums');
+app.get('/allData', async (req, res) => {
+  const musics = await databaseHandler.getCollectionContent(Music);
+  const artists = await databaseHandler.getCollectionContent(Artist);
+  const albums = await databaseHandler.getCollectionContent(Album);
   databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
     const bookmarks = (values[0] as IUser).favorites;
     res.json({
@@ -146,9 +146,9 @@ app.get('/allData', (req, res) => {
 });
 
 app.get('/allPlaylists', (req, res) => {
-  const playlists = dLoader.get('playlists');
-
-  res.json(playlists);
+  databaseHandler.getCollectionContent(Playlist).then(playlists => {
+    res.json(playlists);
+  });
 });
 
 app.post('/updateUserSettings', (req, res) => {
@@ -168,8 +168,7 @@ app.post('/updateUserSettings', (req, res) => {
 app.post('/addBookmark', (req, res) => {
   const id = req.body.musicId;
   databaseHandler.addToArray(User, 'selected', true, 'favorites', id).then(
-    values => {
-      dLoader.loadSpecificData('users');
+    () => {
       databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
         res.json((values[0] as IUser).favorites);
       });
@@ -185,7 +184,6 @@ app.post('/removeBookmark', (req, res) => {
   const id = req.body.musicId;
   databaseHandler.removeFromArray(User, 'selected', true, 'favorites', id).then(
     values => {
-      dLoader.loadSpecificData('users');
       databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
         res.json((values[0] as IUser).favorites);
       });
@@ -211,7 +209,7 @@ app.post('/createPlaylist', upload.single('playlist-picture'), (req, res) => {
   const description = req.body['playlist-description'];
   const file = (req as any).file;
   const creationDate = new Date().getTime();
-  const userId = dLoader.get('currentUser').__id;
+  const userId = dLoader.loggedUser.__id;
   const id = uuid.v4();
 
   let filePath;
@@ -234,7 +232,6 @@ app.post('/createPlaylist', upload.single('playlist-picture'), (req, res) => {
       __id: id,
     },
     error => {
-      dLoader.loadSpecificData('playlists');
       databaseHandler.getCollectionContent(Playlist).then(values => {
         res.send(values);
       });
