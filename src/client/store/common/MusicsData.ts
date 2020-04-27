@@ -4,11 +4,30 @@ import IArtist from '../../../shared/IArtist';
 import IMusic from '../../../shared/IMusic';
 import IPlaylist from '../../../shared/IPlaylist';
 
+import { UpdateArtistOrAlbumResponse } from '../../../shared/SocketIODefinitions';
+import socketIOClient from 'socket.io-client';
+
 class MusicsData {
   @observable private musics: Array<IMusic> = [];
   @observable private artists: Array<IArtist> = [];
   @observable private albums: Array<IAlbum> = [];
   @observable private playlists: Array<IPlaylist> = [];
+
+  @observable socket: SocketIOClient.Socket = null;
+
+  constructor() {
+    this.socket = socketIOClient('http://127.0.0.1:3000');
+    this.socket.on('refresh_musics', this.setMusics);
+    this.socket.on('refresh_artists', this.setArtists);
+    this.socket.on('refresh_albums', this.setAlbums);
+
+    this.socket.on('update_artist', this.handleUpdateArtist);
+    this.socket.on('update_album', this.handleUpdateAlbum);
+
+    this.socket.on('new_music', this.handleNewMusic);
+    this.socket.on('new_artist', this.handleNewArtist);
+    this.socket.on('new_album', this.handleNewAlbum);
+  }
 
   @action setMusics = (musics: Array<IMusic>) => {
     this.musics = musics;
@@ -20,6 +39,36 @@ class MusicsData {
 
   @action setAlbums = (albums: Array<IAlbum>) => {
     this.albums = albums;
+  };
+
+  @action handleNewArtist = (artist: IArtist) => {
+    this.artists.push(artist);
+  };
+
+  @action handleNewAlbum = (album: IAlbum) => {
+    this.albums.push(album);
+  };
+
+  @action handleNewMusic = (music: IMusic) => {
+    this.musics.push(music);
+  };
+
+  @action handleUpdateArtist = (response: UpdateArtistOrAlbumResponse) => {
+    for (let i = 0; i < this.artists.length; i++) {
+      if (this.artists[i].__id == response.id) {
+        this.artists[i] = response.data as IArtist;
+        break;
+      }
+    }
+  };
+
+  @action handleUpdateAlbum = (response: UpdateArtistOrAlbumResponse) => {
+    for (let i = 0; i < this.albums.length; i++) {
+      if (this.albums[i].__id == response.id) {
+        this.albums[i] = response.data as IAlbum;
+        break;
+      }
+    }
   };
 
   @action setPlaylists = (playlists: Array<IPlaylist>) => {

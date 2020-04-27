@@ -10,7 +10,7 @@ const musicSchema: Schema = new mongoose.Schema({
   album: String,
   duration: Number,
   path: String,
-  __id: String,
+  __id: { type: String, unique: true },
 });
 
 const Music: Model<IMusicModel> = mongoose.model<IMusicModel>('Music', musicSchema);

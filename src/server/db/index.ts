@@ -8,7 +8,7 @@ class DatabaseHandler {
   connect = async () => {
     mongoose.connect(
       this.url,
-      { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
+      { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true },
       async err => {
         if (err) throw err;
       },
@@ -102,18 +102,15 @@ class DatabaseHandler {
   };
 
   getCollectionContent = model => {
-    return new Promise(function(resolve, reject) {
-      model
-        .find({})
-        .lean()
-        .then(elements => {
-          resolve(elements);
-          console.log('Succesfully loaded ' + model.collection.collectionName);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
+    return model
+      .find({})
+      .lean()
+      .then(elements => {
+        return elements;
+      })
+      .catch(err => {
+        return err;
+      });
   };
 
   get = (item: 'Musics' | 'Users') => {

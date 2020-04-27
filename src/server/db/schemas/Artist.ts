@@ -1,14 +1,20 @@
 import mongoose from 'mongoose';
+import { handleE11000 } from './handleErrors';
 import IArtist from '../../../shared/IArtist';
 
 interface IArtistModel extends IArtist, mongoose.Document {}
 
-const artistSchema = new mongoose.Schema({
-  name: String,
-  __id: String,
-  albums: [String],
-  musics: [String],
-});
+const artistSchema = new mongoose.Schema(
+  {
+    name: String,
+    __id: { type: String, unique: true },
+    albums: [String],
+    musics: [String],
+  },
+  { emitIndexErrors: true },
+);
+
+artistSchema.post('save', handleE11000);
 
 const artist = mongoose.model<IArtistModel>('Artist', artistSchema);
 
