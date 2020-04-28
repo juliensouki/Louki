@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema({
   __id: { type: String, unique: true },
   settings: {
     language: String,
+    username: String,
+    profilePicture: String,
+    internetUsage: Boolean,
   },
 });
 

@@ -91,18 +91,17 @@ const BootstrapInput = withStyles(theme => ({
 
 @observer
 class Settings extends React.Component<Props & RouteComponentProps, NoState> {
-  @observable internetChecked: boolean = true;
-
-  @action handleChange = () => {
-    this.internetChecked = !this.internetChecked;
-  };
-
   handleCancel = () => {
     this.props.history.push(NavigationForm.previousRoute);
   };
 
   handleSave = () => {
-    UpdateUserSettings({ language: SettingsForm.language })
+    UpdateUserSettings({
+      language: SettingsForm.language,
+      internetUsage: SettingsForm.useInternet,
+      username: SettingsForm.username,
+      profilePicture: SettingsForm.profilePicture,
+    })
       .then(res => {
         return res.json();
       })
@@ -139,9 +138,8 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
           <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
             <Typography className={classes.text}>{T.internet}</Typography>
             <Switch
-              checked={this.internetChecked}
-              onChange={this.handleChange}
-              value={true}
+              checked={SettingsForm.useInternet}
+              onChange={SettingsForm.toggleInternetUsage}
               inputProps={{ 'aria-label': 'secondary checkbox' }}
             />
           </Grid>

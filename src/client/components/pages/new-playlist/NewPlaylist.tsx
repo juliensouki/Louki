@@ -5,6 +5,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 
 import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 import MusicsData from '../../../store/common/MusicsData';
+import UserData from '../../../store/common/UserData';
 import SimpleHeader from '../../fragments/playlist/SimpleHeader';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -88,7 +89,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
     this.open = false;
     CreatePlaylistForm.setName('');
     CreatePlaylistForm.setDescription('');
-    CreatePlaylistForm.setPicture('');
+    CreatePlaylistForm.setPicture(null);
     CreatePlaylistForm.setPictureUrl('');
   }
 
@@ -231,6 +232,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
                 type='button'
                 className={classes.button}
                 style={{ display: 'inline-block' }}
+                disabled={!UserData.settings.internetUsage}
                 onClick={this.handleOpenModal}
               >
                 <PublicIcon className={classes.icon} /> {T.internet}
