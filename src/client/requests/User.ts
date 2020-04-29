@@ -13,16 +13,18 @@ export const LoadUser = async () => {
     });
 };
 
-export const UpdateUserSettings = async (settings: AccountSettings): Promise<any> => {
+export const UpdateUserSettings = async (
+  form: HTMLFormElement,
+  settings: AccountSettings,
+  id: string,
+): Promise<any> => {
+  const data = new FormData(form as HTMLFormElement);
+
+  data.append('settings', JSON.stringify(settings));
+  data.append('id', id);
+
   return fetch('/updateUserSettings', {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json', // eslint-disable-line
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id: UserData.id,
-      settings: settings,
-    }),
+    body: data,
   });
 };

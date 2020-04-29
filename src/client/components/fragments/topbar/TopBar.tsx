@@ -43,6 +43,11 @@ const styles = (theme: Theme) =>
       backgroundColor: theme.palette.secondary.main,
       marginLeft: '1.5em',
     },
+    pic: {
+      height: 'inherit',
+      width: 'inherit',
+      borderRadius: 'inherit',
+    },
     userName: {
       fontSize: '1.5rem',
       color: theme.palette.primary.main,
@@ -109,7 +114,9 @@ class TopBar extends React.Component<IProps, NoState> {
                 <Typography className={classes.userName}>{UserData.name}</Typography>
               </Grid>
               <Grid item>
-                <div className={classes.profilePicture}></div>
+                <div className={classes.profilePicture}>
+                  <img src={UserData.settings.profilePicture} className={classes.pic}></img>
+                </div>
               </Grid>
             </Grid>
           </Grid>

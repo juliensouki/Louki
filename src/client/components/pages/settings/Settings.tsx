@@ -30,6 +30,18 @@ const styles = (theme: Theme) =>
       padding: 30,
       color: theme.palette.primary.main,
     },
+    usernameInput: {
+      color: theme.palette.primary.main,
+      verticalAlign: 'top',
+      marginLeft: '0.8em',
+      marginTop: '0.2em',
+      textAlign: 'right',
+      backgroundColor: 'transparent',
+      border: 'none',
+      fontSize: '1.5rem',
+      fontFamily: 'Roboto',
+      display: 'inline-block',
+    },
     button: {
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
@@ -96,19 +108,31 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
   };
 
   handleSave = () => {
-    UpdateUserSettings({
-      language: SettingsForm.language,
-      internetUsage: SettingsForm.useInternet,
-      username: SettingsForm.username,
-      profilePicture: SettingsForm.profilePicture,
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        UserData.setUser(data);
-        this.props.history.push(NavigationForm.previousRoute);
-      });
+    const form = document.getElementById('settings-form') as HTMLFormElement;
+    if (form != null) {
+      UpdateUserSettings(form, SettingsForm.settings, SettingsForm.id)
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          UserData.setUser(data);
+          this.props.history.push(NavigationForm.previousRoute);
+        });
+    }
+  };
+
+  @action handleFileChange = () => {
+    const fileInput = document.getElementById('hidden-file-input');
+    if (fileInput != null) {
+      SettingsForm.setProfilePicture((fileInput as HTMLInputElement).files[0]);
+    }
+  };
+
+  @action openFileExplorer = () => {
+    const fileInput = document.getElementById('hidden-file-input');
+    if (fileInput) {
+      fileInput.click();
+    }
   };
 
   render() {
@@ -119,62 +143,86 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
       <React.Fragment>
         <SimpleHeader title={T.title} />
         <Grid container className={classes.root} direction='column'>
-          <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography className={classes.text}>{T.username}</Typography>
-            <Typography className={classes.text}>Souki</Typography>
-          </Grid>
-          <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography className={classes.text}>{T.profilePic} : /mnt/c/users/Souki/Pictures/pic.jpg</Typography>
-            <Button className={classes.button}>
-              <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
-            </Button>
-          </Grid>
-          <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography className={classes.text}>{T.directories} : /mnt/c/users/Souki/Music/</Typography>
-            <Button className={classes.button}>
-              <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
-            </Button>
-          </Grid>
-          <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography className={classes.text}>{T.internet}</Typography>
-            <Switch
-              checked={SettingsForm.useInternet}
-              onChange={SettingsForm.toggleInternetUsage}
-              inputProps={{ 'aria-label': 'secondary checkbox' }}
-            />
-          </Grid>
-          <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-            <Typography className={classes.text}>Language : </Typography>
-            <Select
-              id='demo-customized-select-native'
-              value={SettingsForm.language}
-              onChange={event => {
-                SettingsForm.setLanguage(event.target.value as Language);
-              }}
-              input={<BootstrapInput />}
-            >
-              <MenuItem className={classes.text} value={Language.French}>
-                Français
-              </MenuItem>
-              <MenuItem className={classes.text} value={Language.English}>
-                English
-              </MenuItem>
-            </Select>
-          </Grid>
-          <Grid className={classes.gridContainer} item container direction='column'>
-            <Button className={classes.button} style={{ maxWidth: '10em' }}>
-              <RotateLeftIcon style={{ marginRight: '0.7em' }} /> {T.reset}
-            </Button>
-            <Typography className={classes.warning}>{T.resetWarning}</Typography>
-          </Grid>
-          <Grid item container direction='row' justify='flex-end'>
-            <Button className={classes.button} style={{ marginRight: '1.5em' }} onClick={this.handleCancel}>
-              <CloseIcon style={{ marginRight: '0.7em' }} /> {T.cancel}
-            </Button>
-            <Button className={classes.button} onClick={this.handleSave}>
-              <SaveIcon style={{ marginRight: '0.7em' }} /> {T.save}
-            </Button>
-          </Grid>
+          <form
+            id='settings-form'
+            encType='multipart/form-data'
+            onSubmit={e => {
+              e.preventDefault();
+              return false;
+            }}
+          >
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>{T.username}</Typography>
+              <input
+                className={classes.usernameInput}
+                value={SettingsForm.username}
+                onChange={e => {
+                  SettingsForm.setUsername(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>
+                {T.profilePic} : {SettingsForm.path}
+              </Typography>
+              <Button className={classes.button} onClick={this.openFileExplorer}>
+                <input
+                  id='hidden-file-input'
+                  type='file'
+                  name='profile-picture'
+                  style={{ display: 'none' }}
+                  onChange={this.handleFileChange}
+                />
+                <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
+              </Button>
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>{T.directories} : /mnt/c/users/Souki/Music/</Typography>
+              <Button className={classes.button}>
+                <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
+              </Button>
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>{T.internet}</Typography>
+              <Switch
+                checked={SettingsForm.useInternet}
+                onChange={SettingsForm.toggleInternetUsage}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>Language : </Typography>
+              <Select
+                id='demo-customized-select-native'
+                value={SettingsForm.language}
+                onChange={event => {
+                  SettingsForm.setLanguage(event.target.value as Language);
+                }}
+                input={<BootstrapInput />}
+              >
+                <MenuItem className={classes.text} value={Language.French}>
+                  Français
+                </MenuItem>
+                <MenuItem className={classes.text} value={Language.English}>
+                  English
+                </MenuItem>
+              </Select>
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='column'>
+              <Button className={classes.button} style={{ maxWidth: '10em' }}>
+                <RotateLeftIcon style={{ marginRight: '0.7em' }} /> {T.reset}
+              </Button>
+              <Typography className={classes.warning}>{T.resetWarning}</Typography>
+            </Grid>
+            <Grid item container direction='row' justify='flex-end'>
+              <Button className={classes.button} style={{ marginRight: '1.5em' }} onClick={this.handleCancel}>
+                <CloseIcon style={{ marginRight: '0.7em' }} /> {T.cancel}
+              </Button>
+              <Button className={classes.button} onClick={this.handleSave}>
+                <SaveIcon style={{ marginRight: '0.7em' }} /> {T.save}
+              </Button>
+            </Grid>
+          </form>
         </Grid>
       </React.Fragment>
     );
