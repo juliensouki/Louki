@@ -13,7 +13,7 @@ import Album from './db/schemas/Album';
 import User from './db/schemas/User';
 import Music from './db/schemas/Music';
 
-import IUser from '../shared/IUser';
+import IUser, { AccountSettings } from '../shared/IUser';
 import IPlaylist from '../shared/IPlaylist';
 
 import databaseHandler from './db';
@@ -29,19 +29,35 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
-const storage = multer.diskStorage({
+const playlistStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'assets/uploads/');
   },
   filename: (req, file, cb) => {
     const name = req.body['playlist-name'];
     const extension = file['mimetype'].split('image/')[1];
-    console.log(extension);
     cb(null, name + '.' + extension);
   },
 });
 
-const upload = multer({ storage: storage });
+const playlistUpload = multer({ storage: playlistStorage });
+
+const profileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'assets/uploads/');
+  },
+  filename: async (req, file, cb) => {
+    const user = await databaseHandler.findOneInDocument(User, 'selected', true);
+    if (!user) {
+      return;
+    }
+    const name = user[0].__id;
+    const extension = file['mimetype'].split('image/')[1];
+    cb(null, name + '.' + extension);
+  },
+});
+
+const profileUpload = multer({ storage: profileStorage });
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -108,7 +124,9 @@ app.get('/playlists', (req, res) => {
 });
 
 app.get('/currentUser', (req, res) => {
-  res.json(dLoader.loggedUser);
+  databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
+    res.json(users[0]);
+  });
 });
 
 app.get('/bookmarks', (req, res) => {
@@ -151,12 +169,20 @@ app.get('/allPlaylists', (req, res) => {
   });
 });
 
-app.post('/updateUserSettings', (req, res) => {
-  const { id, settings } = req.body;
+app.post('/updateUserSettings', profileUpload.single('profile-picture'), async (req, res) => {
+  const id = req.body.id;
+  const settings = JSON.parse(req.body.settings) as AccountSettings;
+  const file = (req as any).file;
 
   const jsonUpdate = {
+    name: settings.username,
     settings: settings,
   };
+
+  if (file) {
+    const extension = file['mimetype'].split('image/')[1];
+    settings.profilePicture = 'assets/uploads/' + id + '.' + extension;
+  }
 
   databaseHandler.updateDocument(User, id, jsonUpdate).then(() => {
     databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
@@ -204,7 +230,7 @@ app.post('/removeSongFromPlaylist', (req, res) => {
   });
 });
 
-app.post('/createPlaylist', upload.single('playlist-picture'), (req, res) => {
+app.post('/createPlaylist', playlistUpload.single('playlist-picture'), (req, res) => {
   const name = req.body['playlist-name'];
   const description = req.body['playlist-description'];
   const file = (req as any).file;

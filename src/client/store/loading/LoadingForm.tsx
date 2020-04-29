@@ -28,6 +28,7 @@ class LoadingForm {
   @action userHasLoaded = () => {
     this.loadedUser = true;
     SettingsForm.setUserId(UserForm.id);
+    SettingsForm.setUsername(UserForm.name);
     SettingsForm.setSettings(UserForm.settings);
     this.checkThatEverythingHasLoaded();
   };
