@@ -34,18 +34,20 @@ const styles = (theme: Theme) =>
     },
     playlistPictureContainer: {
       width: '15%',
-      height: 'auto',
+      height: '100%',
       minWidth: 140,
       maxWidth: 200,
       marginRight: 20,
+      backgroundColor: '#252525',
       [theme.breakpoints.down('xs')]: {
         display: 'none',
       },
     },
     playlistPicture: {
-      backgroundColor: theme.palette.secondary.main,
-      height: '100%',
-      width: '100%',
+      width: 'auto',
+      maxWidth: '100%',
+      height: 'auto',
+      maxHeight: '100%',
     },
     playlistInfoContainer: {
       width: 'auto',
@@ -189,7 +191,9 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
             className={classes.playlistPictureContainer}
             style={this.pictureHeight ? { height: this.pictureHeight } : {}}
           >
-            <img src={image} className={classes.playlistPicture}></img>
+            <Grid container alignItems='center' justify='center' style={{ width: '100%', height: '100%' }}>
+              <img src={image} className={classes.playlistPicture}></img>
+            </Grid>
           </div>
           <Grid
             item

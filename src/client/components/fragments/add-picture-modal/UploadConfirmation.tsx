@@ -20,7 +20,8 @@ const styles = (theme: Theme) =>
     image: {
       width: 'auto',
       maxWidth: '100%',
-      height: '100%',
+      height: 'auto',
+      maxHeight: '100%',
     },
   });
 
