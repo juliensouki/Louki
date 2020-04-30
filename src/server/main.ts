@@ -23,6 +23,7 @@ import bodyParser from 'body-parser';
 import { __values } from 'tslib';
 import multer from 'multer';
 import { searchImages } from 'pixabay-api';
+import leven from 'leven';
 
 const app = express();
 
@@ -145,6 +146,23 @@ app.get('/playlist', (req, res) => {
 app.get('/allMusics', (req, res) => {
   databaseHandler.getCollectionContent(Music).then(musics => {
     res.json(musics);
+  });
+});
+
+app.post('/search', (req, res) => {
+  const { searchText, musics } = req.body;
+  databaseHandler.findMany(Music, '__id', musics as Array<string>).then(results => {
+    if (results.length == 0) {
+      res.json(results);
+    } else {
+      const musicNames: Array<string> = [];
+      results.forEach(music => {
+        if (leven(searchText, music.title) < 10 || music.title.toLowerCase().includes(searchText.toLowerCase())) {
+          musicNames.push(music.__id);
+        }
+      });
+      res.json(musicNames);
+    }
   });
 });
 

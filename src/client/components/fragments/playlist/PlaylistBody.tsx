@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
@@ -8,6 +8,7 @@ import PlaylistBodyDesktop from './PlaylistBodyDesktop';
 import PlaylistBodyMobile from './PlaylistBodyMobile';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 
+import SearchForm from '../../../store/fragments/search/SearchForm';
 import IMusic from '../../../../shared/IMusic';
 import texts from '../../../lang/fragments/playlist/playlist-body';
 
@@ -32,6 +33,16 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistBody extends React.Component<IProps, NoState> {
+  componentDidUpdate() {
+    if (SearchForm.hasChanged) {
+      const ids = [];
+      this.props.playlist.forEach(music => {
+        ids.push(music.__id);
+      });
+      SearchForm.startSearch(ids);
+    }
+  }
+
   @computed get emptyPlaylistText(): string {
     const T = texts.current;
 
@@ -73,6 +84,7 @@ class PlaylistBody extends React.Component<IProps, NoState> {
           desktop={
             <PlaylistBodyDesktop
               allSongs={allSongs}
+              searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
               favorites={favorites}
               playlist={playlist}
               customPlaylist={customPlaylist}

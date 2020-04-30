@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import SearchIcon from '@material-ui/icons/Search';
+import SearchForm from '../../../store/fragments/search/SearchForm';
 import texts from '../../../lang/fragments/search-container';
 
 const styles = (theme: Theme) =>
@@ -44,7 +45,14 @@ class SearchContainer extends React.Component<Props, NoState> {
     return (
       <div className={classes.root}>
         <SearchIcon className={classes.searchIcon} />
-        <input placeholder={T.searchPlaceholder} className={classes.input} />
+        <input
+          placeholder={T.searchPlaceholder}
+          className={classes.input}
+          value={SearchForm.search}
+          onChange={e => {
+            SearchForm.setSearch(e.target.value);
+          }}
+        />
       </div>
     );
   }

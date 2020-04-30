@@ -92,6 +92,7 @@ interface IProps extends WithStyles<typeof styles> {
   emptyPlaylistText: string;
   emptyPlaylistButtonText: string;
   emptyPlaylistRedirectRoute: string;
+  searchResults: Array<string>;
 }
 
 @observer
@@ -142,6 +143,7 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & R
       allSongs,
       emptyPlaylistText,
       emptyPlaylistButtonText,
+      searchResults,
     } = this.props;
 
     const T = texts.current;
@@ -171,6 +173,7 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & R
             {playlist.map((row, index) => (
               <TableRow
                 key={row.__id}
+                style={searchResults != null && !searchResults.includes(row.__id) ? { display: 'none' } : {}}
                 className={MusicPlayer.playingMusicId == row.__id ? classes.rowSelected : classes.row}
                 onClick={() => {
                   this.playMusic(index);
