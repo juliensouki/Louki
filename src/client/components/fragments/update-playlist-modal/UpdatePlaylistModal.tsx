@@ -9,6 +9,11 @@ import Modal from '../../utils/Modal';
 
 const styles = (theme: Theme) =>
   createStyles({
+    '@global': {
+      '.MuiOutlinedInput-multiline': {
+        width: '100%',
+      },
+    },
     root: {
       padding: 15,
     },
@@ -29,10 +34,16 @@ const styles = (theme: Theme) =>
       fontSize: '1.3rem',
     },
     resizeText: {
-      fontSize: '1.5rem',
+      fontSize: '1.3rem',
     },
     textfield: {
       display: 'block',
+    },
+    descriptionInput: {
+      display: 'inline-block',
+      color: theme.palette.primary.main,
+      width: '100%',
+      marginTop: theme.spacing(2),
     },
   });
 
@@ -98,7 +109,7 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
       <Modal onClose={handleClose} title='Update playlist information' maxWidth='sm' buttons={this.buttons} open={open}>
         <TextField
           className={classes.textfield}
-          label='Playlist name'
+          label='Name'
           value={this.name != null ? this.name : ''}
           name='name'
           onChange={this.handleChange}
@@ -110,17 +121,22 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
           }}
         />
         <TextField
-          className={classes.textfield}
-          label='Playlist description'
-          value={this.description}
+          id='filled-multiline-static'
+          label='Description'
           name='description'
-          onChange={this.handleChange}
-          InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+          multiline
+          rows='4'
+          value={this.description}
           InputProps={{
             classes: {
               input: classes.resizeText,
             },
           }}
+          className={classes.descriptionInput}
+          onChange={e => {
+            this.description = e.target.value;
+          }}
+          variant='outlined'
         />
       </Modal>
     );

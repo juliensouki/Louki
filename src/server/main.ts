@@ -199,7 +199,10 @@ app.post('/updateUserSettings', profileUpload.single('profile-picture'), async (
 
   if (file) {
     const extension = file['mimetype'].split('image/')[1];
-    settings.profilePicture = 'assets/uploads/' + id + '.' + extension;
+    settings.profilePicture = '/assets/uploads/' + id + '.' + extension;
+  } else {
+    const user = await databaseHandler.findOneInDocument(User, 'selected', true);
+    settings.profilePicture = user[0].settings.profilePicture;
   }
 
   databaseHandler.updateDocument(User, id, jsonUpdate).then(() => {
