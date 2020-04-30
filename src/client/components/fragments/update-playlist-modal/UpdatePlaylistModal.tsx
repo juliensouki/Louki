@@ -3,14 +3,36 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { TextField, DialogTitle, Dialog, Button } from '@material-ui/core';
-import IPlaylist from '../../../../shared/IPlaylist';
+import { TextField, Button } from '@material-ui/core';
 import PlaylistData from '../../../store/common/PlaylistData';
+import Modal from '../../utils/Modal';
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       padding: 15,
+    },
+    cancel: {
+      backgroundColor: '#9D9D9D',
+      color: '#464646',
+      textTransform: 'none',
+      marginLeft: '1em',
+      marginRight: '1em',
+      fontSize: '1.3rem',
+    },
+    save: {
+      backgroundColor: theme.palette.background.default,
+      color: '#9D9D9D',
+      textTransform: 'none',
+      marginLeft: '1em',
+      marginRight: '1em',
+      fontSize: '1.3rem',
+    },
+    resizeText: {
+      fontSize: '1.5rem',
+    },
+    textfield: {
+      display: 'block',
     },
   });
 
@@ -57,37 +79,50 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
     }
   };
 
+  get buttons(): Array<JSX.Element> {
+    const classes = this.props.classes;
+    return [
+      <Button key={0} className={classes.cancel} onClick={this.handleClose}>
+        Cancel
+      </Button>,
+      <Button key={1} className={classes.save} onClick={this.updatePlaylist}>
+        Save
+      </Button>,
+    ];
+  }
+
   render() {
     const { classes, open, handleClose } = this.props;
 
     return (
-      <Dialog
-        className={classes.root}
-        maxWidth='sm'
-        onClose={this.handleClose}
-        aria-labelledby='simple-dialog-title'
-        open={open}
-      >
-        <DialogTitle id='simple-dialog-title'>Update playlist information</DialogTitle>
+      <Modal onClose={handleClose} title='Update playlist information' maxWidth='sm' buttons={this.buttons} open={open}>
         <TextField
+          className={classes.textfield}
           label='Playlist name'
           value={this.name != null ? this.name : ''}
           name='name'
           onChange={this.handleChange}
+          InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+          InputProps={{
+            classes: {
+              input: classes.resizeText,
+            },
+          }}
         />
         <TextField
+          className={classes.textfield}
           label='Playlist description'
           value={this.description}
           name='description'
           onChange={this.handleChange}
+          InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+          InputProps={{
+            classes: {
+              input: classes.resizeText,
+            },
+          }}
         />
-        <Button variant='outlined' onClick={handleClose}>
-          Cancel
-        </Button>
-        <Button onClick={this.updatePlaylist} variant='outlined'>
-          Save
-        </Button>
-      </Dialog>
+      </Modal>
     );
   }
 }
