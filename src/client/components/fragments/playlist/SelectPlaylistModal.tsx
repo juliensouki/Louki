@@ -2,11 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { Typography, List, ListItem, Button } from '@material-ui/core';
+import Modal from '../../utils/Modal';
 
 import AddMusicToPlaylist from '../../../store/functions/playlists/AddMusicToPlaylist';
 import MusicsData from '../../../store/common/MusicsData';
@@ -15,7 +12,28 @@ import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import texts from '../../../lang/fragments/select-playlist-modal';
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) =>
+  createStyles({
+    cancel: {
+      backgroundColor: '#9D9D9D',
+      color: '#464646',
+      textTransform: 'none',
+      marginLeft: '1em',
+      marginRight: '1em',
+      fontSize: '1.3rem',
+    },
+    save: {
+      backgroundColor: theme.palette.background.default,
+      color: '#9D9D9D',
+      textTransform: 'none',
+      marginLeft: '1em',
+      marginRight: '1em',
+      fontSize: '1.3rem',
+    },
+    text: {
+      fontSize: '1.5rem',
+    },
+  });
 
 interface IProps extends WithStyles<typeof styles> {
   handleClose: () => void;
@@ -39,18 +57,20 @@ class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, No
     });
   };
 
+  get buttons(): Array<JSX.Element> {
+    const classes = this.props.classes;
+    return [
+      <Button key={0} className={classes.cancel} onClick={this.props.handleClose}>
+        Cancel
+      </Button>,
+    ];
+  }
+
   render() {
-    const { open, handleClose } = this.props;
+    const { classes, open, handleClose } = this.props;
 
     return (
-      <Dialog
-        onClose={() => {
-          handleClose();
-        }}
-        aria-labelledby='simple-dialog-title'
-        open={open}
-      >
-        <DialogTitle id='simple-dialog-title'>Choose a playlist</DialogTitle>
+      <Modal open={open} onClose={handleClose} maxWidth='xs' title='Choose a playlist' buttons={this.buttons}>
         <List>
           {MusicsData.allPlaylists.map(playlist => {
             return (
@@ -63,12 +83,12 @@ class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, No
                   handleClose();
                 }}
               >
-                <Typography>{playlist.name}</Typography>
+                <Typography className={classes.text}>{playlist.name}</Typography>
               </ListItem>
             );
           })}
         </List>
-      </Dialog>
+      </Modal>
     );
   }
 }

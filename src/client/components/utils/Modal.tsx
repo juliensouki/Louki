@@ -13,9 +13,7 @@ const styles = (theme: Theme) =>
       paddingRight: theme.spacing(1),
     },
     title: {
-      fontSize: '3rem',
-      fontWeight: 900,
-      paddingLeft: '16px !important',
+      fontSize: '1.8rem',
       textTransform: 'uppercase',
       color: '#fff',
     },
@@ -52,7 +50,9 @@ class Modal extends React.Component<React.PropsWithChildren<IProps>, NoState> {
         mobile={<Dialog fullScreen open={open} onClose={onClose} />}
       >
         <Grid container direction='row' justify='space-between' alignItems='center' className={classes.headerContainer}>
-          <DialogTitle className={classes.title}>{title}</DialogTitle>
+          <DialogTitle>
+            <Typography className={classes.title}>{title}</Typography>
+          </DialogTitle>
           <IconButton className={classes.closeIcon} onClick={onClose} aria-label='close'>
             <CloseIcon />
           </IconButton>
