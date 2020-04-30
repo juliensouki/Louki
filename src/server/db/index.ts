@@ -101,6 +101,18 @@ class DatabaseHandler {
       });
   };
 
+  findMany = async (model, field: string, array: Array<any>) => {
+    return model
+      .find({ [field]: { $in: array } })
+      .exec()
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        return 'error occured';
+      });
+  };
+
   getCollectionContent = model => {
     return model
       .find({})
