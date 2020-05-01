@@ -27,9 +27,13 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
         return res.json();
       })
       .then(data => {
-        const arrayOfIds: Array<string> = data.musics;
-        this.artistOrAlbumName = this.artistOrAlbum == 'artist' ? data.name : data.title;
-        this.playlist = MusicsData.idsToMusics(arrayOfIds);
+        if (data == null) {
+          this.props.history.push('/all-music');
+        } else {
+          const arrayOfIds: Array<string> = data.musics;
+          this.artistOrAlbumName = this.artistOrAlbum == 'artist' ? data.name : data.title;
+          this.playlist = MusicsData.idsToMusics(arrayOfIds);
+        }
       });
   }
 
