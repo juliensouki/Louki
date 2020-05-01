@@ -75,9 +75,7 @@ const startServer = () => {
   console.log('Starting server');
   server.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
-    io.on('connect', socket => {
-      console.log('A client connected');
-    });
+    io.on('connect', socket => {});
   });
 };
 

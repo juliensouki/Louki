@@ -30,7 +30,7 @@ class Playlist extends React.Component<RouteComponentProps, NoState> {
           playlistId={playlist == null ? undefined : playlist.__id}
           subTitle={T.playlistHeader.subTitle}
           image={
-            playlist == null ? defaultPlaylistImage : playlist.picture != '' ? playlist.picture : defaultPlaylistImage
+            playlist == null || !playlist.picture || playlist.picture == '' ? defaultPlaylistImage : playlist.picture
           }
           title={playlist != null ? playlist.name : ''}
           description={playlist != null ? playlist.description : ''}

@@ -1,6 +1,6 @@
 export default {
   playlistHeader: {
-    subTitle: 'Your favorite musics',
-    title: 'Favorites',
+    subTitle: 'All your musics',
+    title: 'All musics',
   },
 };
