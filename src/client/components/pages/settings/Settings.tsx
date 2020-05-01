@@ -23,6 +23,7 @@ import texts from '../../../lang/pages/settings/';
 import { UpdateUserSettings } from '../../../requests/User';
 import UserData from '../../../store/common/UserData';
 import NavigationForm from '../../../store/common/NavigationForm';
+import ConfirmModal from '../../utils/ConfirmModal';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -135,12 +136,28 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
     }
   };
 
+  @action closeConfirmModal = () => {
+    SettingsForm.setOpen(false);
+  };
+
+  resetLouki = () => {
+    SettingsForm.setOpen(false);
+    console.log('Must reset Louki');
+  };
+
   render() {
     const { classes } = this.props;
     const T = texts.current;
 
     return (
       <React.Fragment>
+        <ConfirmModal
+          open={SettingsForm.open}
+          title='Are you sure ?'
+          message='This action cannot be undone. Every data stored will be lost.'
+          onCancel={this.closeConfirmModal}
+          onConfirm={this.resetLouki}
+        />
         <SimpleHeader title={T.title} />
         <Grid container className={classes.root} direction='column'>
           <form
@@ -209,7 +226,13 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
               </Select>
             </Grid>
             <Grid className={classes.gridContainer} item container direction='column'>
-              <Button className={classes.button} style={{ maxWidth: '10em' }}>
+              <Button
+                className={classes.button}
+                style={{ maxWidth: '10em' }}
+                onClick={() => {
+                  SettingsForm.setOpen(true);
+                }}
+              >
                 <RotateLeftIcon style={{ marginRight: '0.7em' }} /> {T.reset}
               </Button>
               <Typography className={classes.warning}>{T.resetWarning}</Typography>

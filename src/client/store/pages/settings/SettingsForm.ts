@@ -9,9 +9,14 @@ class SettingsForm {
   @observable private file: File | null = null;
   @observable private picturePath: string = '';
   @observable private userId: string | null = '';
+  @observable private openConfirmModal: boolean = false;
 
   @action setLanguage = (lang: Language) => {
     this.lang = lang;
+  };
+
+  @action setOpen = (openConfirmModal: boolean) => {
+    this.openConfirmModal = openConfirmModal;
   };
 
   @action setUsername = (pseudo: string) => {
@@ -25,6 +30,10 @@ class SettingsForm {
   @action toggleInternetUsage = () => {
     this.internet = !this.internet;
   };
+
+  @computed get open(): boolean {
+    return this.openConfirmModal;
+  }
 
   @computed get id(): string {
     return this.userId == null ? '' : this.userId;
