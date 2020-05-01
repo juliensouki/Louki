@@ -9,7 +9,7 @@ class CurrentArtistOrAlbum {
 
   @computed get showArtist(): boolean {
     return this.artistMode;
-  };
+  }
 }
 
 export default new CurrentArtistOrAlbum();

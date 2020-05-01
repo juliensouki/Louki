@@ -75,9 +75,7 @@ const startServer = () => {
   console.log('Starting server');
   server.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
-    io.on('connect', socket => {
-      console.log('A client connected');
-    });
+    io.on('connect', socket => {});
   });
 };
 
@@ -95,7 +93,11 @@ app.get('/getResults', (req, res) => {
 app.get('/artist', (req, res) => {
   const id = req.query.id;
   databaseHandler.findOneInDocument(Artist, '__id', id).then(value => {
-    res.json(value[0]);
+    if (value && value.length > 0) {
+      res.json(value[0]);
+    } else {
+      res.json(null);
+    }
   });
 });
 
@@ -114,7 +116,11 @@ app.get('/allAlbums', (req, res) => {
 app.get('/album', (req, res) => {
   const id = req.query.id;
   databaseHandler.findOneInDocument(Album, '__id', id).then(value => {
-    res.json(value[0]);
+    if (value && value.length > 0) {
+      res.json(value[0]);
+    } else {
+      res.json(null);
+    }
   });
 });
 
@@ -139,7 +145,11 @@ app.get('/bookmarks', (req, res) => {
 app.get('/playlist', (req, res) => {
   const id = req.query.id;
   databaseHandler.findOneInDocument(Playlist, '__id', id).then(value => {
-    res.json(value[0]);
+    if (value && value.length > 0) {
+      res.json(value[0]);
+    } else {
+      res.json(null);
+    }
   });
 });
 

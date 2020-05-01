@@ -30,7 +30,11 @@ class RouteChangerHandler extends React.Component<RouteComponentProps, NoState> 
         return res.json();
       })
       .then(data => {
-        CurrentPlaylist.setPlaylist(data as IPlaylist);
+        if (data != null) {
+          CurrentPlaylist.setPlaylist(data as IPlaylist);
+        } else {
+          this.props.history.push('/all-music');
+        }
       });
   };
 
