@@ -49,10 +49,10 @@ const profileStorage = multer.diskStorage({
   },
   filename: async (req, file, cb) => {
     const user = await databaseHandler.findOneInDocument(User, 'selected', true);
-    if (!user) {
-      return;
+    let name = '0';
+    if (user && user[0]) {
+      name = user[0].__id;
     }
-    const name = user[0].__id;
     const extension = file['mimetype'].split('image/')[1];
     cb(null, name + '.' + extension);
   },
@@ -78,6 +78,12 @@ const startServer = () => {
     io.on('connect', socket => {});
   });
 };
+
+app.get('/alreadySetup', (req, res) => {
+  databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
+    res.send(values && values.length > 0);
+  });
+});
 
 app.get('/getResults', (req, res) => {
   const search = req.query.search;
@@ -138,7 +144,11 @@ app.get('/currentUser', (req, res) => {
 
 app.get('/bookmarks', (req, res) => {
   databaseHandler.findOneInDocument(User, 'selected', true).then(value => {
-    res.json(value[0].favorites);
+    if (value && value.length > 0) {
+      res.status(200).json(value[0].favorites);
+    } else {
+      res.status(401);
+    }
   });
 });
 
@@ -194,6 +204,29 @@ app.get('/allData', async (req, res) => {
 app.get('/allPlaylists', (req, res) => {
   databaseHandler.getCollectionContent(Playlist).then(playlists => {
     res.json(playlists);
+  });
+});
+
+app.post('/setupLouki', profileUpload.single('profile-picture'), (req, res) => {
+  let profilePicture = '';
+  if ((req as any).file) {
+    const extension = (req as any).file['mimetype'].split('image/')[1];
+    profilePicture = '/assets/uploads/0.' + extension;
+  }
+
+  User.create({
+    name: req.body.username,
+    picture: profilePicture,
+    selected: true,
+    __id: 0,
+    settings: {
+      language: 'english',
+      username: '',
+      profilePicture: profilePicture,
+      internetUsage: true,
+    },
+  }).then(user => {
+    res.status(200).json(user);
   });
 });
 

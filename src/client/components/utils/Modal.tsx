@@ -8,14 +8,11 @@ import ResponsiveAdapter from './ResponsiveAdapter';
 
 const styles = (theme: Theme) =>
   createStyles({
-    headerContainer: {
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-    },
     title: {
       fontSize: '1.8rem',
       textTransform: 'uppercase',
       color: '#fff',
+      display: 'inline-block',
     },
     buttonsContainer: {
       paddingBottom: '16px !important',
@@ -27,6 +24,14 @@ const styles = (theme: Theme) =>
       position: 'relative',
       top: '-0.3em',
     },
+    steps: {
+      fontSize: '1.8rem',
+      textTransform: 'uppercase',
+      color: '#fff',
+      opacity: 0.3,
+      display: 'inline-block',
+      marginRight: '0.3em',
+    },
   });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -35,13 +40,14 @@ interface IProps extends WithStyles<typeof styles> {
   title: string;
   maxWidth?: Breakpoint;
   buttons: Array<JSX.Element>;
-  maxHeight?: string | number;
+  preventClosing?: boolean;
+  steps?: string;
 }
 
 @observer
 class Modal extends React.Component<React.PropsWithChildren<IProps>, NoState> {
   render() {
-    const { classes, children, onClose, open, title, buttons, maxWidth } = this.props;
+    const { classes, children, onClose, open, title, buttons, maxWidth, preventClosing, steps } = this.props;
 
     return (
       <ResponsiveAdapter
@@ -49,13 +55,16 @@ class Modal extends React.Component<React.PropsWithChildren<IProps>, NoState> {
         desktop={<Dialog maxWidth={maxWidth ? maxWidth : 'sm'} open={open} onClose={onClose} fullWidth />}
         mobile={<Dialog fullScreen open={open} onClose={onClose} />}
       >
-        <Grid container direction='row' justify='space-between' alignItems='center' className={classes.headerContainer}>
+        <Grid container direction='row' justify='space-between' alignItems='center'>
           <DialogTitle>
+            <Typography className={classes.steps}>{steps}</Typography>
             <Typography className={classes.title}>{title}</Typography>
           </DialogTitle>
-          <IconButton className={classes.closeIcon} onClick={onClose} aria-label='close'>
-            <CloseIcon />
-          </IconButton>
+          {!preventClosing && (
+            <IconButton className={classes.closeIcon} onClick={onClose} aria-label='close'>
+              <CloseIcon />
+            </IconButton>
+          )}
         </Grid>
         <DialogContent>{children}</DialogContent>
         <DialogActions className={classes.buttonsContainer}>{buttons}</DialogActions>

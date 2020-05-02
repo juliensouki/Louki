@@ -27,8 +27,10 @@ export default class DataLoader {
   loadData = (callback: () => void) => {
     this.databaseHandler.getCollectionContent(User).then(users => {
       this.currentUser = this.selectCurrentUser(users);
-      this.checkForObsoleteDataInDB();
-      this.watchUserFolders();
+      if (this.currentUser) {
+        this.checkForObsoleteDataInDB();
+        this.watchUserFolders();
+      }
       callback();
     });
   };
