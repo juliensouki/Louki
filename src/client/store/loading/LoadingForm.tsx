@@ -58,6 +58,10 @@ class LoadingForm {
     this.checkThatEverythingHasLoaded();
   };
 
+  @action setEverythingLoaded = (everythingLoaded: boolean) => {
+    this.everythingLoaded = everythingLoaded;
+  };
+
   @computed public get loadingIsComplete(): boolean {
     return this.everythingLoaded;
   }

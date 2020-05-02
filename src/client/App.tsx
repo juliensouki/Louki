@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { observable, action } from 'mobx';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import Layout from './components/Layout';
@@ -13,21 +14,41 @@ import { LoadMusics } from './requests/Musics';
 import { SnackbarProvider } from 'notistack';
 @observer
 export default class App extends React.Component<NoProps, NoState> {
-  async componentDidMount() {
-    LoadUser();
-    LoadPlaylists();
-    LoadMusics();
-    LoadArtists();
-    LoadAlbums();
-    LoadBookmarks();
+  @observable displaySetupModal: boolean = false;
+
+  componentDidMount() {
+    this.loadEverything();
   }
+
+  componentDidUpdate() {
+    this.loadEverything();
+  }
+
+  loadEverything = async () => {
+    fetch('/alreadySetup')
+      .then(res => {
+        return res.json();
+      })
+      .then(alreadySetup => {
+        if ((this.displaySetupModal = !alreadySetup) == true) {
+          LoadingForm.setEverythingLoaded(true);
+        } else {
+          LoadUser();
+          LoadPlaylists();
+          LoadMusics();
+          LoadArtists();
+          LoadAlbums();
+          LoadBookmarks();
+        }
+      });
+  };
 
   render() {
     if (LoadingForm.loadingIsComplete) {
       return (
         <MuiThemeProvider theme={theme}>
           <SnackbarProvider maxSnack={4} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-            <Layout />
+            <Layout setupModal={this.displaySetupModal} />
           </SnackbarProvider>
         </MuiThemeProvider>
       );
