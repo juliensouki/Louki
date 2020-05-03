@@ -8,6 +8,9 @@ import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistBody from '../../fragments/playlist-artists-or-albums/PlaylistBody';
 
+import { Stats } from '../../../store/statistics/Stats';
+import MusicsData from '../../../store/common/MusicsData';
+
 import artistsTexts from '../../../lang/pages/artists';
 import albumsTexts from '../../../lang/pages/albums';
 
@@ -45,7 +48,14 @@ class ArtistsOrAlbums extends React.Component<RouteComponentProps, NoState> {
 
     return (
       <div style={{ width: '100%' }}>
-        <PlaylistHeader subTitle={this.subTitle} title={this.title} image={image} noStartButton />
+        <PlaylistHeader
+          subTitle={this.subTitle}
+          title={this.title}
+          image={image}
+          noStartButton
+          stat={this.page == Page.ARTISTS ? Stats.NUMBER_OF_ARTISTS : Stats.NUMBER_OF_ALBUMS}
+          statArg={this.page == Page.ARTISTS ? MusicsData.allArtists.length : MusicsData.allAlbums.length}
+        />
         <SearchContainer />
         <PlaylistBody page={this.page} />
       </div>

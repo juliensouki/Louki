@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import NavigationForm from '../../store/common/NavigationForm';
+import { addSecondsOfPlaying } from '../statistics/Stats';
 import IMusic from '../../../shared/IMusic';
 import texts from '../../lang/fragments/music-preview';
 
@@ -20,6 +21,8 @@ class MusicPlayer {
   @observable private audioLevel: number = 100;
   @observable private isMute: boolean = false;
   @observable private route: string = '';
+
+  @observable private timeStart: Date | null;
 
   @action muteUnMute = () => {
     this.isMute = !this.isMute;
@@ -63,6 +66,8 @@ class MusicPlayer {
       else if (this.musicPlayingIndex == this.currentPlaylist.length - 1) {
         if (this.repeatMode == MusicLoop.NO_REPEAT) {
           this.audio = null;
+          this.calculateTimePlaying();
+          this.timeStart = null;
           return;
         } else if (this.repeatMode == MusicLoop.REPEAT_ALL) this.musicPlayingIndex = 0;
         this.playMusic(this.musicPlayingIndex);
@@ -71,6 +76,8 @@ class MusicPlayer {
   };
 
   @action playMusic = (index: number): void => {
+    this.calculateTimePlaying();
+    this.timeStart = new Date();
     this.route = NavigationForm.currentRoute;
     if (this.audio != null) this.audio.pause();
     this.musicPlayingIndex = index;
@@ -79,9 +86,23 @@ class MusicPlayer {
 
   @action public pauseOrPlay = (): void => {
     if (this.audio == null) return;
-    if (this.isPlaying == true) this.audio.pause();
-    else this.audio.play();
+    if (this.isPlaying == true) {
+      this.calculateTimePlaying();
+      this.timeStart = null;
+      this.audio.pause();
+    } else {
+      this.timeStart = new Date();
+      this.audio.play();
+    }
     this.isPlaying = !this.isPlaying;
+  };
+
+  @action calculateTimePlaying = () => {
+    if (this.timeStart != null) {
+      const endDate = new Date();
+      const duration = (+endDate - +this.timeStart) / 1000;
+      addSecondsOfPlaying(duration);
+    }
   };
 
   @action public nextSong = (): void => {

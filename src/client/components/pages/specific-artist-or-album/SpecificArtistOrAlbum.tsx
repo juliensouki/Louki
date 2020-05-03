@@ -4,7 +4,10 @@ import { observable } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import IMusic from '../../../../shared/IMusic';
+
 import MusicsData from '../../../store/common/MusicsData';
+import { Stats } from '../../../store/statistics/Stats';
+
 import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
@@ -43,7 +46,13 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
 
     return (
       <div style={{ width: '100%' }}>
-        <PlaylistHeader title={this.artistOrAlbumName} subTitle={subTitle} description='' image={image} />
+        <PlaylistHeader
+          title={this.artistOrAlbumName}
+          subTitle={subTitle}
+          image={image}
+          playlist={this.playlist}
+          stat={Stats.TIME_SPENT_LISTENING}
+        />
         <SearchContainer />
         <PlaylistBody playlist={this.playlist} canAddToFavorites allSongs />
       </div>

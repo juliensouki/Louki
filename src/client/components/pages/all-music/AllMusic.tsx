@@ -7,6 +7,7 @@ import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
 import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 import MusicsData from '../../../store/common/MusicsData';
+import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/all-songs';
 
@@ -27,7 +28,12 @@ class AllMusic extends React.Component<IProps, NoState> {
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader {...T.playlistHeader} playlist={MusicsData.allMusics} image='/assets/images/all-musics.png' />
+        <PlaylistHeader
+          {...T.playlistHeader}
+          playlist={MusicsData.allMusics}
+          image='/assets/images/all-musics.png'
+          stat={Stats.TIME_SPENT_LISTENING}
+        />
         <SearchContainer />
         <PlaylistBody canAddToFavorites playlist={MusicsData.allMusics} allSongs />
       </div>

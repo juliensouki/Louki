@@ -8,6 +8,8 @@ import SearchContainer from '../../fragments/playlist/SearchContainer';
 import PlaylistBody from '../../fragments/playlist/PlaylistBody';
 
 import BookmarksData from '../../../store/common/BookmarksData';
+import { Stats } from '../../../store/statistics/Stats';
+
 import texts from '../../../lang/pages/favorites';
 
 const styles = (theme: Theme) =>
@@ -27,7 +29,12 @@ class Favorites extends React.Component<IProps, NoState> {
 
     return (
       <div className={classes.root}>
-        <PlaylistHeader {...T.playlistHeader} playlist={BookmarksData.bookmarks} image='/assets/images/favorites.png' />
+        <PlaylistHeader
+          {...T.playlistHeader}
+          playlist={BookmarksData.bookmarks}
+          image='/assets/images/favorites.png'
+          stat={Stats.TIME_SPENT_LISTENING}
+        />
         <SearchContainer />
         <PlaylistBody playlist={BookmarksData.bookmarks} favorites />
       </div>
