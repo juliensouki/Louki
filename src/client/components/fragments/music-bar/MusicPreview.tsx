@@ -31,6 +31,9 @@ const styles = (theme: Theme) =>
       [theme.breakpoints.down('md')]: {
         width: 80,
       },
+      [theme.breakpoints.down('xs')]: {
+        width: 50,
+      },
     },
     musicImage: {
       maxWidth: '100%',

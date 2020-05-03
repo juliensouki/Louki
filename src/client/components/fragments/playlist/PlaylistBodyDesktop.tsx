@@ -199,7 +199,9 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & R
                       </IconButton>
                     )
                   ) : null}
-                  {MusicPlayer.playingMusicId == row.__id && NavigationForm.currentRoute == MusicPlayer.playlistRoute ? (
+                  {MusicPlayer.isPlaying &&
+                  MusicPlayer.playingMusicId == row.__id &&
+                  NavigationForm.currentRoute == MusicPlayer.playlistRoute ? (
                     <MusicPlayingIcon />
                   ) : null}
                   {row.title}

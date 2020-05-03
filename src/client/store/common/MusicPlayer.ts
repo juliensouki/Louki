@@ -66,6 +66,7 @@ class MusicPlayer {
       else if (this.musicPlayingIndex == this.currentPlaylist.length - 1) {
         if (this.repeatMode == MusicLoop.NO_REPEAT) {
           this.audio = null;
+          this.isPlaying = false;
           this.calculateTimePlaying();
           this.timeStart = null;
           return;
