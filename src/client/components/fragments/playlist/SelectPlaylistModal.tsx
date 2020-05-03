@@ -36,7 +36,7 @@ const styles = (theme: Theme) =>
   });
 
 interface IProps extends WithStyles<typeof styles> {
-  handleClose: () => void;
+  handleClose: (e: any) => void;
   open: boolean;
   musicId: string;
 }
@@ -61,16 +61,17 @@ class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, No
     const classes = this.props.classes;
     return [
       <Button key={0} className={classes.cancel} onClick={this.props.handleClose}>
-        Cancel
+        {texts.current.cancel}
       </Button>,
     ];
   }
 
   render() {
     const { classes, open, handleClose } = this.props;
+    const T = texts.current;
 
     return (
-      <Modal open={open} onClose={handleClose} maxWidth='xs' title='Choose a playlist' buttons={this.buttons}>
+      <Modal open={open} onClose={handleClose} maxWidth='xs' title={T.title} buttons={this.buttons}>
         <List>
           {MusicsData.allPlaylists.map(playlist => {
             return (
@@ -80,7 +81,7 @@ class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, No
                 onClick={event => {
                   event.stopPropagation();
                   this.handleListItemClick(playlist);
-                  handleClose();
+                  handleClose(event);
                 }}
               >
                 <Typography className={classes.text}>{playlist.name}</Typography>

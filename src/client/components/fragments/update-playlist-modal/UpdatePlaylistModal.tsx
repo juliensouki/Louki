@@ -1,11 +1,16 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
-import PlaylistData from '../../../store/common/PlaylistData';
 import Modal from '../../utils/Modal';
+import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
+import IPlaylist from '../../../../shared/IPlaylist';
+
+import texts from '../../../lang/fragments/update-playlist-modal';
+import MusicsData from '../../../store/common/MusicsData';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -53,14 +58,14 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class SelectPlaylistModal extends React.Component<IProps, NoState> {
+class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, NoState> {
   @observable name: string | null = null;
   @observable description: string = '';
 
   componentDidUpdate() {
-    if (PlaylistData.currentPlaylist != null && this.name == null) {
-      this.name = PlaylistData.currentPlaylist.name;
-      this.description = PlaylistData.currentPlaylist.description;
+    if (CurrentPlaylist.currentPlaylist != null && this.name == null) {
+      this.name = CurrentPlaylist.currentPlaylist.name;
+      this.description = CurrentPlaylist.currentPlaylist.description;
     }
   }
 
@@ -74,7 +79,7 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
   };
 
   updatePlaylist = () => {
-    if (PlaylistData.currentPlaylist != null) {
+    if (CurrentPlaylist.currentPlaylist != null) {
       fetch('/updatePlaylist', {
         method: 'POST',
         headers: {
@@ -82,34 +87,46 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          playlistId: PlaylistData.currentPlaylist.__id,
+          playlistId: CurrentPlaylist.currentPlaylist.__id,
           playlistName: this.name,
           playlistDescription: this.description,
         }),
-      });
+      })
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          this.props.handleClose();
+          CurrentPlaylist.setPlaylist(data.currentPlaylist as IPlaylist);
+          MusicsData.setPlaylists(data.playlists as Array<IPlaylist>);
+          const snackbarOptions = { variant: 'success' as any };
+          this.props.enqueueSnackbar(texts.current.playlistUpdated(this.name), snackbarOptions);
+        });
     }
   };
 
   get buttons(): Array<JSX.Element> {
     const classes = this.props.classes;
+    const T = texts.current;
     return [
       <Button key={0} className={classes.cancel} onClick={this.handleClose}>
-        Cancel
+        {T.cancel}
       </Button>,
       <Button key={1} className={classes.save} onClick={this.updatePlaylist}>
-        Save
+        {T.save}
       </Button>,
     ];
   }
 
   render() {
     const { classes, open, handleClose } = this.props;
+    const T = texts.current;
 
     return (
-      <Modal onClose={handleClose} title='Update playlist information' maxWidth='sm' buttons={this.buttons} open={open}>
+      <Modal onClose={handleClose} title={T.title} maxWidth='sm' buttons={this.buttons} open={open}>
         <TextField
           className={classes.textfield}
-          label='Name'
+          label={T.namePlaceholder}
           value={this.name != null ? this.name : ''}
           name='name'
           onChange={this.handleChange}
@@ -122,7 +139,7 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
         />
         <TextField
           id='filled-multiline-static'
-          label='Description'
+          label={T.description}
           name='description'
           multiline
           rows='4'
@@ -143,4 +160,4 @@ class SelectPlaylistModal extends React.Component<IProps, NoState> {
   }
 }
 
-export default withStyles(styles)(SelectPlaylistModal);
+export default withSnackbar(withStyles(styles)(SelectPlaylistModal));

@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import CheckIcon from '@material-ui/icons/Check';
+import texts from '../../../lang/fragments/add-picture-modal';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -41,6 +42,7 @@ interface IProps extends WithStyles<typeof styles> {
 class UploadByUrl extends React.Component<IProps, NoState> {
   render() {
     const { classes } = this.props;
+    const T = texts.current;
 
     return (
       <div>
@@ -52,7 +54,7 @@ class UploadByUrl extends React.Component<IProps, NoState> {
             className={classes.input}
             value={this.props.url}
             onChange={this.props.onChange}
-            placeholder='Enter an image url'
+            placeholder={T.uploadPlaceholder}
             inputProps={{ 'aria-label': 'search google maps' }}
           />
           <IconButton className={classes.iconButton}>

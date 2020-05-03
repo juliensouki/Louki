@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import FolderIcon from '@material-ui/icons/Folder';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
@@ -113,7 +114,7 @@ const BootstrapInput = withStyles(theme => ({
 }))(InputBase);
 
 @observer
-class Settings extends React.Component<Props & RouteComponentProps, NoState> {
+class Settings extends React.Component<Props & RouteComponentProps & WithSnackbarProps, NoState> {
   @observable isPixabayAPIKeyValid: boolean = false;
   @observable pixabayTestLoading: boolean = true;
 
@@ -141,6 +142,8 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
         })
         .then(data => {
           UserData.setUser(data);
+          const snackbarOptions = { variant: 'success' as any };
+          this.props.enqueueSnackbar(texts.current.settingsUpdated, snackbarOptions);
           this.props.history.push(NavigationForm.previousRoute);
         });
     }
@@ -166,6 +169,7 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
 
   resetLouki = () => {
     SettingsForm.setOpen(false);
+    localStorage.clear();
     fetch('/resetLouki', { method: 'POST' }).then(() => {
       LoadingForm.reloadApp();
     });
@@ -174,7 +178,7 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
   render() {
     const { classes } = this.props;
     const T = texts.current;
-    const status = this.isPixabayAPIKeyValid ? 'Valid' : 'Invalid or not found';
+    const status = this.isPixabayAPIKeyValid ? T.valid : T.invalid;
     const statusIcon = this.isPixabayAPIKeyValid ? (
       <CheckIcon className={classes.statusIcon} style={{ color: 'green' }} />
     ) : (
@@ -185,8 +189,7 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
       <React.Fragment>
         <ConfirmModal
           open={SettingsForm.open}
-          title='Are you sure ?'
-          message='This action cannot be undone. Every data stored will be lost.'
+          {...T.confirmModal}
           onCancel={this.closeConfirmModal}
           onConfirm={this.resetLouki}
         />
@@ -228,7 +231,7 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
               <Typography className={classes.text}>
-                {T.directories} : {UserData.folders.length} {UserData.folders.length > 1 ? 'folders' : 'folder'}
+                {T.directories} : {UserData.folders.length} {T.folders(UserData.folders.length)}
               </Typography>
               <Button
                 className={classes.button}
@@ -248,7 +251,7 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
               />
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-              <Typography className={classes.text}>Language : </Typography>
+              <Typography className={classes.text}>{T.language} : </Typography>
               <Select
                 id='demo-customized-select-native'
                 value={SettingsForm.language}
@@ -299,4 +302,4 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
   }
 }
 
-export default withRouter(withStyles(styles)(Settings));
+export default withSnackbar(withRouter(withStyles(styles)(Settings)));

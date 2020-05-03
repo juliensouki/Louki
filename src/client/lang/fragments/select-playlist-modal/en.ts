@@ -5,4 +5,6 @@ export default {
   alreadyInPlaylistNotif(musicName: string, playlistName: string): string {
     return musicName + ' is already in playlist ' + playlistName;
   },
+  title: 'Choose a playlist',
+  cancel: 'Cancel',
 };

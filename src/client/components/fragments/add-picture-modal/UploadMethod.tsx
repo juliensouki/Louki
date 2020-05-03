@@ -7,6 +7,8 @@ import { Typography, Button, Divider } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 
+import texts from '../../../lang/fragments/add-picture-modal';
+
 const styles = (theme: Theme) =>
   createStyles({
     text: {
@@ -35,24 +37,25 @@ interface IProps extends WithStyles<typeof styles> {
 class UploadMethod extends React.Component<IProps, NoState> {
   render() {
     const { classes, handleUrl, handleSearch } = this.props;
+    const T = texts.current;
 
     return (
       <React.Fragment>
         <Typography className={classes.text} style={{ marginBottom: '1em' }}>
-          Add a new picture using one of the following ways :
+          {T.helper}
         </Typography>
         <Button className={classes.button} onClick={handleUrl}>
-          <SearchIcon style={{ marginRight: '0.7em' }} /> Upload
+          <SearchIcon style={{ marginRight: '0.7em' }} /> {T.upload}
         </Button>
         <Typography className={classes.text} style={{ display: 'inline-block' }}>
-          a picture using a url
+          {T.uploadText}
         </Typography>
         <Divider className={classes.divider} />
         <Button className={classes.button} onClick={handleSearch}>
-          <ImageSearchIcon style={{ marginRight: '0.7em' }} /> Search
+          <ImageSearchIcon style={{ marginRight: '0.7em' }} /> {T.search}
         </Button>
         <Typography className={classes.text} style={{ display: 'inline-block' }}>
-          and upload a picture directly from Louki
+          {T.searchText}
         </Typography>
       </React.Fragment>
     );

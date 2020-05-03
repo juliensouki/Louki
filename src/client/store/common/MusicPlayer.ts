@@ -212,6 +212,10 @@ class MusicPlayer {
   @computed get playlistRoute(): string {
     return this.route;
   }
+
+  @computed get canPlayPlaylist(): boolean {
+    return true;
+  }
 }
 
 export default new MusicPlayer();

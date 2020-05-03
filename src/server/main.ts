@@ -82,7 +82,6 @@ const startServer = () => {
 app.get('/pixabay', (req, res) => {
   searchImages(process.env.PIXABAY_API_KEY, 'piano')
     .then(results => {
-      console.log(results);
       if (results && results.hits.length > 0) {
         res.status(200).json({ result: true });
       } else {
@@ -181,6 +180,20 @@ app.get('/playlist', (req, res) => {
 app.get('/allMusics', (req, res) => {
   databaseHandler.getCollectionContent(Music).then(musics => {
     res.json(musics);
+  });
+});
+
+app.post('/resetLouki', (req, res) => {
+  const promises = [
+    User.deleteMany({}),
+    Music.deleteMany({}),
+    Playlist.deleteMany({}),
+    Artist.deleteMany({}),
+    Album.deleteMany({}),
+  ];
+
+  Promise.all(promises).then(() => {
+    res.status(200).json({});
   });
 });
 
@@ -395,7 +408,15 @@ app.post('/updatePlaylist', (req, res) => {
     name: playlistName,
     description: playlistDescription,
   };
-  databaseHandler.updateDocument(Playlist, playlistId, jsonUpdate);
+  databaseHandler.updateDocument(Playlist, playlistId, jsonUpdate).then(() => {
+    databaseHandler.getCollectionContent(Playlist).then(async playlists => {
+      const currentPlaylist = await databaseHandler.findOneInDocument(Playlist, '__id', playlistId);
+      res.status(200).json({
+        playlists: playlists,
+        currentPlaylist: currentPlaylist[0],
+      });
+    });
+  });
 });
 
 app.use(apiRouter());

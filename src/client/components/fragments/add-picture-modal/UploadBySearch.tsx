@@ -10,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { Typography } from '@material-ui/core';
 
+import texts from '../../../lang/fragments/add-picture-modal';
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -127,6 +129,7 @@ class UploadBySearch extends React.Component<IProps, NoState> {
     const { classes } = this.props;
     const imagePerLine = 3;
     const imageRows = this.organizeImages(this.resultsArray, imagePerLine);
+    const T = texts.current;
 
     return (
       <div style={{ width: '100%' }} onKeyPress={this.handleKeyPress}>
@@ -138,15 +141,15 @@ class UploadBySearch extends React.Component<IProps, NoState> {
             className={classes.input}
             value={this.props.searchText}
             onChange={this.props.onChange}
-            placeholder='Search an image'
-            inputProps={{ 'aria-label': 'Search an image' }}
+            placeholder={T.searchPlaceholder}
+            inputProps={{ 'aria-label': T.searchPlaceholder }}
           />
           <Button className={classes.searchButton} onClick={this.search}>
-            Search
+            {T.search}
           </Button>
         </Paper>
         <Typography className={classes.text}>
-          Search done thanks to
+          {T.credits}
           <a href='https://pixabay.com/' target='_blank' rel='noopener noreferrer' style={{ marginLeft: 5 }}>
             Pixabay
           </a>

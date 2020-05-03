@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 import MusicsData from '../../../store/common/MusicsData';
@@ -78,7 +79,7 @@ interface Props extends WithStyles<typeof styles> // eslint-disable-line
 }; // eslint-disable-line
 
 @observer
-class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> {
+class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnackbarProps, NoState> {
   @observable nameHelper: string = '';
   @observable descriptionHelper: string = '';
   @observable open: boolean = false;
@@ -124,6 +125,8 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
         })
         .then(data => {
           MusicsData.setPlaylists(data);
+          const snackbarOptions = { variant: 'success' as any };
+          this.props.enqueueSnackbar(texts.current.playlistCreated(CreatePlaylistForm.name), snackbarOptions);
           this.props.history.push('/all-music');
         });
     } else {
@@ -290,4 +293,4 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps, NoState> 
   }
 }
 
-export default withRouter(withStyles(styles)(NewPlaylist));
+export default withSnackbar(withRouter(withStyles(styles)(NewPlaylist)));

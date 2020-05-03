@@ -11,6 +11,8 @@ import UploadByUrl from './UploadByUrl';
 import UploadBySearch from './UploadBySearch';
 import UploadConfirmation from './UploadConfirmation';
 
+import texts from '../../../lang/fragments/add-picture-modal';
+
 import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
 
 const styles = (theme: Theme) =>
@@ -56,26 +58,27 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
 
   @computed get buttons(): Array<JSX.Element> {
     const { classes } = this.props;
+    const T = texts.current;
 
     if (this.step == AddPictureSteps.UPLOAD_METHOD) {
       return [
         <Button onClick={this.onClose} className={classes.cancelButton} key={0}>
-          Cancel
+          {T.cancel}
         </Button>,
       ];
     } else if (this.step == AddPictureSteps.UPLOAD_BY_URL || this.step == AddPictureSteps.UPLOAD_BY_SEARCH) {
       return [
         <Button key={0} className={classes.cancelButton} onClick={this.previousStep}>
-          Back
+          {T.back}
         </Button>,
         <Button key={1} className={classes.confirmButton} disabled={!this.UrlRegExp} onClick={this.nextStep}>
-          Next
+          {T.next}
         </Button>,
       ];
     }
     return [
       <Button key={0} className={classes.cancelButton} onClick={this.tryAgain} disabled={!this.confirmationLoaded}>
-        Try again
+        {T.tryAgain}
       </Button>,
       <Button
         key={1}
@@ -83,7 +86,7 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
         onClick={this.submit}
         disabled={!this.confirmationLoaded || this.error}
       >
-        Yes
+        {T.yes}
       </Button>,
     ];
   }
@@ -178,11 +181,13 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
       );
     }
 
+    const T = texts.current;
+
     return (
       <Modal
         open={open}
         onClose={this.onClose}
-        title={this.step == AddPictureSteps.UPLOAD_CONFIRMATION ? 'Confirmation' : 'Image picker'}
+        title={this.step == AddPictureSteps.UPLOAD_CONFIRMATION ? T.confirmation : T.title}
         buttons={this.buttons}
       >
         {stepComponent}

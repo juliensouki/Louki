@@ -123,7 +123,8 @@ class PlaylistOptions extends React.Component<IProps & RouteComponentProps & Wit
     this.openPlaylistsModal = true;
   };
 
-  handleCloseModal = () => {
+  handleCloseModal = event => {
+    event.stopPropagation();
     this.openPlaylistsModal = false;
   };
 

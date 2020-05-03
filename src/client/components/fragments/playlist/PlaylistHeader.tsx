@@ -219,6 +219,7 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
                       variant='extended'
                       size='medium'
                       className={classes.playlistButton}
+                      disabled={!MusicPlayer.canPlayPlaylist}
                       aria-label='play'
                       onClick={this.startPlaylist}
                     >
@@ -231,7 +232,7 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
             </Grid>
             <Grid item style={{ width: '100%' }}>
               <Typography className={classes.playlistDescription}>
-                {playlist ? T.nbMusics(playlist.length) : ''}
+                {description ? description : playlist ? T.nbMusics(playlist.length) : ''}
               </Typography>
               <Typography className={classes.playlistDescription}>{getStat(stat, statArg)}</Typography>
             </Grid>

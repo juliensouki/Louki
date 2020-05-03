@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Button, Typography, Paper, InputBase, IconButton } from '@material-ui/core';
@@ -9,6 +10,7 @@ import SettingsForm from '../../../store/pages/settings/SettingsForm';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UserData from '../../../store/common/UserData';
+import texts from '../../../lang/pages/settings';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -72,7 +74,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class AddPlaylistModal extends React.Component<IProps, NoState> {
+class AddPlaylistModal extends React.Component<IProps & WithSnackbarProps, NoState> {
   @observable folderToAdd: string = '';
 
   @action handleChange = (folderToAdd: string) => {
@@ -98,6 +100,8 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
         return res.json();
       })
       .then(user => {
+        const snackbarOptions = { variant: 'success' as any };
+        this.props.enqueueSnackbar(texts.current.folderRemoved(folder), snackbarOptions);
         UserData.setUser(user);
       });
   };
@@ -119,6 +123,8 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
         })
         .then(user => {
           UserData.setUser(user);
+          const snackbarOptions = { variant: 'success' as any };
+          this.props.enqueueSnackbar(texts.current.folderAdded(this.folderToAdd), snackbarOptions);
           this.folderToAdd = '';
         });
     }
@@ -126,9 +132,10 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
 
   render() {
     const { classes, open, folders } = this.props;
+    const T = texts.current;
 
     return (
-      <Modal open={open} title={'Manager folders'} buttons={[]} onClose={this.onClose}>
+      <Modal open={open} title={T.manageFolders.title} buttons={[]} onClose={this.onClose}>
         <Paper className={classes.root}>
           <InputBase
             className={classes.input}
@@ -136,11 +143,11 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
             onChange={e => {
               this.handleChange(e.target.value);
             }}
-            placeholder='Add a folder (you must provide full path)'
-            inputProps={{ 'aria-label': 'Add a folder' }}
+            placeholder={T.manageFolders.placeholder}
+            inputProps={{ 'aria-label': T.manageFolders.placeholder }}
           />
           <Button className={classes.confirmButton} onClick={this.addNewFolder}>
-            Add folder
+            {T.manageFolders.button}
           </Button>
         </Paper>
         <Paper className={classes.folderContainer}>
@@ -164,4 +171,4 @@ class AddPlaylistModal extends React.Component<IProps, NoState> {
   }
 }
 
-export default withStyles(styles)(AddPlaylistModal);
+export default withSnackbar(withStyles(styles)(AddPlaylistModal));

@@ -14,6 +14,22 @@ export interface Definition { // eslint-disable-line
   resetWarning: string;
   cancel: string;
   save: string;
+  confirmModal: {
+    title: string;
+    message: string;
+  };
+  valid: string;
+  invalid: string;
+  language: string;
+  folders: (nb: number) => string;
+  manageFolders: {
+    title: string;
+    placeholder: string;
+    button: string;
+  };
+  settingsUpdated: string;
+  folderAdded: (folder: string) => string;
+  folderRemoved: (folder: string) => string;
 }
 
 export default new LanguagesManager<Definition>(
