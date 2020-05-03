@@ -11,6 +11,7 @@ import IPlaylist from '../../../../shared/IPlaylist';
 
 import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
 import MusicsData from '../../../store/common/MusicsData';
+import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/custom-playlist';
 @observer
@@ -34,6 +35,7 @@ class Playlist extends React.Component<RouteComponentProps, NoState> {
           }
           title={playlist != null ? playlist.name : ''}
           description={playlist != null ? playlist.description : ''}
+          stat={Stats.TIME_SPENT_LISTENING}
         />
         <SearchContainer />
         <PlaylistBody playlist={musics} customPlaylist />

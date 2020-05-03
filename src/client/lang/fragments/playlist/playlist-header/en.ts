@@ -3,7 +3,8 @@ export default {
   continue: 'Continue',
   pause: 'Pause',
   nbMusics(nb: number): string {
-    return 'You have ' + nb + ' musics in your favorites.';
+    const s = nb < 2 ? '' : 's';
+    return `You have ${nb} music${s} in this playlist`;
   },
-  hardcodedStat: 'You spent 5 days 12 hours and 6 minutes listening to your music.',
+  hardcodedStat: 'You spent 5 days 12 hours and 6 minutes listening to your music',
 };

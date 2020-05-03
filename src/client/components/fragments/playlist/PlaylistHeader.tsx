@@ -10,6 +10,7 @@ import PlaylistOptions from './PlaylistOptions';
 import MusicPlayer from '../../../store/common/MusicPlayer';
 import NavigationForm from '../../../store/common/NavigationForm';
 import IMusic from '../../../../shared/IMusic';
+import { Stats, getStat } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/fragments/playlist/playlist-header';
 
@@ -128,6 +129,8 @@ interface IProps extends WithStyles<typeof styles> {
   image: string;
   description?: string;
   noStartButton?: boolean;
+  stat: Stats;
+  statArg?: any;
 }
 
 @observer
@@ -159,7 +162,7 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
   };
 
   render() {
-    const { classes, playlist, description, image, noStartButton } = this.props;
+    const { classes, playlist, description, image, noStartButton, stat, statArg } = this.props;
     const T = texts.current;
     let icon: JSX.Element;
     let buttonText: string;
@@ -228,9 +231,9 @@ class PlaylistHeader extends React.Component<IProps, NoState> {
             </Grid>
             <Grid item style={{ width: '100%' }}>
               <Typography className={classes.playlistDescription}>
-                {description ? description : playlist ? T.nbMusics(playlist.length) : ''}
+                {playlist ? T.nbMusics(playlist.length) : ''}
               </Typography>
-              <Typography className={classes.playlistDescription}>{T.hardcodedStat}</Typography>
+              <Typography className={classes.playlistDescription}>{getStat(stat, statArg)}</Typography>
             </Grid>
           </Grid>
         </Grid>
