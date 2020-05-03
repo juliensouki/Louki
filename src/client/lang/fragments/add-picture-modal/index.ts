@@ -4,10 +4,24 @@ import { Language } from '../../../../shared/Languages';
 import LanguagesManager from '../../../store/LanguagesManager';
 
 export interface Definition { // eslint-disable-line
-  addedToPlaylistNotif(musicName: string, playlistName: string): string;
-  alreadyInPlaylistNotif(musicName: string, playlistName: string): string;
   title: string;
   cancel: string;
+  helper: string;
+  upload: string;
+  search: string;
+  uploadText: string;
+  searchText: string;
+  confirmation: string;
+  back: string;
+  tryAgain: string;
+  next: string;
+  yes: string;
+  uploadPlaceholder: string;
+  error: string;
+  searchPlaceholder: string;
+  credits: string;
+  searchButton: string;
+  confirmationMessage: string;
 }
 
 export default new LanguagesManager<Definition>(

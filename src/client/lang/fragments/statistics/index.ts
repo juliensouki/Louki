@@ -4,10 +4,13 @@ import { Language } from '../../../../shared/Languages';
 import LanguagesManager from '../../../store/LanguagesManager';
 
 export interface Definition { // eslint-disable-line
-  addedToPlaylistNotif(musicName: string, playlistName: string): string;
-  alreadyInPlaylistNotif(musicName: string, playlistName: string): string;
-  title: string;
-  cancel: string;
+  noListen: string;
+  listened: (time: string) => string;
+  nbArtists: (nb: number) => string;
+  nbAlbums: (nb: number) => string;
+  days: (nb: number) => string;
+  hours: (nb: number) => string;
+  minutes: (nb: number) => string;
 }
 
 export default new LanguagesManager<Definition>(

@@ -62,7 +62,7 @@ class SetupModal extends React.Component<IProps, NoState> {
   @action validation = () => {
     SetupForm.submit().then(res => {
       if (res.status == 200) {
-        LoadingForm.setEverythingLoaded(false);
+        LoadingForm.reloadApp();
       }
     });
   };

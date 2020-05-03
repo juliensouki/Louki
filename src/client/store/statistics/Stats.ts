@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import texts from '../../lang/fragments/statistics';
 
 export enum Stats {
   TIME_SPENT_LISTENING = 0,
@@ -16,8 +16,8 @@ const nbTimesCustomPlaylist = (playlist: string): string => {
 const timeSpentListening = (): string => {
   const seconds: number = Number(localStorage.getItem('time_listening_music')) || 0;
   return seconds == 0
-    ? "You didn't listen to any music yet."
-    : `You spent ${secondsToDhms(seconds)} listening to your music`;
+    ? texts.current.noListen //You didn't listen to any music yet.
+    : texts.current.listened(secondsToDhms(seconds)); //${secondsToDhms(seconds)} listening to your music`;
 };
 
 const recentlyAdded = (type: string): string => {
@@ -26,15 +26,15 @@ const recentlyAdded = (type: string): string => {
 
 const numberOfSongs = (nb: number) => {
   const s = nb < 2 ? '' : 's';
-  return `There are ${nb} music${s} in this playlist.`;
+  return `There are ${nb} music${s} in this playlist.`; // translate later
 };
 
 const numberOfArtists = (nb: number) => {
-  return `You have ${nb} artists`;
+  return texts.current.nbArtists(nb); //You have ${nb} artists
 };
 
 const numberOfAlbums = (nb: number) => {
-  return `You have ${nb} albums`;
+  return texts.current.nbAlbums(nb); //You have ${nb} albums
 };
 
 const statistics: Array<(arg: any) => string> = [
@@ -46,17 +46,15 @@ const statistics: Array<(arg: any) => string> = [
   numberOfAlbums,
 ];
 
-const secondsToDhms = (seconds: number) => {
+const secondsToDhms = (seconds: number): string => {
   const d = Math.floor(seconds / (3600 * 24));
   const h = Math.floor((seconds % (3600 * 24)) / 3600);
   const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
 
-  const dDisplay = d > 0 ? d + (d == 1 ? ' day, ' : ' days, ') : '';
-  const hDisplay = h > 0 ? h + (h == 1 ? ' hour, ' : ' hours, ') : '';
-  const mDisplay = m > 0 ? m + (m == 1 ? ' minute, ' : ' minutes, ') : '';
-  const sDisplay = s > 0 ? s + (s == 1 ? ' second' : ' seconds') : '';
-  return dDisplay + hDisplay + mDisplay + sDisplay;
+  const dDisplay = d > 0 ? d + texts.current.days(d) : '';
+  const hDisplay = h > 0 ? h + texts.current.hours(h) : '';
+  const mDisplay = m > 0 ? m + texts.current.minutes(m) : '';
+  return dDisplay + hDisplay + mDisplay;
 };
 
 export const getStat = (stat: Stats, arg?: any): string => {

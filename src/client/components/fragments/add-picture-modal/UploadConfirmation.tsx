@@ -4,6 +4,7 @@ import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Typography, Grid } from '@material-ui/core';
+import texts from '../../../lang/fragments/add-picture-modal';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -52,6 +53,7 @@ class UploadConfirmation extends React.Component<IProps, NoState> {
 
   render() {
     const { loaded, error, url, classes } = this.props;
+    const T = texts.current;
 
     if (!loaded && !error) {
       return (
@@ -62,14 +64,14 @@ class UploadConfirmation extends React.Component<IProps, NoState> {
     } else if (error == false) {
       return (
         <Grid container direction='column'>
-          <Typography className={classes.text}>Do you want to load this picture ?</Typography>
+          <Typography className={classes.text}>{T.confirmationMessage}</Typography>
           <div className={classes.imgContainer}>
             <img className={classes.image} src={url}></img>
           </div>
         </Grid>
       );
     } else {
-      return <Typography className={classes.text}>{"Couldn't find the image, please try again."}</Typography>;
+      return <Typography className={classes.text}>{T.error}</Typography>;
     }
   }
 }

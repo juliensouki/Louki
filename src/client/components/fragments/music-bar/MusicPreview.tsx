@@ -76,10 +76,7 @@ class MusicPreview extends React.Component<IProps & RoutePropsComponent, NoState
     return (
       <Grid container item direction='row' className={classes.root} onClick={this.handleClick}>
         <Grid item className={classes.pictureConatainer}>
-          <img
-            src='https://images.genius.com/cd64d6c15657a9d85823d3666969a00d.1000x1000x1.jpg'
-            className={classes.musicImage}
-          />
+          <img src='/assets/images/all-musics.png' className={classes.musicImage} />
         </Grid>
         <Grid
           item

@@ -62,6 +62,10 @@ class LoadingForm {
     this.everythingLoaded = everythingLoaded;
   };
 
+  @action reloadApp = () => {
+    this.everythingLoaded = false;
+  };
+
   @computed public get loadingIsComplete(): boolean {
     return this.everythingLoaded;
   }
