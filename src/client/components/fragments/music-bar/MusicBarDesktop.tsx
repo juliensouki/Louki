@@ -12,7 +12,6 @@ import LoopIcon from '@material-ui/icons/Loop';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-
 import PauseIcon from '@material-ui/icons/Pause';
 
 import MusicPreview from './MusicPreview';

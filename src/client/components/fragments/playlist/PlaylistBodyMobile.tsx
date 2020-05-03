@@ -8,6 +8,8 @@ import { IconButton, Grid, Typography } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IMusic from '../../../../shared/IMusic';
 import MusicsData from '../../../store/common/MusicsData';
+import MusicPlayer from '../../../store/common/MusicPlayer';
+import NavigationForm from '../../../store/common/NavigationForm';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -44,18 +46,26 @@ interface IProps extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistBodyMobile extends React.Component<IProps, NoState> {
+  playMusic = (index: number): void => {
+    MusicPlayer.setCurrentPlaylist(this.props.playlist);
+    MusicPlayer.playMusic(index);
+  };
+
   render() {
     const { classes, playlist } = this.props;
 
     return (
       <div style={{ width: '100%' }}>
-        {playlist.map(row => (
+        {playlist.map((row, index) => (
           <Grid
             container
             direction='row'
             alignItems='center'
             justify='space-between'
             key={row.__id}
+            onClick={() => {
+              this.playMusic(index);
+            }}
             className={classes.songContainer}
           >
             <Grid item style={{ marginLeft: -15 }}>
@@ -72,7 +82,13 @@ class PlaylistBodyMobile extends React.Component<IProps, NoState> {
               className={classes.songInfoContainer}
             >
               <Grid item style={{ width: '100%' }}>
-                <Typography className={classes.songName}>{row.title}</Typography>
+                {MusicPlayer.playingMusicId == row.__id && NavigationForm.currentRoute == MusicPlayer.playlistRoute ? (
+                  <Typography style={{ color: 'rgb(255, 177, 59)' }} className={classes.songName}>
+                    {row.title}
+                  </Typography>
+                ) : (
+                  <Typography className={classes.songName}>{row.title}</Typography>
+                )}
               </Grid>
               <Grid item>
                 <Typography className={classes.artistName}>{MusicsData.getArtistNameById(row.artist)}</Typography>
@@ -83,7 +99,7 @@ class PlaylistBodyMobile extends React.Component<IProps, NoState> {
             </Grid>
           </Grid>
         ))}
-      </div>
+      </div> 
     );
   }
 }

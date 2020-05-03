@@ -10,11 +10,12 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import LoopIcon from '@material-ui/icons/Loop';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+import PauseIcon from '@material-ui/icons/Pause';
 
 import MusicPreview from './MusicPreview';
 import ProgressBar from './ProgressBar';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import MusicPlayer, { MusicLoop } from '../../../store/common/MusicPlayer';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -23,15 +24,35 @@ const styles = (theme: Theme) =>
       bottom: 0,
       left: 0,
       height: 80,
+      [theme.breakpoints.down('xs')]: {
+        height: 50,
+      },
       width: '100%',
       backgroundColor: theme.palette.background.default,
       color: theme.palette.primary.main,
     },
+    bubbleRepeat: {
+      position: 'absolute',
+      bottom: 0,
+      fontFamilty: 'Roboto',
+      right: 15,
+      height: 13,
+      width: 13,
+      fontSize: 10,
+      textAlign: 'center',
+      borderRadius: '100%',
+      backgroundColor: theme.palette.secondary.main,
+      color: '#FFF',
+    },
     musicControlsContainer: {
+      position: 'relative',
       height: '100%',
       padding: 20,
       paddingLeft: 20,
       paddingRight: 20,
+      [theme.breakpoints.down('xs')]: {
+        width: 'calc(100% - 50px)',
+      },
       width: 'calc(100% - 80px)',
     },
     arrowIcon: {
@@ -86,6 +107,9 @@ const styles = (theme: Theme) =>
     mobileProgressBarContainer: {
       position: 'absolute',
       bottom: 80,
+      [theme.breakpoints.down('xs')]: {
+        bottom: 50,
+      },
       left: 0,
       height: 6,
       width: '100%',
@@ -136,16 +160,28 @@ class MusicBarMobile extends React.Component<IProps, NoState> {
           >
             <Grid container item alignItems='center' justify='space-between' direction='row'>
               <Grid item>
-                <ShuffleIcon className={classes.controlIcons} />
-                <LoopIcon className={classes.controlIcons} />
+                <ShuffleIcon
+                  onClick={MusicPlayer.changeRandom}
+                  style={{ color: MusicPlayer.random ? '#FFB13B' : '' }}
+                  className={classes.controlIcons}
+                />
+                <LoopIcon
+                  onClick={MusicPlayer.changeRepeatMode}
+                  style={{ color: MusicPlayer.repeat == MusicLoop.NO_REPEAT ? '' : '#FFB13B' }}
+                  className={classes.controlIcons}
+                />
+                {MusicPlayer.repeat == MusicLoop.REPEAT_ONE ? <div className={classes.bubbleRepeat}>1</div> : null}
               </Grid>
               <Grid item>
-                <SkipPreviousIcon className={classes.audioControlIcons} />
-                <PlayArrowIcon className={classes.audioControlIcons} />
-                <SkipNextIcon className={classes.audioControlIcons} />
+                <SkipPreviousIcon onClick={MusicPlayer.prevSong} className={classes.audioControlIcons} />
+                {MusicPlayer.isPlaying ? (
+                  <PauseIcon onClick={MusicPlayer.pauseOrPlay} className={classes.audioControlIcons} />
+                ) : (
+                  <PlayArrowIcon onClick={MusicPlayer.pauseOrPlay} className={classes.audioControlIcons} />
+                )}
+                <SkipNextIcon onClick={MusicPlayer.nextSong} className={classes.audioControlIcons} />
               </Grid>
               <Grid item>
-                <FavoriteBorderOutlinedIcon className={classes.controlIcons} />
                 <VolumeUpIcon className={classes.controlIcons} />
               </Grid>
             </Grid>
