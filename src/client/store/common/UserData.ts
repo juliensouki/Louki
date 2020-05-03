@@ -21,6 +21,10 @@ class UserData {
   @computed get settings(): AccountSettings {
     return this.user.settings;
   }
+
+  @computed get folders(): Array<string> {
+    return this.user.musicPaths;
+  }
 }
 
 export default new UserData();

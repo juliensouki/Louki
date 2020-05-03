@@ -16,6 +16,7 @@ import chokidar from 'chokidar';
 export default class DataLoader {
   private databaseHandler: any;
   private io: any;
+  private watchersMap: any = new Map<string, chokidar.FSWatcher>();
 
   private currentUser: any = null;
 
@@ -57,26 +58,40 @@ export default class DataLoader {
     });
   };
 
+  unwatchFolder = (folder: string) => {
+    const watcher: chokidar.FSWatcher = this.watchersMap.get(folder);
+    if (watcher) {
+      watcher.close();
+      this.watchersMap.delete(folder);
+      fs.readdirSync(folder).forEach(file => {
+        this.detectDeletedSong(folder + file);
+      });
+    }
+  };
+
+  watchFolder = (folder: string) => {
+    const fileWatcher = chokidar.watch('file', {
+      ignored: /(^|[\/\\])\../, // ignore dotfiles
+      persistent: true,
+    });
+
+    this.watchersMap.set(folder, fileWatcher);
+    fileWatcher.add(folder);
+    fileWatcher.on('add', newSongPath => {
+      this.databaseHandler.findOneInDocument(Music, 'path', newSongPath).then(musics => {
+        if (musics.length == 0) {
+          filesHandler.getMetadataAndAddToDB(newSongPath, this.checkIfSongMustBeAdded);
+        }
+      });
+    });
+    fileWatcher.on('unlink', deletedSongPath => {
+      this.detectDeletedSong(deletedSongPath);
+    });
+  };
+
   watchUserFolders = () => {
     this.currentUser.musicPaths.forEach(userPath => {
-      console.log('watching : ' + userPath);
-
-      const fileWatcher = chokidar.watch('file', {
-        ignored: /(^|[\/\\])\../, // ignore dotfiles
-        persistent: true,
-      });
-
-      fileWatcher.add(userPath);
-      fileWatcher.on('add', newSongPath => {
-        this.databaseHandler.findOneInDocument(Music, 'path', newSongPath).then(musics => {
-          if (musics.length == 0) {
-            filesHandler.getMetadataAndAddToDB(newSongPath, this.checkIfSongMustBeAdded);
-          }
-        });
-      });
-      fileWatcher.on('unlink', deletedSongPath => {
-        this.detectDeletedSong(deletedSongPath);
-      });
+      this.watchFolder(userPath);
     });
   };
 

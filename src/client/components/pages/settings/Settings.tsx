@@ -8,22 +8,26 @@ import FolderIcon from '@material-ui/icons/Folder';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@material-ui/icons/Check';
 
+import { Grid, Button, Typography, Switch } from '@material-ui/core/';
 import InputBase from '@material-ui/core/InputBase';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { Grid, Button, Typography, Switch } from '@material-ui/core/';
 import SimpleHeader from '../../fragments/playlist/SimpleHeader';
+import ConfirmModal from '../../utils/ConfirmModal';
+import ManageFoldersModal from '../../fragments/settings/ManageFoldersModal';
+
+import NavigationForm from '../../../store/common/NavigationForm';
 import SettingsForm from '../../../store/pages/settings/SettingsForm';
+import LoadingForm from '../../../store/loading/LoadingForm';
+import UserData from '../../../store/common/UserData';
 
 import { Language } from '../../../../shared/Languages';
 import texts from '../../../lang/pages/settings/';
 
 import { UpdateUserSettings } from '../../../requests/User';
-import UserData from '../../../store/common/UserData';
-import NavigationForm from '../../../store/common/NavigationForm';
-import ConfirmModal from '../../utils/ConfirmModal';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -59,6 +63,12 @@ const styles = (theme: Theme) =>
     },
     text: {
       fontSize: '1.5rem',
+    },
+    statusIcon: {
+      position: 'relative',
+      top: '0.25em',
+      left: '-0.3em',
+      fontSize: '2rem',
     },
   });
 
@@ -104,6 +114,20 @@ const BootstrapInput = withStyles(theme => ({
 
 @observer
 class Settings extends React.Component<Props & RouteComponentProps, NoState> {
+  @observable isPixabayAPIKeyValid: boolean = false;
+  @observable pixabayTestLoading: boolean = true;
+
+  componentDidMount() {
+    fetch('/pixabay')
+      .then(res => {
+        return res.json();
+      })
+      .then(test => {
+        this.isPixabayAPIKeyValid = (test as any).result as boolean;
+        this.pixabayTestLoading = false;
+      });
+  }
+
   handleCancel = () => {
     this.props.history.push(NavigationForm.previousRoute);
   };
@@ -142,12 +166,20 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
 
   resetLouki = () => {
     SettingsForm.setOpen(false);
-    console.log('Must reset Louki');
+    fetch('/resetLouki', { method: 'POST' }).then(() => {
+      LoadingForm.reloadApp();
+    });
   };
 
   render() {
     const { classes } = this.props;
     const T = texts.current;
+    const status = this.isPixabayAPIKeyValid ? 'Valid' : 'Invalid or not found';
+    const statusIcon = this.isPixabayAPIKeyValid ? (
+      <CheckIcon className={classes.statusIcon} style={{ color: 'green' }} />
+    ) : (
+      <CloseIcon className={classes.statusIcon} style={{ color: 'red' }} />
+    );
 
     return (
       <React.Fragment>
@@ -158,6 +190,7 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
           onCancel={this.closeConfirmModal}
           onConfirm={this.resetLouki}
         />
+        <ManageFoldersModal open={SettingsForm.openManage} folders={UserData.folders} />
         <SimpleHeader title={T.title} />
         <Grid container className={classes.root} direction='column'>
           <form
@@ -194,8 +227,15 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
               </Button>
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-              <Typography className={classes.text}>{T.directories} : /mnt/c/users/Souki/Music/</Typography>
-              <Button className={classes.button}>
+              <Typography className={classes.text}>
+                {T.directories} : {UserData.folders.length} {UserData.folders.length > 1 ? 'folders' : 'folder'}
+              </Typography>
+              <Button
+                className={classes.button}
+                onClick={() => {
+                  SettingsForm.setOpenManage(true);
+                }}
+              >
                 <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
               </Button>
             </Grid>
@@ -224,6 +264,13 @@ class Settings extends React.Component<Props & RouteComponentProps, NoState> {
                   English
                 </MenuItem>
               </Select>
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>Pixabay API : </Typography>
+              <Typography className={classes.text}>
+                {!this.pixabayTestLoading && statusIcon}
+                {this.pixabayTestLoading ? 'Test in progress...' : status}
+              </Typography>
             </Grid>
             <Grid className={classes.gridContainer} item container direction='column'>
               <Button

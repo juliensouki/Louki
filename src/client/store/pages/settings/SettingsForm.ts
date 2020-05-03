@@ -10,6 +10,7 @@ class SettingsForm {
   @observable private picturePath: string = '';
   @observable private userId: string | null = '';
   @observable private openConfirmModal: boolean = false;
+  @observable private openManageFoldersModal: boolean = false;
 
   @action setLanguage = (lang: Language) => {
     this.lang = lang;
@@ -17,6 +18,10 @@ class SettingsForm {
 
   @action setOpen = (openConfirmModal: boolean) => {
     this.openConfirmModal = openConfirmModal;
+  };
+
+  @action setOpenManage = (openManageFoldersModal: boolean) => {
+    this.openManageFoldersModal = openManageFoldersModal;
   };
 
   @action setUsername = (pseudo: string) => {
@@ -30,6 +35,10 @@ class SettingsForm {
   @action toggleInternetUsage = () => {
     this.internet = !this.internet;
   };
+
+  @computed get openManage(): boolean {
+    return this.openManageFoldersModal;
+  }
 
   @computed get open(): boolean {
     return this.openConfirmModal;

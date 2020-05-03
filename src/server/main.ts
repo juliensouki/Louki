@@ -79,6 +79,21 @@ const startServer = () => {
   });
 };
 
+app.get('/pixabay', (req, res) => {
+  searchImages(process.env.PIXABAY_API_KEY, 'piano')
+    .then(results => {
+      console.log(results);
+      if (results && results.hits.length > 0) {
+        res.status(200).json({ result: true });
+      } else {
+        res.status(200).json({ result: false });
+      }
+    })
+    .catch(() => {
+      res.status(200).json({ result: false });
+    });
+});
+
 app.get('/alreadySetup', (req, res) => {
   databaseHandler.findOneInDocument(User, 'selected', true).then(values => {
     res.send(values && values.length > 0);
@@ -87,7 +102,7 @@ app.get('/alreadySetup', (req, res) => {
 
 app.get('/getResults', (req, res) => {
   const search = req.query.search;
-  searchImages(process.env.PIXABAY_KEY, search as string).then(results => {
+  searchImages(process.env.PIXABAY_API_KEY, search as string).then(results => {
     const images = [];
     for (let i = 0; i < results.hits.length; i++) {
       images.push(results.hits[i].webformatURL);
@@ -204,6 +219,26 @@ app.get('/allData', async (req, res) => {
 app.get('/allPlaylists', (req, res) => {
   databaseHandler.getCollectionContent(Playlist).then(playlists => {
     res.json(playlists);
+  });
+});
+
+app.post('/addFolder', (req, res) => {
+  const { folder } = req.body;
+  databaseHandler.addToArray(User, 'selected', true, 'musicPaths', folder).then(() => {
+    databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
+      dLoader.watchFolder(folder);
+      res.status(200).json(users[0]);
+    });
+  });
+});
+
+app.post('/removeFolder', (req, res) => {
+  const { folder } = req.body;
+  databaseHandler.removeFromArray(User, 'selected', true, 'musicPaths', folder).then(() => {
+    databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
+      dLoader.unwatchFolder(folder);
+      res.status(200).json(users[0]);
+    });
   });
 });
 
