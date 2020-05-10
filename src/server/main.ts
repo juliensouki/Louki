@@ -1,56 +1,36 @@
 import express from 'express';
 import path from 'path';
+import http from 'http';
 import mongoose from 'mongoose';
+import socketio from 'socket.io';
+import bodyParser from 'body-parser';
+import multer from 'multer';
 
 import { apiRouter } from './routes/api-router';
 import { pagesRouter } from './routes/pages-router';
 import { staticsRouter } from './routes/statics-router';
+import routes from './routes/handlers';
 import * as config from './config';
 
-import User from './db/schemas/User';
-
-import databaseHandler from './db';
+import { playlistPictureStorage, profilePictureStorage } from './upload';
 import dataLoader from './dataLoader';
-import bodyParser from 'body-parser';
-import { __values } from 'tslib';
-import multer from 'multer';
+import databaseHandler from './db';
 
-import routes from './routes/handlers';
+const playlistUpload = multer({ storage: multer.diskStorage(profilePictureStorage) });
+const profileUpload = multer({ storage: multer.diskStorage(playlistPictureStorage) });
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio.listen(server);
 
-const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
+const startServer = () => {
+  console.log('Starting server');
+  server.listen(config.SERVER_PORT, () => {
+    console.log(`App listening on port ${config.SERVER_PORT}!`);
+  });
+};
 
-const playlistStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'assets/uploads/');
-  },
-  filename: (req, file, cb) => {
-    const name = req.body['playlist-name'];
-    const extension = file['mimetype'].split('image/')[1];
-    cb(null, name + '.' + extension);
-  },
-});
-
-const playlistUpload = multer({ storage: playlistStorage });
-
-const profileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'assets/uploads/');
-  },
-  filename: async (req, file, cb) => {
-    const user = await databaseHandler.findOneInDocument(User, 'selected', true);
-    let name = '0';
-    if (user && user[0]) {
-      name = user[0].__id;
-    }
-    const extension = file['mimetype'].split('image/')[1];
-    cb(null, name + '.' + extension);
-  },
-});
-
-const profileUpload = multer({ storage: profileStorage });
+const dLoader = new dataLoader(databaseHandler, io);
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -59,16 +39,6 @@ app.use('/musics', express.static(path.join(process.cwd(), 'musics')));
 app.use('/musics2', express.static(path.join(process.cwd(), 'musics2')));
 app.use('/scripts', express.static(path.join(process.cwd(), 'musics2')));
 app.use(bodyParser.urlencoded({ extended: true }));
-
-const dLoader = new dataLoader(databaseHandler, io);
-databaseHandler.connect();
-
-const startServer = () => {
-  console.log('Starting server');
-  server.listen(config.SERVER_PORT, () => {
-    console.log(`App listening on port ${config.SERVER_PORT}!`);
-  });
-};
 
 app.get('/artist', (req, res) => routes.getArtist(req, res));
 app.get('/album', (req, res) => routes.getAlbum(req, res));
@@ -100,6 +70,8 @@ app.get('/getResults', (req, res) => routes.musicSearch(req, res));
 app.use(apiRouter());
 app.use(staticsRouter());
 app.use(pagesRouter());
+
+databaseHandler.connect();
 
 mongoose.connection.once('open', function() {
   console.log('Connected to database');

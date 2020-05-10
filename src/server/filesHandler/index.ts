@@ -42,10 +42,10 @@ class FilesHandler {
       });
   };
 
-  getArrayOfFiles = (musicPaths: Array<string>) => {
-    const arrayOfPaths = [];
+  getArrayOfFiles = (musicPaths: Array<string>): Array<Array<string>> => {
+    const arrayOfPaths: Array<Array<string>> = [];
     musicPaths.forEach(pathElement => {
-      const arrayOfFiles = [];
+      const arrayOfFiles: Array<string> = [];
       fs.readdirSync(pathElement, { withFileTypes: true }).filter(item => {
         if (!item.isDirectory()) arrayOfFiles.push(pathElement + item.name);
       });
