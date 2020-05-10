@@ -1,6 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { Language } from '../../../../shared/Languages';
-import { AccountSettings } from '../../../../shared/IUser';
+import { Settings } from '../../../../shared/IUser';
 
 class SettingsForm {
   @observable private lang: Language = Language.English;
@@ -28,7 +28,7 @@ class SettingsForm {
     this.pseudo = pseudo;
   };
 
-  @action setProfilePicture = (file: File | null) => {
+  @action setPicture = (file: File | null) => {
     this.file = file;
   };
 
@@ -56,7 +56,7 @@ class SettingsForm {
     return this.pseudo;
   }
 
-  @computed get profilePicture(): File | null {
+  @computed get picture(): File | null {
     return this.file;
   }
 
@@ -72,19 +72,19 @@ class SettingsForm {
     return this.file != null ? this.file.name : this.picturePath;
   }
 
-  @computed get settings(): AccountSettings {
+  @computed get settings(): Settings {
     return {
       username: this.username,
       language: this.language,
-      profilePicture: '',
+      picture: '',
       internetUsage: this.internet,
     };
   }
 
-  @action setSettings = (settings: AccountSettings) => {
+  @action setSettings = (settings: Settings) => {
     if (this.userId != null) {
       this.lang = settings.language;
-      this.picturePath = settings.profilePicture;
+      this.picturePath = settings.picture;
       this.internet = settings.internetUsage;
     }
   };

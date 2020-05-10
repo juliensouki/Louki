@@ -123,8 +123,8 @@ class Settings extends React.Component<Props & RouteComponentProps & WithSnackba
       .then(res => {
         return res.json();
       })
-      .then(test => {
-        this.isPixabayAPIKeyValid = (test as any).result as boolean;
+      .then(pixabayIsValid => {
+        this.isPixabayAPIKeyValid = pixabayIsValid;
         this.pixabayTestLoading = false;
       });
   }
@@ -152,7 +152,7 @@ class Settings extends React.Component<Props & RouteComponentProps & WithSnackba
   @action handleFileChange = () => {
     const fileInput = document.getElementById('hidden-file-input');
     if (fileInput != null) {
-      SettingsForm.setProfilePicture((fileInput as HTMLInputElement).files[0]);
+      SettingsForm.setPicture((fileInput as HTMLInputElement).files[0]);
     }
   };
 
