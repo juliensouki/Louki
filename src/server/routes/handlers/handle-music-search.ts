@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import Music from '../../db/schemas/Music';
+import { MusicSearchResponse } from '../../../shared/RoutesResponses';
 import leven from 'leven';
 
 export const handleMusicSearch = (req: Request, res: Response): void => {
@@ -9,13 +10,13 @@ export const handleMusicSearch = (req: Request, res: Response): void => {
     if (results.length == 0) {
       res.json(results);
     } else {
-      const musicNames: Array<string> = [];
+      const response: MusicSearchResponse = [];
       results.forEach(music => {
         if (leven(searchText, music.title) < 10 || music.title.toLowerCase().includes(searchText.toLowerCase())) {
-          musicNames.push(music.__id);
+          response.push(music.__id);
         }
       });
-      res.json(musicNames);
+      res.json(response);
     }
   });
 };

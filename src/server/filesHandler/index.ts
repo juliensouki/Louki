@@ -27,7 +27,6 @@ class FilesHandler {
         const musicObject: IMusic = {
           title: this.getFieldInMetadata(metadata, ['common', 'title']),
           artist: '',
-          feat: [],
           album: '',
           path: music,
           __id: uuid.v4(),

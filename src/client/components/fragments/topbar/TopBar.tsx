@@ -115,7 +115,7 @@ class TopBar extends React.Component<IProps, NoState> {
               </Grid>
               <Grid item>
                 <div className={classes.profilePicture}>
-                  <img src={UserData.settings.profilePicture} className={classes.pic}></img>
+                  <img src={UserData.picture} className={classes.pic}></img>
                 </div>
               </Grid>
             </Grid>

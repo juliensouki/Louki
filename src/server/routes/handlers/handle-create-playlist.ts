@@ -3,6 +3,7 @@ import databaseHandler from '../../db';
 import User from '../../db/schemas/User';
 import Playlist from '../../db/schemas/Playlist';
 import uuid from 'uuid';
+import { CreatePlaylistResponse } from '../../../shared/RoutesResponses';
 
 export const handleCreatePlaylist = (req: Request, res: Response): void => {
   const name = req.body['playlist-name'];
@@ -13,7 +14,6 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
 
   databaseHandler.findOneInDocument(User, 'selected', true).then(user => {
     let filePath;
-    const userId = user[0].__id;
     if (file) {
       const extension = file['mimetype'].split('image/')[1];
       filePath = '/assets/uploads/' + name + '.' + extension;
@@ -27,12 +27,11 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
         description: description,
         musics: [],
         createdAt: creationDate,
-        createdBy: userId,
         __id: id,
       },
-      error => {
-        databaseHandler.getCollectionContent(Playlist).then(values => {
-          res.send(values);
+      () => {
+        databaseHandler.getCollectionContent(Playlist).then((response: CreatePlaylistResponse) => {
+          res.send(response);
         });
       },
     );

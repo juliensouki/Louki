@@ -13,6 +13,10 @@ class UserData {
     return this.user.name;
   }
 
+  @computed get picture(): string {
+    return this.user.picture;
+  }
+
   @computed get id(): string | null {
     if (this.user == null) return null;
     return this.user.__id;

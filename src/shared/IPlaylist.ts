@@ -4,7 +4,6 @@ interface IPlaylist {
   description: string;
   musics: Array<string>;
   createdAt: Date;
-  createdBy: number;
   __id: string;
 }
 

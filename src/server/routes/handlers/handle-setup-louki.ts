@@ -1,25 +1,21 @@
 import { Request, Response } from 'express';
 import User from '../../db/schemas/User';
+import { SetupLoukiResponse } from '../../../shared/RoutesResponses';
 
 export const handleSetupLouki = (req: Request, res: Response): void => {
-  let profilePicture = '';
-  if ((req as any).file) {
-    const extension = (req as any).file['mimetype'].split('image/')[1];
-    profilePicture = '/assets/uploads/0.' + extension;
-  }
+  const file = (req as any).file;
+  const id = 0;
 
   User.create({
     name: req.body.username,
-    picture: profilePicture,
+    picture: file ? `/assets/uploads/${id}.${file['mimetype'].split('image/')[1]}` : '',
     selected: true,
     __id: 0,
     settings: {
       language: 'english',
-      username: '',
-      profilePicture: profilePicture,
       internetUsage: true,
     },
-  }).then(user => {
-    res.status(200).json(user);
+  }).then((response: SetupLoukiResponse) => {
+    res.status(200).json(response);
   });
 };

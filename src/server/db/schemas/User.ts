@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import IUser, { AccountSettings } from '../../../shared/IUser';
+import IUser from '../../../shared/IUser';
 
 interface IUserModel extends IUser, mongoose.Document {}
 
@@ -13,8 +13,6 @@ const userSchema = new mongoose.Schema({
   __id: { type: String, unique: true },
   settings: {
     language: String,
-    username: String,
-    profilePicture: String,
     internetUsage: Boolean,
   },
 });

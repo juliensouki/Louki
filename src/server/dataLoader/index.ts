@@ -72,7 +72,7 @@ export default class DataLoader {
 
   watchFolder = (folder: string) => {
     const fileWatcher = chokidar.watch('file', {
-      ignored: /(^|[\/\\])\../, // ignore dotfiles
+      ignored: /(^|[\/\\])\../,
       persistent: true,
     });
 
@@ -253,7 +253,6 @@ export default class DataLoader {
         const artist = new Artist({
           name: artistName,
           __id: artistId,
-          albums: [],
           musics: [musicId],
         });
         artist.save((err, artist) => {
