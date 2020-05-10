@@ -347,34 +347,33 @@ app.post('/createPlaylist', playlistUpload.single('playlist-picture'), (req, res
   const description = req.body['playlist-description'];
   const file = (req as any).file;
   const creationDate = new Date().getTime();
-  const userId = dLoader.loggedUser.__id;
+  databaseHandler.findOneInDocument(User, 'selected', true).then(user => {
+    let filePath;
+    const userId = user[0].__id;
+    if (file) {
+      const extension = file['mimetype'].split('image/')[1];
+      filePath = '/assets/uploads/' + name + '.' + extension;
+    } else {
+      filePath = req.body.pictureUrl;
+    }
+    Playlist.create(
+      {
+        name: name,
+        picture: filePath,
+        description: description,
+        musics: [],
+        createdAt: creationDate,
+        createdBy: userId,
+        __id: id,
+      },
+      error => {
+        databaseHandler.getCollectionContent(Playlist).then(values => {
+          res.send(values);
+        });
+      },
+    );
+  });
   const id = uuid.v4();
-
-  let filePath;
-
-  if (file) {
-    const extension = file['mimetype'].split('image/')[1];
-    filePath = '/assets/uploads/' + name + '.' + extension;
-  } else {
-    filePath = req.body.pictureUrl;
-  }
-
-  Playlist.create(
-    {
-      name: name,
-      picture: filePath,
-      description: description,
-      musics: [],
-      createdAt: creationDate,
-      createdBy: userId,
-      __id: id,
-    },
-    error => {
-      databaseHandler.getCollectionContent(Playlist).then(values => {
-        res.send(values);
-      });
-    },
-  );
 });
 
 app.post('/deletePlaylist', (req, res) => {

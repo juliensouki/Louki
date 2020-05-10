@@ -17,6 +17,7 @@ class FilesHandler {
 
   getMetadataAndAddToDB = (
     music: string,
+    folder: string,
     callback: (values: any, artists: Array<string>, album: string) => void,
   ): void => {
     mm.parseFile(music)
@@ -32,6 +33,9 @@ class FilesHandler {
           __id: uuid.v4(),
           duration: this.getFieldInMetadata(metadata, ['format', 'duration']),
         };
+        if (musicObject.title == undefined || musicObject.title == null || musicObject.title == '') {
+          musicObject.title = music.replace(folder, '').replace('.mp3', '');
+        }
         callback(musicObject, artists, album);
       })
       .catch(err => {

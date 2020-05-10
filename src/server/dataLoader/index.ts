@@ -59,6 +59,7 @@ export default class DataLoader {
   };
 
   unwatchFolder = (folder: string) => {
+    console.log('unwatch ' + folder);
     const watcher: chokidar.FSWatcher = this.watchersMap.get(folder);
     if (watcher) {
       watcher.close();
@@ -77,10 +78,12 @@ export default class DataLoader {
 
     this.watchersMap.set(folder, fileWatcher);
     fileWatcher.add(folder);
+    console.log('watching : ' + folder);
     fileWatcher.on('add', newSongPath => {
+      console.log('Detected new song');
       this.databaseHandler.findOneInDocument(Music, 'path', newSongPath).then(musics => {
         if (musics.length == 0) {
-          filesHandler.getMetadataAndAddToDB(newSongPath, this.checkIfSongMustBeAdded);
+          filesHandler.getMetadataAndAddToDB(newSongPath, folder, this.checkIfSongMustBeAdded);
         }
       });
     });
@@ -215,8 +218,14 @@ export default class DataLoader {
   };
 
   addMusic = (values, artistName, albumName) => {
-    const artistId = sha1(artistName);
-    const albumId = sha1(albumName);
+    if (artistName == undefined) {
+      artistName = '';
+    }
+    if (albumName == undefined) {
+      albumName = '';
+    }
+    const artistId = artistName == undefined ? '' : sha1(artistName);
+    const albumId = albumName == undefined ? '' : sha1(albumName);
     const musicId = uuid.v4();
 
     const artistPromise = this.databaseHandler.findOneInDocument(Artist, '__id', artistId);
@@ -240,7 +249,7 @@ export default class DataLoader {
 
   createArtist = (musicId, artistName, artistId) => {
     this.databaseHandler.findOneInDocument(Artist, '__id', artistId).then(artists => {
-      if (artists.length == 0) {
+      if (artists.length == 0 && artistName != '' && artistId != '') {
         const artist = new Artist({
           name: artistName,
           __id: artistId,
@@ -261,7 +270,7 @@ export default class DataLoader {
 
   createAlbum = (musicId, albumName, albumId, artistId): void => {
     this.databaseHandler.findOneInDocument(Album, '__id', albumId).then(albums => {
-      if (albums.length == 0 && albumName != '') {
+      if (albums.length == 0 && albumName != '' && albumId != '') {
         const artist = new Album({
           title: albumName,
           author: artistId,
