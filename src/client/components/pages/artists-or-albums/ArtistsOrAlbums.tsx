@@ -4,12 +4,12 @@ import { observable } from 'mobx';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
-import SearchContainer from '../../fragments/playlist/SearchContainer';
-import PlaylistBody from '../../fragments/playlist-artists-or-albums/PlaylistBody';
+import PlaylistHeader from '../../playlist/PlaylistHeader';
+import SearchContainer from '../../playlist/SearchContainer';
+import PlaylistBody from '../../playlist/artists-or-albums-playlist-layout/PlaylistBody';
 
 import { Stats } from '../../../store/statistics/Stats';
-import MusicsData from '../../../store/common/MusicsData';
+import LoukiStore from '../../../store/data/LoukiStore';
 
 import artistsTexts from '../../../lang/pages/artists';
 import albumsTexts from '../../../lang/pages/albums';
@@ -54,7 +54,7 @@ class ArtistsOrAlbums extends React.Component<RouteComponentProps, NoState> {
           image={image}
           noStartButton
           stat={this.page == Page.ARTISTS ? Stats.NUMBER_OF_ARTISTS : Stats.NUMBER_OF_ALBUMS}
-          statArg={this.page == Page.ARTISTS ? MusicsData.allArtists.length : MusicsData.allAlbums.length}
+          statArg={this.page == Page.ARTISTS ? LoukiStore.allArtists.length : LoukiStore.allAlbums.length}
         />
         <SearchContainer />
         <PlaylistBody page={this.page} />

@@ -4,18 +4,19 @@ import { observable, action, computed } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
-import CreatePlaylistForm from '../../../store/pages/create-playlist/CreatePlaylistForm';
-import MusicsData from '../../../store/common/MusicsData';
-import UserData from '../../../store/common/UserData';
-import SimpleHeader from '../../fragments/playlist/SimpleHeader';
+import NewPlaylistForm from '../../../store/forms/NewPlaylistForm';
+import LoukiStore from '../../../store/data/LoukiStore';
+import User from '../../../store/data/User';
+import SimpleHeader from '../../layout/SimpleHeader';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Grid, IconButton, Button, Typography, TextField } from '@material-ui/core/';
-import AddPictureModal from '../../fragments/add-picture-modal/AddPlaylistModal';
+import AddPictureModal from '../../modals/add-picture-modal/AddPlaylistModal';
 import PublicIcon from '@material-ui/icons/Public';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import texts from '../../../lang/pages/new-playlist';
+import { CreatePlaylist, CreatePlaylistResponse } from '../../../requests/Playlists';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -88,10 +89,10 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
     this.nameHelper = '';
     this.descriptionHelper = '';
     this.open = false;
-    CreatePlaylistForm.setName('');
-    CreatePlaylistForm.setDescription('');
-    CreatePlaylistForm.setPicture(null);
-    CreatePlaylistForm.setPictureUrl('');
+    NewPlaylistForm.setName('');
+    NewPlaylistForm.setDescription('');
+    NewPlaylistForm.setPicture(null);
+    NewPlaylistForm.setPictureUrl('');
   }
 
   openFileExplorer = () => {
@@ -102,7 +103,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
   };
 
   formValidation = (): boolean => {
-    return CreatePlaylistForm.name.length > 0 && CreatePlaylistForm.description.length > 0;
+    return NewPlaylistForm.name.length > 0 && NewPlaylistForm.description.length > 0;
   };
 
   handleRedirect = event => {
@@ -110,30 +111,23 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
     const T = texts.current;
     const form = document.getElementById('new-playlist-form');
     if (form != null && this.formValidation()) {
-      const data = new FormData(form as HTMLFormElement);
+      const data: FormData = new FormData(form as HTMLFormElement);
 
-      if (CreatePlaylistForm.pictureUrl) {
-        data.append('pictureUrl', CreatePlaylistForm.pictureUrl);
+      if (NewPlaylistForm.pictureUrl) {
+        data.append('pictureUrl', NewPlaylistForm.pictureUrl);
       }
 
-      fetch('/createPlaylist', {
-        method: 'POST',
-        body: data,
-      })
-        .then(res => {
-          return res.json();
-        })
-        .then(data => {
-          MusicsData.setPlaylists(data);
-          const snackbarOptions = { variant: 'success' as any };
-          this.props.enqueueSnackbar(texts.current.playlistCreated(CreatePlaylistForm.name), snackbarOptions);
-          this.props.history.push('/all-music');
-        });
+      CreatePlaylist(data).then((result: CreatePlaylistResponse) => {
+        LoukiStore.setPlaylists(result);
+        const snackbarOptions = { variant: 'success' as any };
+        this.props.enqueueSnackbar(texts.current.playlistCreated(NewPlaylistForm.name), snackbarOptions);
+        this.props.history.push('/all-music');
+      });
     } else {
-      if (CreatePlaylistForm.name.length == 0) {
+      if (NewPlaylistForm.name.length == 0) {
         this.nameHelper = T.nameInput.helper;
       }
-      if (CreatePlaylistForm.description.length == 0) {
+      if (NewPlaylistForm.description.length == 0) {
         this.descriptionHelper = T.descriptionInput.helper;
       }
     }
@@ -142,24 +136,24 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
   @action handleFileChange = () => {
     const fileInput = document.getElementById('hidden-file-input');
     if (fileInput != null) {
-      CreatePlaylistForm.setPicture((fileInput as HTMLInputElement).files[0]);
+      NewPlaylistForm.setPicture((fileInput as HTMLInputElement).files[0]);
     }
   };
 
   @computed get pictureSelectedText(): string {
     const T = texts.current;
 
-    if (!CreatePlaylistForm.pictureFile && CreatePlaylistForm.pictureUrl == '') {
+    if (!NewPlaylistForm.pictureFile && NewPlaylistForm.pictureUrl == '') {
       return T.noPicture;
-    } else if (CreatePlaylistForm.pictureUrl != '') {
-      return T.currentPicture + CreatePlaylistForm.pictureUrl;
+    } else if (NewPlaylistForm.pictureUrl != '') {
+      return T.currentPicture + NewPlaylistForm.pictureUrl;
     }
-    return T.currentPicture + CreatePlaylistForm.pictureFile.name;
+    return T.currentPicture + NewPlaylistForm.pictureFile.name;
   }
 
   @action cancelImage = () => {
-    CreatePlaylistForm.setPicture(null);
-    CreatePlaylistForm.setPictureUrl('');
+    NewPlaylistForm.setPicture(null);
+    NewPlaylistForm.setPictureUrl('');
   };
 
   @action handleOpenModal = () => {
@@ -195,7 +189,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
             <Grid item style={{ marginBottom: '2em' }}>
               <TextField
                 id='standard-basic'
-                value={CreatePlaylistForm.name}
+                value={NewPlaylistForm.name}
                 name='playlist-name'
                 helperText={this.nameHelper}
                 InputLabelProps={{ style: { fontSize: '1.3rem' } }}
@@ -206,7 +200,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
                 }}
                 onChange={e => {
                   this.nameHelper = '';
-                  CreatePlaylistForm.setName(e.target.value);
+                  NewPlaylistForm.setName(e.target.value);
                 }}
                 style={{ display: 'inline-block' }}
                 label={T.nameInput.placeholder}
@@ -235,7 +229,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
                 type='button'
                 className={classes.button}
                 style={{ display: 'inline-block' }}
-                disabled={!UserData.settings.internetUsage}
+                disabled={!User.settings.internetUsage}
                 onClick={this.handleOpenModal}
               >
                 <PublicIcon className={classes.icon} /> {T.internet}
@@ -247,7 +241,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
                 >
                   {this.pictureSelectedText}
                 </Typography>
-                {CreatePlaylistForm.pictureFile || CreatePlaylistForm.pictureUrl != '' ? (
+                {NewPlaylistForm.pictureFile || NewPlaylistForm.pictureUrl != '' ? (
                   <IconButton
                     style={{ position: 'relative', top: '-0.3em', display: 'inline-block' }}
                     onClick={this.cancelImage}
@@ -265,7 +259,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
                   multiline
                   rows='4'
                   helperText={this.descriptionHelper}
-                  value={CreatePlaylistForm.description}
+                  value={NewPlaylistForm.description}
                   InputLabelProps={{ style: { fontSize: '1.3rem' } }}
                   InputProps={{
                     classes: {
@@ -275,7 +269,7 @@ class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnac
                   className={classes.descriptionInput}
                   onChange={e => {
                     this.descriptionHelper = '';
-                    CreatePlaylistForm.setDescription(e.target.value);
+                    NewPlaylistForm.setDescription(e.target.value);
                   }}
                   variant='outlined'
                 />

@@ -3,11 +3,11 @@ import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
-import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
-import SearchContainer from '../../fragments/playlist/SearchContainer';
-import PlaylistBody from '../../fragments/playlist/PlaylistBody';
+import PlaylistHeader from '../../playlist/PlaylistHeader';
+import SearchContainer from '../../playlist/SearchContainer';
+import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
 
-import BookmarksData from '../../../store/common/BookmarksData';
+import Bookmarks from '../../../store/data/Bookmarks';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/favorites';
@@ -31,12 +31,12 @@ class Favorites extends React.Component<IProps, NoState> {
       <div className={classes.root}>
         <PlaylistHeader
           {...T.playlistHeader}
-          playlist={BookmarksData.bookmarks}
+          playlist={Bookmarks.bookmarks}
           image='/assets/images/favorites.png'
           stat={Stats.TIME_SPENT_LISTENING}
         />
         <SearchContainer />
-        <PlaylistBody playlist={BookmarksData.bookmarks} favorites />
+        <PlaylistBody playlist={Bookmarks.bookmarks} favorites />
       </div>
     );
   }

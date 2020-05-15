@@ -16,19 +16,20 @@ import InputBase from '@material-ui/core/InputBase';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import SimpleHeader from '../../fragments/playlist/SimpleHeader';
+import SimpleHeader from '../../layout/SimpleHeader';
 import ConfirmModal from '../../utils/ConfirmModal';
-import ManageFoldersModal from '../../fragments/settings/ManageFoldersModal';
+import ManageFoldersModal from '../../modals/ManageFoldersModal';
 
-import NavigationForm from '../../../store/common/NavigationForm';
-import SettingsForm from '../../../store/pages/settings/SettingsForm';
-import LoadingForm from '../../../store/loading/LoadingForm';
-import UserData from '../../../store/common/UserData';
+import Navigation from '../../../store/navigation/Navigation';
+import SettingsForm from '../../../store/forms/SettingsForm';
+import Loading from '../../../store/loading/Loading';
+import User from '../../../store/data/User';
 
 import { Language } from '../../../../shared/Languages';
 import texts from '../../../lang/pages/settings/';
 
-import { UpdateUserSettings } from '../../../requests/User';
+import { UpdateUserSettings, ResetLouki, UpdateSettingsResponse } from '../../../requests/Users';
+import { TestPixabayResponse, TestPixabay } from '../../../requests/Pixabay';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -119,33 +120,25 @@ class Settings extends React.Component<Props & RouteComponentProps & WithSnackba
   @observable pixabayTestLoading: boolean = true;
 
   componentDidMount() {
-    fetch('/pixabay')
-      .then(res => {
-        return res.json();
-      })
-      .then(pixabayIsValid => {
-        this.isPixabayAPIKeyValid = pixabayIsValid;
-        this.pixabayTestLoading = false;
-      });
+    TestPixabay().then((result: TestPixabayResponse) => {
+      this.isPixabayAPIKeyValid = result;
+      this.pixabayTestLoading = false;
+    });
   }
 
   handleCancel = () => {
-    this.props.history.push(NavigationForm.previousRoute);
+    this.props.history.push(Navigation.previousRoute);
   };
 
   handleSave = () => {
     const form = document.getElementById('settings-form') as HTMLFormElement;
     if (form != null) {
-      UpdateUserSettings(form, SettingsForm.settings, SettingsForm.id)
-        .then(res => {
-          return res.json();
-        })
-        .then(data => {
-          UserData.setUser(data);
-          const snackbarOptions = { variant: 'success' as any };
-          this.props.enqueueSnackbar(texts.current.settingsUpdated, snackbarOptions);
-          this.props.history.push(NavigationForm.previousRoute);
-        });
+      UpdateUserSettings(form, SettingsForm.settings, SettingsForm.id).then((response: UpdateSettingsResponse) => {
+        User.setUser(response);
+        const snackbarOptions = { variant: 'success' as any };
+        this.props.enqueueSnackbar(texts.current.settingsUpdated, snackbarOptions);
+        this.props.history.push(Navigation.previousRoute);
+      });
     }
   };
 
@@ -170,8 +163,8 @@ class Settings extends React.Component<Props & RouteComponentProps & WithSnackba
   resetLouki = () => {
     SettingsForm.setOpen(false);
     localStorage.clear();
-    fetch('/resetLouki', { method: 'POST' }).then(() => {
-      LoadingForm.reloadApp();
+    ResetLouki().then(() => {
+      Loading.reloadApp();
     });
   };
 
@@ -193,7 +186,7 @@ class Settings extends React.Component<Props & RouteComponentProps & WithSnackba
           onCancel={this.closeConfirmModal}
           onConfirm={this.resetLouki}
         />
-        <ManageFoldersModal open={SettingsForm.openManage} folders={UserData.folders} />
+        <ManageFoldersModal open={SettingsForm.openManage} folders={User.folders} />
         <SimpleHeader title={T.title} />
         <Grid container className={classes.root} direction='column'>
           <form
@@ -231,7 +224,7 @@ class Settings extends React.Component<Props & RouteComponentProps & WithSnackba
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
               <Typography className={classes.text}>
-                {T.directories} : {UserData.folders.length} {T.folders(UserData.folders.length)}
+                {T.directories} : {User.folders.length} {T.folders(User.folders.length)}
               </Typography>
               <Button
                 className={classes.button}

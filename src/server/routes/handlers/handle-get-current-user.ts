@@ -6,6 +6,6 @@ import { GetCurrentUserResponse } from '../../../shared/RoutesResponses';
 export const handleGetCurrentUser = (req: Request, res: Response): void => {
   databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
     const response: GetCurrentUserResponse = users[0];
-    res.json(response);
+    res.status(200).json(response);
   });
 };

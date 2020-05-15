@@ -10,6 +10,6 @@ export const handlePixabaySearch = (req: Request, res: Response): void => {
     for (let i = 0; i < results.hits.length; i++) {
       images.push(results.hits[i].webformatURL);
     }
-    res.send(images);
+    res.status(200).send(images);
   });
 };

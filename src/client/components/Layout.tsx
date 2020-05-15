@@ -7,10 +7,10 @@ import RouteChangeHandler from '../components/utils/RouteChangeHandler';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
-import TopBar from './fragments/topbar/TopBar';
-import LeftPanel from './fragments/left-panel/LeftPanel';
-import MusicBar from './fragments/music-bar/MusicBar';
-import PlaylistPanel from './fragments/playlist-panel/PlaylistPanel';
+import TopBar from './layout/topbar/TopBar';
+import LeftPanel from './layout/left-panel/LeftPanel';
+import MusicBar from './layout/music-bar/MusicBar';
+import PlaylistPanel from './layout/playlist-panel/PlaylistPanel';
 import AllMusic from './pages/all-music/AllMusic';
 import ArtistsOrAlbums from './pages/artists-or-albums/ArtistsOrAlbums';
 import NewPlaylist from './pages/new-playlist/NewPlaylist';
@@ -18,7 +18,7 @@ import Playlist from './pages/playlist/Playlist';
 import Settings from './pages/settings/Settings';
 import Favorites from './pages/favorites/Favorites';
 import SpecificArtistOrAlbum from './pages/specific-artist-or-album/SpecificArtistOrAlbum';
-import SetupModal from './fragments/setup-modal/SetupModal';
+import SetupModal from './modals/setup-modal/SetupModal';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -42,7 +42,7 @@ const styles = (theme: Theme) =>
         height: 'calc(100vh - 140px)',
       },
       [theme.breakpoints.down('xs')]: {
-        height: 'calc(100vh - 145px)',
+        height: 'calc(100vh - 115px)',
       },
     },
   });

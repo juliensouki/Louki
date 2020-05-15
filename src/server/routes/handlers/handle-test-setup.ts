@@ -6,6 +6,6 @@ import { TestSetupResponse } from '../../../shared/RoutesResponses';
 export const handleTestSetup = (req: Request, res: Response): void => {
   databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
     const response: TestSetupResponse = users && users.length > 0;
-    res.send(response);
+    res.status(200).send(response);
   });
 };

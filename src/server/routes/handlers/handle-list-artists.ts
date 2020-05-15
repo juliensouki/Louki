@@ -5,6 +5,6 @@ import { ListArtistsResponse } from '../../../shared/RoutesResponses';
 
 export const handleListArtists = (req: Request, res: Response): void => {
   databaseHandler.getCollectionContent(Artist).then((artists: ListArtistsResponse) => {
-    res.json(artists);
+    res.status(200).json(artists);
   });
 };

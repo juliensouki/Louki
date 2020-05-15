@@ -16,7 +16,7 @@ export const handleMusicSearch = (req: Request, res: Response): void => {
           response.push(music.__id);
         }
       });
-      res.json(response);
+      res.status(200).json(response);
     }
   });
 };

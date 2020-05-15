@@ -3,10 +3,10 @@ import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
-import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
-import SearchContainer from '../../fragments/playlist/SearchContainer';
-import PlaylistBody from '../../fragments/playlist/PlaylistBody';
-import MusicsData from '../../../store/common/MusicsData';
+import PlaylistHeader from '../../playlist/PlaylistHeader';
+import SearchContainer from '../../playlist/SearchContainer';
+import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
+import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/all-songs';
@@ -30,12 +30,12 @@ class AllMusic extends React.Component<IProps, NoState> {
       <div className={classes.root}>
         <PlaylistHeader
           {...T.playlistHeader}
-          playlist={MusicsData.allMusics}
+          playlist={LoukiStore.allMusics}
           image='/assets/images/all-musics.png'
           stat={Stats.TIME_SPENT_LISTENING}
         />
         <SearchContainer />
-        <PlaylistBody canAddToFavorites playlist={MusicsData.allMusics} allSongs />
+        <PlaylistBody canAddToFavorites playlist={LoukiStore.allMusics} allSongs />
       </div>
     );
   }

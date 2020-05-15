@@ -4,15 +4,18 @@ import { observable } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import IMusic from '../../../../shared/IMusic';
+import IArtist from '../../../../shared/IArtist';
+import IAlbum from '../../../../shared/IAlbum';
 
-import MusicsData from '../../../store/common/MusicsData';
+import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
 
-import PlaylistBody from '../../fragments/playlist/PlaylistBody';
-import SearchContainer from '../../fragments/playlist/SearchContainer';
-import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
+import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
+import SearchContainer from '../../playlist/SearchContainer';
+import PlaylistHeader from '../../playlist/PlaylistHeader';
 
 import texts from '../../../lang/pages/specific-artist-or-album';
+import { GetArtistOrAlbum, GetArtistOrAlbumResponse } from '../../../requests/ArtistsOrAlbums';
 
 @observer
 class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState> {
@@ -25,19 +28,15 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
     this.artistOrAlbum = this.props.location.pathname.split('/')[1];
     this.artistOrAlbumId = this.props.location.pathname.split('/' + this.artistOrAlbum + '/')[1];
 
-    fetch('/' + this.artistOrAlbum + '?id=' + this.artistOrAlbumId)
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        if (data == null) {
-          this.props.history.push('/all-music');
-        } else {
-          const arrayOfIds: Array<string> = data.musics;
-          this.artistOrAlbumName = this.artistOrAlbum == 'artist' ? data.name : data.title;
-          this.playlist = MusicsData.idsToMusics(arrayOfIds);
-        }
-      });
+    GetArtistOrAlbum(this.artistOrAlbum, this.artistOrAlbumId).then((response: GetArtistOrAlbumResponse) => {
+      if (response == null) {
+        this.props.history.push('/all-music');
+      } else {
+        const arrayOfIds: Array<string> = response.musics;
+        this.artistOrAlbumName = (response as IArtist).name || (response as IAlbum).title;
+        this.playlist = LoukiStore.idsToMusics(arrayOfIds);
+      }
+    });
   }
 
   render() {

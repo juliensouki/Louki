@@ -21,6 +21,6 @@ export const handleLoadLouki = async (req: Request, res: Response) => {
       bookmarks: bookmarks,
     };
 
-    res.json(response);
+    res.status(200).json(response);
   });
 };

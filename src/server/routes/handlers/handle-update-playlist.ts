@@ -4,7 +4,8 @@ import Playlist from '../../db/schemas/Playlist';
 import { UpdatePlaylistResponse } from '../../../shared/RoutesResponses';
 
 export const handleUpdatePlaylist = (req: Request, res: Response): void => {
-  const { playlistId, playlistName, playlistDescription } = req.body;
+  const { playlistId } = req.params;
+  const { playlistName, playlistDescription } = req.body;
 
   const jsonUpdate = {
     name: playlistName,
