@@ -35,6 +35,7 @@ const fLoader = new filesLoader(databaseHandler, io);
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use('/assets', express.static(path.join(process.cwd(), 'assets')));
+app.use('/views', express.static(path.join(process.cwd(), 'views')));
 app.use('/musics', express.static(path.join(process.cwd(), 'musics')));
 app.use('/musics2', express.static(path.join(process.cwd(), 'musics2')));
 app.use('/scripts', express.static(path.join(process.cwd(), 'musics2')));
