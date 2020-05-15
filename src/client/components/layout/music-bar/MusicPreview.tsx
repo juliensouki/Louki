@@ -65,10 +65,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {}; //eslint-disable-line
-
 @observer
-class MusicPreview extends React.Component<IProps & RoutePropsComponent, NoState> {
+class MusicPreview extends React.Component<WithStyles & RoutePropsComponent, NoState> {
   handleClick = () => {
     this.props.history.push(MusicPlayer.playlistRoute);
   };

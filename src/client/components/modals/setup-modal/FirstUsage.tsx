@@ -14,10 +14,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {} //eslint-disable-line
-
 @observer
-class FirstUsage extends React.Component<IProps, NoState> {
+class FirstUsage extends React.Component<WithStyles, NoState> {
   render() {
     const { classes } = this.props;
 

@@ -24,9 +24,9 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface Props extends WithStyles<typeof styles> { // eslint-disable-line
+interface Props extends WithStyles<typeof styles> {
   title: string;
-}; // eslint-disable-line
+};
 
 @observer
 class SimpleHeader extends React.Component<Props, NoState> {

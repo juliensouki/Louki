@@ -19,7 +19,7 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
   inline?: boolean;
-} //eslint-disable-line
+}
 
 @observer
 class Pixabay extends React.Component<React.PropsWithChildren<IProps>, NoState> {

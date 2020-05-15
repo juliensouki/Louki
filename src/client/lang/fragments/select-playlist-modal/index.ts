@@ -3,7 +3,7 @@ import en from './en';
 import { Language } from '../../../../shared/Languages';
 import LanguagesManager from '../../../store/languages/LanguagesManager';
 
-export interface Definition { // eslint-disable-line
+export interface Definition {
   addedToPlaylistNotif(musicName: string, playlistName: string): string;
   alreadyInPlaylistNotif(musicName: string, playlistName: string): string;
   title: string;

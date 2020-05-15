@@ -9,7 +9,7 @@ import { Grid, Typography } from '@material-ui/core';
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
-      'a': { //eslint-disable-line
+      'a': {
         color: theme.palette.primary.main,
         textDecoration: 'none',
       },

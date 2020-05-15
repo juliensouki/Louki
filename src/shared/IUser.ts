@@ -1,13 +1,13 @@
 import { Language } from './Languages';
 
-export interface Settings { // eslint-disable-line
+export interface Settings {
   language: Language;
   internetUsage: boolean;
   username: string;
   picture: string;
 }
 
-export interface AccountSettings { //eslint-disable-line
+export interface AccountSettings {
   language: Language;
   internetUsage: boolean;
 }

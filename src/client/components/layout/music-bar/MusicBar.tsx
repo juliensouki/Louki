@@ -9,10 +9,8 @@ import MusicBarMobile from './MusicBarMobile';
 
 const styles = (theme: Theme) => createStyles({});
 
-interface Props extends WithStyles<typeof styles> {}; // eslint-disable-line
-
 @observer
-class MusicBar extends React.Component<Props, NoState> {
+class MusicBar extends React.Component<WithStyles, NoState> {
   render() {
     const { classes } = this.props;
 
