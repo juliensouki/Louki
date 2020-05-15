@@ -4,11 +4,11 @@ import Playlist from '../../db/schemas/Playlist';
 import { DeletePlaylistResponse } from '../../../shared/RoutesResponses';
 
 export const handleDeletePlaylist = (req: Request, res: Response): void => {
-  const id = req.body.playlistId;
+  const { playlistId } = req.params;
 
-  databaseHandler.deleteFromDocument(Playlist, '__id', id).then(() => {
+  databaseHandler.deleteFromDocument(Playlist, '__id', playlistId).then(() => {
     databaseHandler.getCollectionContent(Playlist).then((response: DeletePlaylistResponse) => {
-      res.send(response);
+      res.status(200).send(response);
     });
   });
 };

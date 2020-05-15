@@ -16,7 +16,7 @@ export const handleRemoveBookmark = (req: Request, res: Response): void => {
     },
     error => {
       console.log(error);
-      res.send(null);
+      res.status(200).send(null);
     },
   );
 };

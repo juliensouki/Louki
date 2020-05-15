@@ -24,7 +24,7 @@ export const handleUpdateSettings = async (req: Request, res: Response) => {
   databaseHandler.updateDocument(User, id, jsonUpdate).then(() => {
     databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
       const response: UpdateSettingsResponse = users[0];
-      res.json(response);
+      res.status(200).json(response);
     });
   });
 };

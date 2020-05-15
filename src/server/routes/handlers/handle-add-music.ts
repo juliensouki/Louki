@@ -3,7 +3,8 @@ import databaseHandler from '../../db';
 import Playlist from '../../db/schemas/Playlist';
 
 export const handleAddMusic = (req: Request, res: Response): void => {
-  const { playlistId, musicId } = req.body;
+  const { playlistId } = req.params;
+  const { musicId } = req.body;
 
   databaseHandler.findOneInDocument(Playlist, '__id', playlistId).then(values => {
     if (values[0].musics.includes(musicId)) {

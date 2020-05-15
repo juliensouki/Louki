@@ -1,7 +1,7 @@
 import fr from './fr';
 import en from './en';
 import { Language } from '../../../../shared/Languages';
-import LanguagesManager from '../../../store/LanguagesManager';
+import LanguagesManager from '../../../store/languages/LanguagesManager';
 
 export interface Definition { // eslint-disable-line
   addedToPlaylistNotif(musicName: string, playlistName: string): string;

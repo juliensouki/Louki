@@ -2,15 +2,14 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import PlaylistHeader from '../../fragments/playlist/PlaylistHeader';
-import SearchContainer from '../../fragments/playlist/SearchContainer';
-import PlaylistBody from '../../fragments/playlist/PlaylistBody';
+import PlaylistHeader from '../../playlist/PlaylistHeader';
+import SearchContainer from '../../playlist/SearchContainer';
+import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
 
 import IMusic from '../../../../shared/IMusic';
 import IPlaylist from '../../../../shared/IPlaylist';
 
-import CurrentPlaylist from '../../../store/fragments/playlist/CurrentPlaylist';
-import MusicsData from '../../../store/common/MusicsData';
+import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/custom-playlist';
@@ -19,8 +18,8 @@ class Playlist extends React.Component<RouteComponentProps, NoState> {
   render() {
     const T = texts.current;
 
-    const playlist: IPlaylist = CurrentPlaylist.currentPlaylist;
-    const musics: Array<IMusic> = playlist != null ? MusicsData.idsToMusics(playlist.musics) : [];
+    const playlist: IPlaylist = LoukiStore.currentPlaylist;
+    const musics: Array<IMusic> = playlist != null ? LoukiStore.idsToMusics(playlist.musics) : [];
 
     const defaultPlaylistImage = '/assets/images/playlist.png';
 

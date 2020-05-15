@@ -31,7 +31,7 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
       },
       () => {
         databaseHandler.getCollectionContent(Playlist).then((response: CreatePlaylistResponse) => {
-          res.send(response);
+          res.status(200).send(response);
         });
       },
     );

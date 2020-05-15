@@ -15,9 +15,7 @@ const nbTimesCustomPlaylist = (playlist: string): string => {
 
 const timeSpentListening = (): string => {
   const seconds: number = Number(localStorage.getItem('time_listening_music')) || 0;
-  return seconds == 0
-    ? texts.current.noListen //You didn't listen to any music yet.
-    : texts.current.listened(secondsToDhms(seconds)); //${secondsToDhms(seconds)} listening to your music`;
+  return seconds == 0 ? texts.current.noListen : texts.current.listened(secondsToDhms(seconds));
 };
 
 const recentlyAdded = (type: string): string => {

@@ -5,6 +5,6 @@ import { ListPlaylistsResponse } from '../../../shared/RoutesResponses';
 
 export const handleListPlaylists = (req: Request, res: Response): void => {
   databaseHandler.getCollectionContent(Playlist).then((playlists: ListPlaylistsResponse) => {
-    res.json(playlists);
+    res.status(200).json(playlists);
   });
 };

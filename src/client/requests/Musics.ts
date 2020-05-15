@@ -1,13 +1,13 @@
-import MusicsData from '../store/common/MusicsData';
-import LoadingForm from '../store/loading/LoadingForm';
+import LoukiStore from '../store/data/LoukiStore';
+import Loading from '../store/loading/Loading';
 
 export const LoadMusics = async () => {
-  fetch('/allMusics')
+  fetch(`/api/v1/list-musics`)
     .then(res => {
       return res.json();
     })
     .then(data => {
-      MusicsData.setMusics(data);
-      LoadingForm.musicsHaveLoaded();
+      LoukiStore.setMusics(data);
+      Loading.musicsHaveLoaded();
     });
 };
