@@ -1,4 +1,4 @@
-export enum Language { // eslint-disable-line
+export enum Language {
   French = 'french',
   English = 'english',
 }

@@ -34,10 +34,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface Props extends WithStyles<typeof styles> {}; //eslint-disable-line
-
 @observer
-class SearchContainer extends React.Component<Props, NoState> {
+class SearchContainer extends React.Component<WithStyles, NoState> {
   render() {
     const { classes } = this.props;
     const T = texts.current;

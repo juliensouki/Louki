@@ -84,10 +84,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {} // eslint-disable-line
-
 @observer
-class MusicBarDesktop extends React.Component<IProps, NoState> {
+class MusicBarDesktop extends React.Component<WithStyles, NoState> {
   @observable volumeAnchorEl: HTMLElement | null = null;
 
   handlePopoverOpen = event => {

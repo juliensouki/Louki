@@ -46,10 +46,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {} //eslint-disable-line
-
 @observer
-class NewAccount extends React.Component<IProps, NoState> {
+class NewAccount extends React.Component<WithStyles, NoState> {
   openFileExplorer = () => {
     const fileInput = document.getElementById('hidden-file-input');
     if (fileInput) {

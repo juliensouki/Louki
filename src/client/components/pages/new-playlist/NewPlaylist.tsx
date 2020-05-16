@@ -74,13 +74,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface Props extends WithStyles<typeof styles> // eslint-disable-line
-{ 
-
-}; // eslint-disable-line
-
 @observer
-class NewPlaylist extends React.Component<Props & RouteComponentProps & WithSnackbarProps, NoState> {
+class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & WithSnackbarProps, NoState> {
   @observable nameHelper: string = '';
   @observable descriptionHelper: string = '';
   @observable open: boolean = false;

@@ -76,10 +76,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {}; // eslint-disable-line
-
 @observer
-class TopBar extends React.Component<IProps, NoState> {
+class TopBar extends React.Component<WithStyles, NoState> {
   openOrCloseMenu = () => {
     MobileMenu.setOpen(!MobileMenu.isOpen);
   };

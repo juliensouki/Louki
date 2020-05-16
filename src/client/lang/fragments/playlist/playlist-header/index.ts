@@ -3,7 +3,7 @@ import en from './en';
 import { Language } from '../../../../../shared/Languages';
 import LanguagesManager from '../../../../store/languages/LanguagesManager';
 
-export interface Definition { // eslint-disable-line
+export interface Definition {
   play: string;
   continue: string;
   pause: string;

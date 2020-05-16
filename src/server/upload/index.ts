@@ -2,7 +2,7 @@ import { Request } from 'express';
 import databaseHandler from '../db';
 import User from '../db/schemas/User';
 
-interface MulterStorage { // eslint-disable-line
+interface MulterStorage {
   destination: (req: Request, file, cb: (e: Error | null, dest: string) => void) => void;
   filename: (req: Request, file, cb: (e: Error | null, dest: string) => void) => void;
 }

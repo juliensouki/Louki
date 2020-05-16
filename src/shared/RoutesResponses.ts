@@ -4,7 +4,7 @@ import IPlaylist from './IPlaylist';
 import IMusic from './IMusic';
 import IUser from './IUser';
 
-export interface UpdatePlaylistBody { // eslint-disable-line
+export interface UpdatePlaylistBody {
   playlists: Array<IPlaylist>;
   currentPlaylist: IPlaylist;
 }

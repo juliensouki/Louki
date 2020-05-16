@@ -18,10 +18,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {} // eslint-disable-line
-
 @observer
-class AllMusic extends React.Component<IProps, NoState> {
+class AllMusic extends React.Component<WithStyles, NoState> {
   render() {
     const { classes } = this.props;
     const T = texts.current;

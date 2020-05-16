@@ -74,11 +74,6 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface Props extends WithStyles<typeof styles> // eslint-disable-line
-{ 
-
-}; // eslint-disable-line
-
 const BootstrapInput = withStyles(theme => ({
   root: {
     'label + &': {
@@ -115,7 +110,7 @@ const BootstrapInput = withStyles(theme => ({
 }))(InputBase);
 
 @observer
-class Settings extends React.Component<Props & RouteComponentProps & WithSnackbarProps, NoState> {
+class Settings extends React.Component<WithStyles & RouteComponentProps & WithSnackbarProps, NoState> {
   @observable isPixabayAPIKeyValid: boolean = false;
   @observable pixabayTestLoading: boolean = true;
 
