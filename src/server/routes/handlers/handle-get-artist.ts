@@ -19,7 +19,7 @@ export const handleGetArtist = (req: Request, res: Response): void => {
       };
 
       logError(response);
-      res.status(422).send(response);
+      res.status(500).send(response);
     }
   });
 };

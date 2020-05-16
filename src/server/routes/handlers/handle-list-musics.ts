@@ -10,6 +10,6 @@ export const handleListMusics = (req: Request, res: Response): void => {
   },
   error => {
     logError(error);
-    res.status(422).send(error);
+    res.status(500).send(error);
   });
 };

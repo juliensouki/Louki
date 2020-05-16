@@ -16,7 +16,7 @@ export const handleGetAlbum = (req: Request, res: Response): void => {
         message: `Couldn't get album for id ${id}`
       };
       logError(response);
-      res.status(422).send(response);
+      res.status(500).send(response);
     }
   });
 };

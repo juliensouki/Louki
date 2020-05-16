@@ -13,24 +13,24 @@ export const handleRemoveBookmark = (req: Request, res: Response): void => {
       databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
         if (users && users.lenght > 0) {
           const response: RemoveBookmarkResponse = (users[0] as IUser).favorites;
-          res.send(response);
+          res.status(200).send(response);
         } else {
           const response: CustomError = {
             name: `Remove bookmark error`,
             message: `Unable to get current user in order to remove music with id ${id} from bookrmarks`,
           };
           logError(response);
-          res.status(422).send(response);
+          res.status(500).send(response);
         }
       },
       error => {
         logError(error);
-        res.status(422).send(error);
+        res.status(500).send(error);
       });
     },
     error => {
       logError(error);
-      res.status(422).send(error);
+      res.status(500).send(error);
     },
   );
 };

@@ -13,10 +13,10 @@ export const handleDeletePlaylist = (req: Request, res: Response): void => {
     }, 
     error => {
       logError(error);
-      res.status(422).send(error.message);    
+      res.status(500).send(error.message);    
     });
   }, error => {
     logError(error);
-    res.status(422).send(error.message);    
+    res.status(500).send(error.message);    
   });
 };

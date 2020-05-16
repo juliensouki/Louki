@@ -17,11 +17,11 @@ export const handleMusicSearch = (req: Request, res: Response): void => {
           response.push(music.__id);
         }
       });
-      res.status(200).json(response);
+      res.status(200).send(response);
     }
   },
   error => {
     logError(error);
-    res.status(422).send(error);
+    res.status(500).send(error);
   });
 };

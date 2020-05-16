@@ -26,23 +26,23 @@ export const handleUpdateSettings = async (req: Request, res: Response) => {
     databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
       if (users && users.length > 0) {
         const response: UpdateSettingsResponse = users[0];
-        res.status(200).json(response);
+        res.status(200).send(response);
       } else {
         const response: CustomError = {
           name: `Update user settings error`,
           message: `Unable to get current user`,
         };
         logError(response);
-        res.status(422).send(response);
+        res.status(500).send(response);
       }
     },
     error => {
       logError(error);
-      res.status(422).send(error);
+      res.status(500).send(error);
     });
   },
   error => {
     logError(error);
-    res.status(422).send(error);
+    res.status(500).send(error);
   });
 };

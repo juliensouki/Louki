@@ -30,11 +30,11 @@ export const handleLoadLouki = async (req: Request, res: Response) => {
         message: `Couln't get current user`,
       };
       logError(response);
-      res.status(422).send(response);
+      res.status(500).send(response);
     }
   },
   error => {
     logError(error);
-    res.status(422).send(error);
+    res.status(500).send(error);
   });
 };

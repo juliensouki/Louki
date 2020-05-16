@@ -19,14 +19,16 @@ export const handleRemoveMusic = (req: Request, res: Response): void => {
           message: `Unable to get updated playlist`,
         };
         logError(response);
-        res.status(422).send(response);
+        res.status(500).send(response);
       }
     },
     error => {
       logError(error);
+      res.status(500).send(error);
     });
   },
   error => {
     logError(error);
+    res.status(500).send(error);
   });
 };

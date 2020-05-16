@@ -20,6 +20,6 @@ export const handleSetupLouki = (req: Request, res: Response): void => {
     res.status(200).send(response);
   }, error => {
     logError(error);
-    res.status(422).send(error);
+    res.status(500).send(error);
   });
 };

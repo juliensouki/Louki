@@ -13,7 +13,7 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
   const creationDate = new Date().getTime();
   const id = uuid.v4();
 
-  databaseHandler.findOneInDocument(User, 'selected', true).then(user => {
+  databaseHandler.findOneInDocument(User, 'selected', true).then(() => {
     let filePath;
     if (file) {
       const extension = file['mimetype'].split('image/')[1];
@@ -36,13 +36,13 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
         },
         error => {
           logError(error);
-          res.status(422).send(error.message);      
+          res.status(500).send(error.message);      
         });
       },
     );
   },
   error => {
     logError(error);
-    res.status(422).send(error.message);    
+    res.status(500).send(error.message);    
   });
 };

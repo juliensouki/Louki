@@ -19,16 +19,16 @@ export const handleRemoveFolder = (req: Request, res: Response, dLoader: any): v
           message: `Unable to get current user`,
         };
         logError(response);
-        res.status(422).send(response);
+        res.status(500).send(response);
       }
     },
     error => {
       logError(error);
-      res.status(422).send(error);
+      res.status(500).send(error);
 
     });
   }, error => {
     logError(error);
-    res.status(422).send(error);
+    res.status(500).send(error);
   });
 };

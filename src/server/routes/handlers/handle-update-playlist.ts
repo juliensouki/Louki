@@ -20,23 +20,23 @@ export const handleUpdatePlaylist = (req: Request, res: Response): void => {
           playlists: playlists,
           currentPlaylist: currentPlaylist[0],
         };
-        res.status(200).json(response);
+        res.status(200).send(response);
       } else {
         const response: CustomError = {
           name: `Update playlist error`,
           message: `Unable to get current playlist`,
         };
         logError(response);
-        res.status(422).send(response);
+        res.status(500).send(response);
       }
     },
     error => {
       logError(error);
-      res.status(422).send(error);  
+      res.status(500).send(error);  
     });
   },
   error => {
     logError(error);
-    res.status(422).send(error);
+    res.status(500).send(error);
   });
 };
