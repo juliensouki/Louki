@@ -17,6 +17,7 @@ const SERVER_PORT = process.env.PORT || 3000;
 const WEBPACK_PORT = 8085;
 
 const checkEnv = (): boolean => {
+  console.log('-------------------------- CONFIGURATION -------------------------------');
   if (!process.env.DATABASE_URL) {
     console.log(`Environment error : DATABASE_URL is missing in your .env file. Exiting Louki now.`);
     process.exit();
@@ -33,6 +34,7 @@ const checkEnv = (): boolean => {
   console.log(logsText);
   console.log(`Pixabay API KEY : ${pixabayKeyExists}`);
   console.log(`Webpack polling feature : ${webpackPolling}`);
+  console.log('----------------------- END OF CONFIGURATION ---------------------------');
   return true;
 }
 
