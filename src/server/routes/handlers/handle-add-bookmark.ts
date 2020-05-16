@@ -16,7 +16,7 @@ export const handleAddBookmark = (req: Request, res: Response): void => {
     },
     error => {
       console.log(error);
-      res.send(null);
+      res.status(422).send(error.message);
     },
   );
 };
