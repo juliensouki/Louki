@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { logError } from '../logger';
 
 class DatabaseHandler {
   private url: string = process.env.DATABASE_URL;
@@ -6,13 +7,14 @@ class DatabaseHandler {
   private Musics: any = null;
 
   connect = async () => {
-    mongoose.connect(
-      this.url,
-      { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true },
-      async err => {
-        if (err) throw err;
-      },
-    );
+    try {
+      await mongoose.connect(
+        this.url, 
+        { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }
+      );
+    } catch (error) {
+      logError(error);
+    }
   };
 
   deleteFromDocument = (model, fieldName: string, fieldValue: string) => {

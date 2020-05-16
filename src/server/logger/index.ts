@@ -1,13 +1,18 @@
 import mongoose from 'mongoose';
 import { CustomError } from '../../shared/RoutesResponses';
 
-const opts = {
+const opts = process.env.LOG_FOLDER ? {
   errorEventName: 'Server error',
-      logDirectory: process.env.LOG_FOLDER ? process.env.LOG_FOLDER : null,
-      fileNamePattern:'louki.log',
+  logDirectory: process.env.LOG_FOLDER,
+  timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS',
+  fileNamePattern:'louki.log',
+} : {
+  timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS',
 };
 
-const logger = require('simple-node-logger').createRollingFileLogger( opts );
+const simpleNodeLogger = require('simple-node-logger');
+const logger = process.env.LOG_FOLDER ? simpleNodeLogger.createRollingFileLogger(opts) : 
+  simpleNodeLogger.createSimpleLogger(opts);
 
 export const logError = (error: mongoose.Error | CustomError): void => {
   logger.error(`${error.name} : ${error.message}`);

@@ -15,6 +15,7 @@ import * as config from './config/config';
 import { playlistPictureStorage, profilePictureStorage } from './upload';
 import filesLoader from './filesLoader';
 import databaseHandler from './db';
+import logger from './logger';
 
 const playlistUpload = multer({ storage: multer.diskStorage(profilePictureStorage) });
 const profileUpload = multer({ storage: multer.diskStorage(playlistPictureStorage) });
@@ -22,13 +23,6 @@ const profileUpload = multer({ storage: multer.diskStorage(playlistPictureStorag
 const app = express();
 const server = http.createServer(app);
 const io = socketio.listen(server);
-
-const startServer = () => {
-  console.log('Starting server');
-  server.listen(config.SERVER_PORT, () => {
-    console.log(`App listening on port ${config.SERVER_PORT}!`);
-  });
-};
 
 const fLoader = new filesLoader(databaseHandler, io);
 
@@ -76,9 +70,18 @@ app.use(apiRouter());
 app.use(staticsRouter());
 app.use(pagesRouter());
 
-databaseHandler.connect();
-
-mongoose.connection.once('open', function() {
-  console.log('Connected to database');
-  fLoader.loadData(startServer);
-});
+if (config.checkEnv()) {
+  const startServer = () => {
+    logger.info('Starting server');
+    server.listen(config.SERVER_PORT, () => {
+      logger.info(`App listening on port ${config.SERVER_PORT}!`);
+    });
+  };
+  
+  databaseHandler.connect();
+  
+  mongoose.connection.once('open', function() {
+    logger.info('Connected to database');
+    fLoader.loadData(startServer);
+  });
+}
