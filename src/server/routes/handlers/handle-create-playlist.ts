@@ -4,6 +4,7 @@ import User from '../../db/schemas/User';
 import Playlist from '../../db/schemas/Playlist';
 import uuid from 'uuid';
 import { CreatePlaylistResponse } from '../../../shared/RoutesResponses';
+import { logError } from '../../logger';
 
 export const handleCreatePlaylist = (req: Request, res: Response): void => {
   const name = req.body['playlist-name'];
@@ -32,8 +33,16 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
       () => {
         databaseHandler.getCollectionContent(Playlist).then((response: CreatePlaylistResponse) => {
           res.status(200).send(response);
+        },
+        error => {
+          logError(error);
+          res.status(422).send(error.message);      
         });
       },
     );
+  },
+  error => {
+    logError(error);
+    res.status(422).send(error.message);    
   });
 };

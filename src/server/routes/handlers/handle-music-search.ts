@@ -3,12 +3,13 @@ import databaseHandler from '../../db';
 import Music from '../../db/schemas/Music';
 import { MusicSearchResponse } from '../../../shared/RoutesResponses';
 import leven from 'leven';
+import { logError } from '../../logger';
 
 export const handleMusicSearch = (req: Request, res: Response): void => {
   const { searchText, musics } = req.body;
   databaseHandler.findMany(Music, '__id', musics as Array<string>).then(results => {
     if (results.length == 0) {
-      res.json(results);
+      res.status(200).send(results);
     } else {
       const response: MusicSearchResponse = [];
       results.forEach(music => {
@@ -18,5 +19,9 @@ export const handleMusicSearch = (req: Request, res: Response): void => {
       });
       res.status(200).json(response);
     }
+  },
+  error => {
+    logError(error);
+    res.status(422).send(error);
   });
 };

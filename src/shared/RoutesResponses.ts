@@ -1,12 +1,19 @@
+import mongoose from 'mongoose';
 import IArtist from './IArtist';
 import IAlbum from './IAlbum';
 import IPlaylist from './IPlaylist';
 import IMusic from './IMusic';
 import IUser from './IUser';
 
-export interface UpdatePlaylistBody {
+interface UpdatePlaylistBody {
   playlists: Array<IPlaylist>;
   currentPlaylist: IPlaylist;
+}
+
+export interface CustomError {
+  name: string;
+  message: string;
+  details?: any;
 }
 
 export type GetArtistResponse = IArtist;
@@ -33,3 +40,4 @@ export type RemoveMusicResponse = IPlaylist;
 export type PixabaySearchResponse = Array<string>;
 export type MusicSearchResponse = Array<string>;
 export type UpdatePlaylistResponse = UpdatePlaylistBody;
+export type ServerError = CustomError | mongoose.Error;

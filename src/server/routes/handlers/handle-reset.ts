@@ -15,6 +15,6 @@ export const handleReset = (req: Request, res: Response): void => {
   ];
 
   Promise.all(promises).then(() => {
-    res.status(200).json({});
+    res.status(200);
   });
 };
