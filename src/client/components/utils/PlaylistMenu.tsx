@@ -12,7 +12,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   anchorEl: HTMLElement | null;
   handleClose: (event) => void;
   addMusicToPlaylist: (event) => void | null;
@@ -24,7 +24,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistMenu extends React.Component<IProps, NoState> {
+class PlaylistMenu extends React.Component<Props, NoState> {
   render() {
     const { classes } = this.props;
     const T = texts.current;

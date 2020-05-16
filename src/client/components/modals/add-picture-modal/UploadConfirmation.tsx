@@ -26,7 +26,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   loaded: boolean;
   onLoad: () => void;
   url: string;
@@ -41,7 +41,7 @@ const ColorCircularProgress = withStyles({
 })(CircularProgress);
 
 @observer
-class UploadConfirmation extends React.Component<IProps, NoState> {
+class UploadConfirmation extends React.Component<Props, NoState> {
   @observable image: HTMLImageElement;
 
   componentDidMount() {

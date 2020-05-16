@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
-import Album from '../../db/schemas/Album';
-import Artist from '../../db/schemas/Artist';
-import User from '../../db/schemas/User';
-import Playlist from '../../db/schemas/Playlist';
-import Music from '../../db/schemas/Music';
+import AlbumSchema from '../../db/schemas/AlbumSchema';
+import ArtistSchema from '../../db/schemas/ArtistSchema';
+import UserSchema from '../../db/schemas/UserSchema';
+import PlaylistSchema from '../../db/schemas/PlaylistSchema';
+import MusicSchema from '../../db/schemas/MusicSchema';
 
 export const handleReset = (req: Request, res: Response): void => {
   const promises = [
-    User.deleteMany({}),
-    Music.deleteMany({}),
-    Playlist.deleteMany({}),
-    Artist.deleteMany({}),
-    Album.deleteMany({}),
+    UserSchema.deleteMany({}),
+    MusicSchema.deleteMany({}),
+    PlaylistSchema.deleteMany({}),
+    ArtistSchema.deleteMany({}),
+    AlbumSchema.deleteMany({}),
   ];
 
   Promise.all(promises).then(() => {

@@ -6,7 +6,7 @@ import { Typography, List, ListItem, Button } from '@material-ui/core';
 import Modal from '../utils/Modal';
 
 import LoukiStore from '../../store/data/LoukiStore';
-import IPlaylist from '../../../shared/IPlaylist';
+import { Playlist } from '../../../shared/LoukiTypes';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { AddMusic } from '../../requests/Playlists';
 
@@ -35,15 +35,15 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   handleClose: (e: any) => void;
   open: boolean;
   musicId: string;
 }
 
 @observer
-class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, NoState> {
-  handleListItemClick = (playlist: IPlaylist) => {
+class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
+  handleListItemClick = (playlist: Playlist) => {
     AddMusic(playlist.__id, this.props.musicId).then((response: Response) => {
       const musicName = LoukiStore.idToMusic(this.props.musicId).title;
       const playlistName = LoukiStore.idToPlaylist(playlist.__id).name;

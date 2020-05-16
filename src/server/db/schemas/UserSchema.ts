@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import IUser from '../../../shared/IUser';
+import { User } from '../../../shared/LoukiTypes';
 
-interface IUserModel extends IUser, mongoose.Document {}
+interface UserModel extends User, mongoose.Document {}
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -17,6 +17,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model<IUserModel>('User', userSchema);
+const UserSchema = mongoose.model<UserModel>('User', userSchema);
 
-export = User;
+export = UserSchema;

@@ -1,22 +1,27 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import Playlist from '../../db/schemas/Playlist';
+import PlaylistSchema from '../../db/schemas/PlaylistSchema';
 import { DeletePlaylistResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleDeletePlaylist = (req: Request, res: Response): void => {
   const { playlistId } = req.params;
 
-  databaseHandler.deleteFromDocument(Playlist, '__id', playlistId).then(() => {
-    databaseHandler.getCollectionContent(Playlist).then((response: DeletePlaylistResponse) => {
-      res.status(200).send(response);
-    }, 
+  databaseHandler.deleteFromDocument(PlaylistSchema, '__id', playlistId).then(
+    () => {
+      databaseHandler.getCollectionContent(PlaylistSchema).then(
+        (response: DeletePlaylistResponse) => {
+          res.status(200).send(response);
+        },
+        error => {
+          logError(error);
+          res.status(500).send(error.message);
+        },
+      );
+    },
     error => {
       logError(error);
-      res.status(500).send(error.message);    
-    });
-  }, error => {
-    logError(error);
-    res.status(500).send(error.message);    
-  });
+      res.status(500).send(error.message);
+    },
+  );
 };

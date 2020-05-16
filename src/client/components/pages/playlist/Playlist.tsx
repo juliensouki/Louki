@@ -6,20 +6,19 @@ import PlaylistHeader from '../../playlist/PlaylistHeader';
 import SearchContainer from '../../playlist/SearchContainer';
 import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
 
-import IMusic from '../../../../shared/IMusic';
-import IPlaylist from '../../../../shared/IPlaylist';
+import { Music, Playlist } from '../../../../shared/LoukiTypes';
 
 import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/custom-playlist';
 @observer
-class Playlist extends React.Component<RouteComponentProps, NoState> {
+class PlaylistPage extends React.Component<RouteComponentProps, NoState> {
   render() {
     const T = texts.current;
 
-    const playlist: IPlaylist = LoukiStore.currentPlaylist;
-    const musics: Array<IMusic> = playlist != null ? LoukiStore.idsToMusics(playlist.musics) : [];
+    const playlist: Playlist = LoukiStore.currentPlaylist;
+    const musics: Array<Music> = playlist != null ? LoukiStore.idsToMusics(playlist.musics) : [];
 
     const defaultPlaylistImage = '/assets/images/playlist.png';
 
@@ -43,4 +42,4 @@ class Playlist extends React.Component<RouteComponentProps, NoState> {
   }
 }
 
-export default withRouter(Playlist);
+export default withRouter(PlaylistPage);

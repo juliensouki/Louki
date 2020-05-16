@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import databaseHandler from '../db';
-import User from '../db/schemas/User';
+import UserSchema from '../db/schemas/UserSchema';
 
 interface MulterStorage {
   destination: (req: Request, file, cb: (e: Error | null, dest: string) => void) => void;
@@ -12,7 +12,7 @@ export const playlistPictureStorage: MulterStorage = {
     cb(null, 'assets/uploads/');
   },
   filename: async (req: Request, file, cb: (e: Error | null, dest: string) => void) => {
-    const user = await databaseHandler.findOneInDocument(User, 'selected', true);
+    const user = await databaseHandler.findOneInDocument(UserSchema, 'selected', true);
     let name = '0';
     if (user && user[0]) {
       name = user[0].__id;

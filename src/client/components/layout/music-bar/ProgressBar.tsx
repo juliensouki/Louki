@@ -61,12 +61,12 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   mobile?: boolean;
 }
 
 @observer
-class ProgressBar extends React.Component<IProps, NoState> {
+class ProgressBar extends React.Component<Props, NoState> {
   handleClick = event => {
     if (MusicPlayer.audio == null) return;
     const currentTargetRect = event.currentTarget.getBoundingClientRect();

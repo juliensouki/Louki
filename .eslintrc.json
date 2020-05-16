@@ -14,7 +14,7 @@
     }
   },
   "plugins": [
-    "react", 
+    "react",
     "@typescript-eslint/eslint-plugin"
   ],
   "settings": {
@@ -30,6 +30,6 @@
     "@typescript-eslint/no-use-before-define": 0,
     "@typescript-eslint/no-inferrable-types": 0,
     "react/prop-types": 0,
-    "react/display-name": 0,
+    "react/display-name": 0
   }
 }

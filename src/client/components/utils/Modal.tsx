@@ -34,7 +34,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   onClose?: (optional: any) => void;
   open: boolean;
   title: string;
@@ -45,7 +45,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class Modal extends React.Component<React.PropsWithChildren<IProps>, NoState> {
+class Modal extends React.Component<React.PropsWithChildren<Props>, NoState> {
   render() {
     const { classes, children, onClose, open, title, buttons, maxWidth, preventClosing, steps } = this.props;
 

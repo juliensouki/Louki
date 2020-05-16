@@ -1,6 +1,6 @@
 import User from '../store/data/User';
 import Loading from '../store/loading/Loading';
-import { AccountSettings } from '../../shared/IUser';
+import { AccountSettings } from '../../shared/LoukiTypes';
 import * as Responses from '../../shared/RoutesResponses';
 
 export type AddFolderResponse = Responses.AddFolderResponse;

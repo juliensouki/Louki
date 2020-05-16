@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import IPlaylist from '../../../shared/IPlaylist';
+import { Playlist } from '../../../shared/LoukiTypes';
 
-interface IPlaylistModel extends IPlaylist, mongoose.Document {}
+interface PlaylistModel extends Playlist, mongoose.Document {}
 
 const playlistSchema = new mongoose.Schema({
   name: String,
@@ -13,6 +13,6 @@ const playlistSchema = new mongoose.Schema({
   __id: { type: String, unique: true },
 });
 
-const playlist = mongoose.model<IPlaylistModel>('playlist', playlistSchema);
+const PlaylistSchema = mongoose.model<PlaylistModel>('playlist', playlistSchema);
 
-export = playlist;
+export = PlaylistSchema;

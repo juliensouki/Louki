@@ -32,12 +32,12 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   page: Page;
 }
 
 @observer
-class PlaylistBody extends React.Component<IProps, NoState> {
+class PlaylistBody extends React.Component<Props, NoState> {
   render() {
     const { classes, page } = this.props;
     const playlist = page == Page.ALBUMS ? MusicsData.allAlbums : MusicsData.allArtists;

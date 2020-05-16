@@ -12,7 +12,7 @@ import SelectPlaylistModal from '../modals/SelectPlaylistModal';
 import UpdatePlaylistModal from '../modals/update-playlist-modal/UpdatePlaylistModal';
 import Bookmarks from '../../store/data/Bookmarks';
 
-import IMusic from '../../../shared/IMusic';
+import { Music } from '../../../shared/LoukiTypes';
 import NavigationForm from '../../store/navigation/Navigation';
 import LoukiStore from '../../store/data/LoukiStore';
 
@@ -35,8 +35,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
-  music?: IMusic;
+interface Props extends WithStyles<typeof styles> {
+  music?: Music;
   playlist?: boolean;
   musicInPlaylist?: boolean;
   removeBookmark?: boolean;
@@ -44,7 +44,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistOptions extends React.Component<IProps & WithSnackbarProps & RouteComponentProps, NoState> {
+class PlaylistOptions extends React.Component<Props & WithSnackbarProps & RouteComponentProps, NoState> {
   @observable anchorEl: HTMLElement | null = null;
   @observable openPlaylistsModal: boolean = false;
   @observable openUpdatePlaylistModal: boolean = false;

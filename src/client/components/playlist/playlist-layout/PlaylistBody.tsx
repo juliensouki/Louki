@@ -9,7 +9,7 @@ import PlaylistBodyMobile from './PlaylistBodyMobile';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 
 import SearchForm from '../../../store/features/Search';
-import IMusic from '../../../../shared/IMusic';
+import Music from '../../../../shared/Music';
 import texts from '../../../lang/fragments/playlist/playlist-body';
 
 const styles = (theme: Theme) =>
@@ -23,8 +23,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
-  playlist: Array<IMusic>;
+interface Props extends WithStyles<typeof styles> {
+  playlist: Array<Music>;
   canAddToFavorites?: boolean;
   favorites?: boolean;
   customPlaylist?: boolean;
@@ -32,7 +32,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistBody extends React.Component<IProps, NoState> {
+class PlaylistBody extends React.Component<Props, NoState> {
   componentDidUpdate() {
     if (SearchForm.hasChanged) {
       const ids = [];

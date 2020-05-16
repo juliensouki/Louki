@@ -1,7 +1,6 @@
-import IArtist from './IArtist';
-import IAlbum from './IAlbum';
+import { Artist, Album } from './LoukiTypes';
 
 export interface UpdateArtistOrAlbumResponse {
   id: string;
-  data: IArtist | IAlbum;
+  data: Artist | Album;
 }

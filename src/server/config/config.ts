@@ -27,15 +27,15 @@ const checkEnv = (): boolean => {
   const pixabayKeyExists: boolean = process.env.PIXABAY_API_KEY !== undefined;
   const webpackPolling: boolean = process.env.WEBPACK__WATCH__USE_POLLING === 'true';
 
-  const logsText = writeLogsInFile ? 
-    `Logs will be written in the following folder : ${process.env.LOG_FOLDER}.` : 
-    `Logs won't be written in any file. Set LOG_FOLDER in your .env to turn this feature on.`;
+  const logsText = writeLogsInFile
+    ? `Logs will be written in the following folder : ${process.env.LOG_FOLDER}.`
+    : `Logs won't be written in any file. Set LOG_FOLDER in your .env to turn this feature on.`;
 
   console.log(logsText);
   console.log(`Pixabay API KEY : ${pixabayKeyExists}`);
   console.log(`Webpack polling feature : ${webpackPolling}`);
   console.log('----------------------- END OF CONFIGURATION ---------------------------');
   return true;
-}
+};
 
 export { IS_DEV, VERSION, SERVER_PORT, WEBPACK_PORT, checkEnv };

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import Artist from '../../db/schemas/Artist';
+import ArtistSchema from '../../db/schemas/ArtistSchema';
 import { GetArtistResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleGetArtist = (req: Request, res: Response): void => {
   const id = req.params.artistId;
 
-  databaseHandler.findOneInDocument(Artist, '__id', id).then(value => {
+  databaseHandler.findOneInDocument(ArtistSchema, '__id', id).then(value => {
     if (value && value.length > 0) {
       const response: GetArtistResponse = value[0];
 

@@ -32,14 +32,14 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   url: string;
   isValid: boolean;
 }
 
 @observer
-class UploadByUrl extends React.Component<IProps, NoState> {
+class UploadByUrl extends React.Component<Props, NoState> {
   render() {
     const { classes } = this.props;
     const T = texts.current;

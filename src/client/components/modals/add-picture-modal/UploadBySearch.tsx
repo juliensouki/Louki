@@ -68,7 +68,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   updateUrl: (url: string) => void;
   searchText: string;
@@ -81,7 +81,7 @@ const ColorCircularProgress = withStyles({
 })(CircularProgress);
 
 @observer
-class UploadBySearch extends React.Component<IProps, NoState> {
+class UploadBySearch extends React.Component<Props, NoState> {
   @observable resultsArray: Array<string> = [];
   @observable loading: boolean = false;
   @observable currentUrl: string = '';

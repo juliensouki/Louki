@@ -1,18 +1,15 @@
 import { observable, action, computed } from 'mobx';
-import IAlbum from '../../../shared/IAlbum';
-import IArtist from '../../../shared/IArtist';
-import IMusic from '../../../shared/IMusic';
-import IPlaylist from '../../../shared/IPlaylist';
+import { Album, Artist, Music, Playlist } from '../../../shared/LoukiTypes';
 
 import { UpdateArtistOrAlbumResponse } from '../../../shared/SocketIODefinitions';
 import socketIOClient from 'socket.io-client';
 
 class LoukiStore {
-  @observable private musics: Array<IMusic> = [];
-  @observable private artists: Array<IArtist> = [];
-  @observable private albums: Array<IAlbum> = [];
-  @observable private playlists: Array<IPlaylist> = [];
-  @observable private cPlaylist: IPlaylist | null = null;
+  @observable private musics: Array<Music> = [];
+  @observable private artists: Array<Artist> = [];
+  @observable private albums: Array<Album> = [];
+  @observable private playlists: Array<Playlist> = [];
+  @observable private cPlaylist: Playlist | null = null;
 
   @observable socket: SocketIOClient.Socket = null;
 
@@ -30,34 +27,34 @@ class LoukiStore {
     this.socket.on('new_album', this.handleNewAlbum);
   }
 
-  @action setMusics = (musics: Array<IMusic>) => {
+  @action setMusics = (musics: Array<Music>) => {
     this.musics = musics;
   };
 
-  @action setArtists = (artists: Array<IArtist>) => {
+  @action setArtists = (artists: Array<Artist>) => {
     this.artists = artists;
   };
 
-  @action setAlbums = (albums: Array<IAlbum>) => {
+  @action setAlbums = (albums: Array<Album>) => {
     this.albums = albums;
   };
 
-  @action handleNewArtist = (artist: IArtist) => {
+  @action handleNewArtist = (artist: Artist) => {
     this.artists.push(artist);
   };
 
-  @action handleNewAlbum = (album: IAlbum) => {
+  @action handleNewAlbum = (album: Album) => {
     this.albums.push(album);
   };
 
-  @action handleNewMusic = (music: IMusic) => {
+  @action handleNewMusic = (music: Music) => {
     this.musics.push(music);
   };
 
   @action handleUpdateArtist = (response: UpdateArtistOrAlbumResponse) => {
     for (let i = 0; i < this.artists.length; i++) {
       if (this.artists[i].__id == response.id) {
-        this.artists[i] = response.data as IArtist;
+        this.artists[i] = response.data as Artist;
         break;
       }
     }
@@ -66,37 +63,37 @@ class LoukiStore {
   @action handleUpdateAlbum = (response: UpdateArtistOrAlbumResponse) => {
     for (let i = 0; i < this.albums.length; i++) {
       if (this.albums[i].__id == response.id) {
-        this.albums[i] = response.data as IAlbum;
+        this.albums[i] = response.data as Album;
         break;
       }
     }
   };
 
-  @action setPlaylists = (playlists: Array<IPlaylist>) => {
+  @action setPlaylists = (playlists: Array<Playlist>) => {
     this.playlists = playlists;
   };
 
-  @action setCurrentPlaylist = (cPlaylist: IPlaylist) => {
+  @action setCurrentPlaylist = (cPlaylist: Playlist) => {
     this.cPlaylist = cPlaylist;
   };
 
-  @computed get currentPlaylist(): IPlaylist | null {
+  @computed get currentPlaylist(): Playlist | null {
     return this.cPlaylist;
   }
 
-  @computed get allMusics(): Array<IMusic> {
+  @computed get allMusics(): Array<Music> {
     return this.musics;
   }
 
-  @computed get allArtists(): Array<IArtist> {
+  @computed get allArtists(): Array<Artist> {
     return this.artists;
   }
 
-  @computed get allAlbums(): Array<IAlbum> {
+  @computed get allAlbums(): Array<Album> {
     return this.albums;
   }
 
-  @computed get allPlaylists(): Array<IPlaylist> {
+  @computed get allPlaylists(): Array<Playlist> {
     return this.playlists;
   }
 
@@ -123,22 +120,22 @@ class LoukiStore {
     return '';
   };
 
-  private getMusicFromId = (id: string): IMusic | null => {
+  private getMusicFromId = (id: string): Music | null => {
     for (let i = 0; i < this.musics.length; i++) {
       if (this.musics[i].__id == id) return this.musics[i];
     }
     return null;
   };
 
-  private getPlaylistFromId = (id: string): IPlaylist | null => {
+  private getPlaylistFromId = (id: string): Playlist | null => {
     for (let i = 0; i < this.playlists.length; i++) {
       if (this.playlists[i].__id == id) return this.playlists[i];
     }
     return null;
   };
 
-  idsToMusics = (ids: Array<string>): Array<IMusic> => {
-    const result: Array<IMusic> = [];
+  idsToMusics = (ids: Array<string>): Array<Music> => {
+    const result: Array<Music> = [];
     ids.forEach(id => {
       const music = this.getMusicFromId(id);
       if (music) result.push(music);
@@ -147,11 +144,11 @@ class LoukiStore {
     return result;
   };
 
-  idToMusic = (id: string): IMusic => {
+  idToMusic = (id: string): Music => {
     return this.getMusicFromId(id);
   };
 
-  idToPlaylist = (id: string): IPlaylist => {
+  idToPlaylist = (id: string): Playlist => {
     return this.getPlaylistFromId(id);
   };
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import User from '../../db/schemas/User';
-import Playlist from '../../db/schemas/Playlist';
+import UserSchema from '../../db/schemas/UserSchema';
+import PlaylistSchema from '../../db/schemas/PlaylistSchema';
 import uuid from 'uuid';
 import { CreatePlaylistResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
@@ -13,36 +13,40 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
   const creationDate = new Date().getTime();
   const id = uuid.v4();
 
-  databaseHandler.findOneInDocument(User, 'selected', true).then(() => {
-    let filePath;
-    if (file) {
-      const extension = file['mimetype'].split('image/')[1];
-      filePath = '/assets/uploads/' + name + '.' + extension;
-    } else {
-      filePath = req.body.pictureUrl;
-    }
-    Playlist.create(
-      {
-        name: name,
-        picture: filePath,
-        description: description,
-        musics: [],
-        createdAt: creationDate,
-        __id: id,
-      },
-      () => {
-        databaseHandler.getCollectionContent(Playlist).then((response: CreatePlaylistResponse) => {
-          res.status(200).send(response);
+  databaseHandler.findOneInDocument(UserSchema, 'selected', true).then(
+    () => {
+      let filePath;
+      if (file) {
+        const extension = file['mimetype'].split('image/')[1];
+        filePath = '/assets/uploads/' + name + '.' + extension;
+      } else {
+        filePath = req.body.pictureUrl;
+      }
+      PlaylistSchema.create(
+        {
+          name: name,
+          picture: filePath,
+          description: description,
+          musics: [],
+          createdAt: creationDate,
+          __id: id,
         },
-        error => {
-          logError(error);
-          res.status(500).send(error.message);      
-        });
-      },
-    );
-  },
-  error => {
-    logError(error);
-    res.status(500).send(error.message);    
-  });
+        () => {
+          databaseHandler.getCollectionContent(PlaylistSchema).then(
+            (response: CreatePlaylistResponse) => {
+              res.status(200).send(response);
+            },
+            error => {
+              logError(error);
+              res.status(500).send(error.message);
+            },
+          );
+        },
+      );
+    },
+    error => {
+      logError(error);
+      res.status(500).send(error.message);
+    },
+  );
 };

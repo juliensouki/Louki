@@ -1,12 +1,12 @@
 import { observable, action, computed } from 'mobx';
-import IMusic from '../../../shared/IMusic';
+import { Music } from '../../../shared/LoukiTypes';
 import LoukiStore from './LoukiStore';
 import { RemoveBookmarkResponse, RemoveBookmark, AddBookmarkResponse, AddBookmark } from '../../requests/Bookmarks';
 
 class Bookmarks {
-  @observable bkmarks: Array<IMusic> = [];
+  @observable bkmarks: Array<Music> = [];
 
-  @action setBookmarks = (bkmarks: Array<IMusic>): void => {
+  @action setBookmarks = (bkmarks: Array<Music>): void => {
     this.bkmarks = bkmarks;
   };
 
@@ -29,7 +29,7 @@ class Bookmarks {
     return false;
   };
 
-  @computed get bookmarks(): Array<IMusic> {
+  @computed get bookmarks(): Array<Music> {
     return this.bkmarks;
   }
 }

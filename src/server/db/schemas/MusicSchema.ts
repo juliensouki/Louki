@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import IMusic from '../../../shared/IMusic';
+import { Music } from '../../../shared/LoukiTypes';
 
-interface IMusicModel extends IMusic, mongoose.Document {}
+interface MusicModel extends Music, mongoose.Document {}
 
 const musicSchema: Schema = new mongoose.Schema({
   title: String,
@@ -13,6 +13,6 @@ const musicSchema: Schema = new mongoose.Schema({
   __id: { type: String, unique: true },
 });
 
-const Music: Model<IMusicModel> = mongoose.model<IMusicModel>('Music', musicSchema);
+const MusicSchema: Model<MusicModel> = mongoose.model<MusicModel>('Music', musicSchema);
 
-export = Music;
+export = MusicSchema;

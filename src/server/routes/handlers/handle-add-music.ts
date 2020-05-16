@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import Playlist from '../../db/schemas/Playlist';
+import PlaylistSchema from '../../db/schemas/PlaylistSchema';
 import { CustomError } from '../../../shared/RoutesResponses';
 import logger, { logError } from '../../logger';
 
@@ -8,31 +8,35 @@ export const handleAddMusic = (req: Request, res: Response): void => {
   const { playlistId } = req.params;
   const { musicId } = req.body;
 
-  databaseHandler.findOneInDocument(Playlist, '__id', playlistId).then(playlists => {
-    if (playlists && playlists.length > 0) {
-      if (playlists[0].musics.includes(musicId)) {
-        logger.info(`music ${musicId} is already in playlist ${playlistId}`);
-        res.status(403);    
+  databaseHandler.findOneInDocument(PlaylistSchema, '__id', playlistId).then(
+    playlists => {
+      if (playlists && playlists.length > 0) {
+        if (playlists[0].musics.includes(musicId)) {
+          logger.info(`music ${musicId} is already in playlist ${playlistId}`);
+          res.status(403);
+        } else {
+          databaseHandler.addToArray(PlaylistSchema, '__id', playlistId, 'musics', musicId).then(
+            () => {
+              res.sendStatus(200);
+            },
+            error => {
+              logError(error);
+              res.status(500).send(error.message);
+            },
+          );
+        }
       } else {
-        databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId).then(() => {
-          res.sendStatus(200);
-        },
-        error => {
-          logError(error);
-          res.status(500).send(error.message);    
-        });
+        const response: CustomError = {
+          name: `Add music error`,
+          message: `Unable to get playlist to check if music can be added`,
+        };
+        logError(response);
+        res.status(422).send(response);
       }
-    } else {
-      const response: CustomError = {
-        name: `Add music error`,
-        message: `Unable to get playlist to check if music can be added`,
-      };
-      logError(response);
-      res.status(422).send(response);
-    }
-  },
-  error => {
-    logError(error);
-    res.status(500).send(error.message);
-  });
+    },
+    error => {
+      logError(error);
+      res.status(500).send(error.message);
+    },
+  );
 };

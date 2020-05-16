@@ -37,12 +37,12 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   playlist: any;
 }
 
 @observer
-class PlaylistBodyMobile extends React.Component<IProps & RouteComponentProps, NoState> {
+class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, NoState> {
   goTo = (row: any) => {
     if (row.title) {
       this.props.history.push('/artist/' + row.__id);

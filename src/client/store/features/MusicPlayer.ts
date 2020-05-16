@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import Navigation from '../navigation/Navigation';
 import { addSecondsOfPlaying } from '../statistics/Stats';
-import IMusic from '../../../shared/IMusic';
+import { Music } from '../../../shared/LoukiTypes';
 import texts from '../../lang/fragments/music-preview';
 
 export enum MusicLoop {
@@ -13,7 +13,7 @@ export enum MusicLoop {
 class MusicPlayer {
   @observable public isPlaying: boolean = false;
   @observable private musicPlayingIndex: number = 0;
-  @observable private currentPlaylist: Array<IMusic> = [];
+  @observable private currentPlaylist: Array<Music> = [];
   @observable private repeatMode: MusicLoop = MusicLoop.NO_REPEAT;
   @observable private isOrderRandom: boolean = false;
   @observable public audio: HTMLAudioElement | null = null;
@@ -41,7 +41,7 @@ class MusicPlayer {
     }
   };
 
-  @action setCurrentPlaylist = (playlist: Array<IMusic>): void => {
+  @action setCurrentPlaylist = (playlist: Array<Music>): void => {
     this.currentPlaylist = playlist;
   };
 

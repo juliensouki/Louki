@@ -26,7 +26,7 @@ const styles = (theme: Theme) =>
 
 interface Props extends WithStyles<typeof styles> {
   title: string;
-};
+}
 
 @observer
 class SimpleHeader extends React.Component<Props, NoState> {

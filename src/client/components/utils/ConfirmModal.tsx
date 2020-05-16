@@ -27,7 +27,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -36,16 +36,16 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class ConfirmModal extends React.Component<React.PropsWithChildren<IProps>, NoState> {
+class ConfirmModal extends React.Component<React.PropsWithChildren<Props>, NoState> {
   get buttons(): Array<JSX.Element> {
     const { classes, onCancel, onConfirm } = this.props;
 
     return [
-      <Button key={1} className={classes.confirmButton} onClick={onConfirm}>
-        Yes
-      </Button>,
       <Button key={0} className={classes.cancelButton} onClick={onCancel}>
         No
+      </Button>,
+      <Button key={1} className={classes.confirmButton} onClick={onConfirm}>
+        Yes
       </Button>,
     ];
   }

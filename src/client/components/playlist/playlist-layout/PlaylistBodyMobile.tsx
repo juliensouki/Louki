@@ -6,7 +6,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { IconButton, Grid, Typography } from '@material-ui/core';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import IMusic from '../../../../shared/IMusic';
+import { Music } from '../../../../shared/LoukiTypes';
 import LoukiStore from '../../../store/data/LoukiStore';
 import MusicPlayer from '../../../store/features/MusicPlayer';
 import Navigation from '../../../store/navigation/Navigation';
@@ -40,12 +40,12 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
-  playlist: Array<IMusic>;
+interface Props extends WithStyles<typeof styles> {
+  playlist: Array<Music>;
 }
 
 @observer
-class PlaylistBodyMobile extends React.Component<IProps, NoState> {
+class PlaylistBodyMobile extends React.Component<Props, NoState> {
   playMusic = (index: number): void => {
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
     MusicPlayer.playMusic(index);

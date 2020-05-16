@@ -70,13 +70,13 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   open: boolean;
   folders: Array<string>;
 }
 
 @observer
-class AddPlaylistModal extends React.Component<IProps & WithSnackbarProps, NoState> {
+class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
   @observable folderToAdd: string = '';
 
   @action handleChange = (folderToAdd: string) => {

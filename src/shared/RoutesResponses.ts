@@ -1,13 +1,9 @@
 import mongoose from 'mongoose';
-import IArtist from './IArtist';
-import IAlbum from './IAlbum';
-import IPlaylist from './IPlaylist';
-import IMusic from './IMusic';
-import IUser from './IUser';
+import { Artist, Album, Playlist, Music, User } from './LoukiTypes';
 
 interface UpdatePlaylistBody {
-  playlists: Array<IPlaylist>;
-  currentPlaylist: IPlaylist;
+  playlists: Array<Playlist>;
+  currentPlaylist: Playlist;
 }
 
 export interface CustomError {
@@ -16,27 +12,27 @@ export interface CustomError {
   details?: any;
 }
 
-export type GetArtistResponse = IArtist;
-export type GetAlbumResponse = IAlbum;
-export type GetPlaylistResponse = IPlaylist;
-export type GetCurrentUserResponse = IUser;
-export type UpdateSettingsResponse = IUser;
+export type GetArtistResponse = Artist;
+export type GetAlbumResponse = Album;
+export type GetPlaylistResponse = Playlist;
+export type GetCurrentUserResponse = User;
+export type UpdateSettingsResponse = User;
 export type LoadLoukiResponse = any;
-export type ListArtistsResponse = Array<IArtist>;
-export type ListAlbumsResponse = Array<IAlbum>;
-export type ListPlaylistsResponse = Array<IPlaylist>;
-export type ListMusicsResponse = Array<IMusic>;
+export type ListArtistsResponse = Array<Artist>;
+export type ListAlbumsResponse = Array<Album>;
+export type ListPlaylistsResponse = Array<Playlist>;
+export type ListMusicsResponse = Array<Music>;
 export type ListBookmarksResponse = Array<string> | null;
 export type TestPixabayResponse = boolean;
 export type TestSetupResponse = boolean;
-export type SetupLoukiResponse = IUser;
-export type AddFolderResponse = IUser;
-export type RemoveFolderResponse = IUser;
+export type SetupLoukiResponse = User;
+export type AddFolderResponse = User;
+export type RemoveFolderResponse = User;
 export type AddBookmarkResponse = Array<string> | null;
 export type RemoveBookmarkResponse = Array<string> | null;
-export type CreatePlaylistResponse = Array<IPlaylist>;
-export type DeletePlaylistResponse = Array<IPlaylist>;
-export type RemoveMusicResponse = IPlaylist;
+export type CreatePlaylistResponse = Array<Playlist>;
+export type DeletePlaylistResponse = Array<Playlist>;
+export type RemoveMusicResponse = Playlist;
 export type PixabaySearchResponse = Array<string>;
 export type MusicSearchResponse = Array<string>;
 export type UpdatePlaylistResponse = UpdatePlaylistBody;

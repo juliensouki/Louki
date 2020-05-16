@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import IAlbum from '../../../shared/IAlbum';
+import { Album } from '../../../shared/LoukiTypes';
 
-interface IAlbumModel extends IAlbum, mongoose.Document {}
+interface AlbumModel extends Album, mongoose.Document {}
 
 const albumSchema: Schema = new mongoose.Schema(
   {
@@ -13,6 +13,6 @@ const albumSchema: Schema = new mongoose.Schema(
   { emitIndexErrors: true },
 );
 
-const Album: Model<IAlbumModel> = mongoose.model<IAlbumModel>('Album', albumSchema);
+const AlbumSchema: Model<AlbumModel> = mongoose.model<AlbumModel>('Album', albumSchema);
 
-export = Album;
+export = AlbumSchema;

@@ -9,7 +9,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 import PlaylistOptions from '../utils/PlaylistOptions';
 import MusicPlayer from '../../store/features/MusicPlayer';
 import Navigation from '../../store/navigation/Navigation';
-import IMusic from '../../../shared/IMusic';
+import { Music } from '../../../shared/LoukiTypes';
 import { Stats, getStat } from '../../store/statistics/Stats';
 
 import texts from '../../lang/fragments/playlist/playlist-header';
@@ -121,8 +121,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
-  playlist?: Array<IMusic>;
+interface Props extends WithStyles<typeof styles> {
+  playlist?: Array<Music>;
   playlistId?: string;
   subTitle: string;
   title: string;
@@ -134,7 +134,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistHeader extends React.Component<IProps, NoState> {
+class PlaylistHeader extends React.Component<Props, NoState> {
   @observable ref: React.RefObject<HTMLInputElement> = React.createRef();
   @observable pictureHeight: number | null = null;
 

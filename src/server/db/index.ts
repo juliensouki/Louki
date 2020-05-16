@@ -8,10 +8,12 @@ class DatabaseHandler {
 
   connect = async () => {
     try {
-      await mongoose.connect(
-        this.url, 
-        { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }
-      );
+      await mongoose.connect(this.url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
+      });
     } catch (error) {
       logError(error);
     }

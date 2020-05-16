@@ -17,13 +17,13 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
 }
 
 @observer
-class Volume extends React.Component<IProps, NoState> {
+class Volume extends React.Component<Props, NoState> {
   handleChange = (event: any, newValue: number | number[]) => {
     MusicPlayer.setAudioLevel(newValue as number);
     event.stopPropagation();

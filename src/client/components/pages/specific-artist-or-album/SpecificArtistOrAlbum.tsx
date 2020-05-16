@@ -3,9 +3,7 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import IMusic from '../../../../shared/IMusic';
-import IArtist from '../../../../shared/IArtist';
-import IAlbum from '../../../../shared/IAlbum';
+import { Music, Artist, Album } from '../../../../shared/LoukiTypes';
 
 import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
@@ -22,7 +20,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
   @observable artistOrAlbumId: string = '';
   @observable artistOrAlbumName: string = '';
   @observable artistOrAlbum: 'artist' | 'album' | '' = '';
-  @observable playlist: Array<IMusic> | null = null;
+  @observable playlist: Array<Music> | null = null;
 
   componentDidMount() {
     this.artistOrAlbum = this.props.location.pathname.split('/')[1];
@@ -33,7 +31,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
         this.props.history.push('/all-music');
       } else {
         const arrayOfIds: Array<string> = response.musics;
-        this.artistOrAlbumName = (response as IArtist).name || (response as IAlbum).title;
+        this.artistOrAlbumName = (response as Artist).name || (response as Album).title;
         this.playlist = LoukiStore.idsToMusics(arrayOfIds);
       }
     });

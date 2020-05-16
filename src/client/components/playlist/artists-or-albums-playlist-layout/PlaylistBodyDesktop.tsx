@@ -14,8 +14,7 @@ import { Typography, Button } from '@material-ui/core';
 import AlbumIcon from '@material-ui/icons/Album';
 import MicIcon from '@material-ui/icons/Mic';
 
-import IArtist from '../../../../shared/IArtist';
-import IAlbum from '../../../../shared/IAlbum';
+import { Artist, Album } from '../../../../shared/LoukiTypes';
 import { Page } from '../../pages/artists-or-albums/ArtistsOrAlbums';
 import MusicsData from '../../../store/data/LoukiStore';
 
@@ -68,14 +67,14 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
-  playlist: Array<IArtist> | Array<IAlbum>;
+interface Props extends WithStyles<typeof styles> {
+  playlist: Array<Artist> | Array<Album>;
   page: Page;
 }
 
 @observer
-class PlaylistBodyDesktop extends React.Component<IProps & RouteComponentProps, NoState> {
-  @action redirectToSpecificArtistOrAlbum = (item: IArtist | IAlbum) => {
+class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, NoState> {
+  @action redirectToSpecificArtistOrAlbum = (item: Artist | Album) => {
     const page = this.props.page == Page.ARTISTS ? 'artist' : 'album';
     this.props.history.push('/' + page + '/' + item.__id);
   };
@@ -116,9 +115,9 @@ class PlaylistBodyDesktop extends React.Component<IProps & RouteComponentProps, 
             </TableRow>
           </TableHead>
           <TableBody>
-            {(playlist as Array<IArtist | IAlbum>).map(row => (
+            {(playlist as Array<Artist | Album>).map(row => (
               <TableRow
-                key={(row as IAlbum).title || (row as IArtist).name}
+                key={(row as Album).title || (row as Artist).name}
                 onClick={() => {
                   this.redirectToSpecificArtistOrAlbum(row);
                 }}
@@ -128,13 +127,13 @@ class PlaylistBodyDesktop extends React.Component<IProps & RouteComponentProps, 
                   {page == Page.ARTISTS ? <MicIcon /> : <AlbumIcon />}
                 </TableCell>
                 <TableCell className={classes.whiteTableRow} component='th' scope='row'>
-                  {page == Page.ARTISTS ? (row as IArtist).name : (row as IAlbum).title}
+                  {page == Page.ARTISTS ? (row as Artist).name : (row as Album).title}
                 </TableCell>
                 {page == Page.ARTISTS ? (
                   <React.Fragment />
                 ) : (
                   <TableCell className={classes.whiteTableRow}>
-                    {MusicsData.getArtistNameById((row as IAlbum).author)}
+                    {MusicsData.getArtistNameById((row as Album).author)}
                   </TableCell>
                 )}
                 <TableCell className={classes.tableRow}>{row.musics.length}</TableCell>

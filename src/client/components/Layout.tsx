@@ -47,12 +47,12 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   setupModal: boolean;
 }
 
 @observer
-class Layout extends React.Component<IProps, NoState> {
+class Layout extends React.Component<Props, NoState> {
   @observable closeSetupModal: boolean = false;
 
   @action closeModal = () => {

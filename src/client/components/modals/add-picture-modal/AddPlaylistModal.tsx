@@ -35,7 +35,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   open: boolean;
   onClose: () => void;
 }
@@ -48,7 +48,7 @@ enum AddPictureSteps {
 }
 
 @observer
-class AddPlaylistModal extends React.Component<IProps, NoState> {
+class AddPlaylistModal extends React.Component<Props, NoState> {
   @observable step: AddPictureSteps = AddPictureSteps.UPLOAD_METHOD;
   @observable prevStep: AddPictureSteps = AddPictureSteps.UPLOAD_METHOD;
   @observable url: string = '';

@@ -77,9 +77,9 @@ if (config.checkEnv()) {
       logger.info(`App listening on port ${config.SERVER_PORT}!`);
     });
   };
-  
+
   databaseHandler.connect();
-  
+
   mongoose.connection.once('open', function() {
     logger.info('Connected to database');
     fLoader.loadData(startServer);

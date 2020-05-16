@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import IArtist from '../../../shared/IArtist';
+import { Artist } from '../../../shared/LoukiTypes';
 
-interface IArtistModel extends IArtist, mongoose.Document {}
+interface ArtistModel extends Artist, mongoose.Document {}
 
 const artistSchema = new mongoose.Schema(
   {
@@ -12,6 +12,6 @@ const artistSchema = new mongoose.Schema(
   { emitIndexErrors: true },
 );
 
-const artist = mongoose.model<IArtistModel>('Artist', artistSchema);
+const ArtistSchema = mongoose.model<ArtistModel>('Artist', artistSchema);
 
-export = artist;
+export = ArtistSchema;

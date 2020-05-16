@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import User from '../../db/schemas/User';
-import { Settings, AccountSettings } from '../../../shared/IUser';
+import UserSchema from '../../db/schemas/UserSchema';
+import { Settings, AccountSettings } from '../../../shared/LoukiTypes';
 import { UpdateSettingsResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
@@ -9,7 +9,7 @@ export const handleUpdateSettings = async (req: Request, res: Response) => {
   const id: string = req.body.id;
   const settings: Settings = JSON.parse(req.body.settings) as Settings;
   const file = (req as any).file;
-  const user = await databaseHandler.findOneInDocument(User, 'selected', true);
+  const user = await databaseHandler.findOneInDocument(UserSchema, 'selected', true);
 
   const newAccountSettings: AccountSettings = {
     language: settings.language,
@@ -22,27 +22,31 @@ export const handleUpdateSettings = async (req: Request, res: Response) => {
     settings: newAccountSettings,
   };
 
-  databaseHandler.updateDocument(User, id, jsonUpdate).then(() => {
-    databaseHandler.findOneInDocument(User, 'selected', true).then(users => {
-      if (users && users.length > 0) {
-        const response: UpdateSettingsResponse = users[0];
-        res.status(200).send(response);
-      } else {
-        const response: CustomError = {
-          name: `Update user settings error`,
-          message: `Unable to get current user`,
-        };
-        logError(response);
-        res.status(500).send(response);
-      }
+  databaseHandler.updateDocument(UserSchema, id, jsonUpdate).then(
+    () => {
+      databaseHandler.findOneInDocument(UserSchema, 'selected', true).then(
+        users => {
+          if (users && users.length > 0) {
+            const response: UpdateSettingsResponse = users[0];
+            res.status(200).send(response);
+          } else {
+            const response: CustomError = {
+              name: `Update user settings error`,
+              message: `Unable to get current user`,
+            };
+            logError(response);
+            res.status(500).send(response);
+          }
+        },
+        error => {
+          logError(error);
+          res.status(500).send(error);
+        },
+      );
     },
     error => {
       logError(error);
       res.status(500).send(error);
-    });
-  },
-  error => {
-    logError(error);
-    res.status(500).send(error);
-  });
+    },
+  );
 };

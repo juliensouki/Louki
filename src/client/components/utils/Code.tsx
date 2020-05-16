@@ -17,12 +17,12 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   inline?: boolean;
 }
 
 @observer
-class Pixabay extends React.Component<React.PropsWithChildren<IProps>, NoState> {
+class Pixabay extends React.Component<React.PropsWithChildren<Props>, NoState> {
   render() {
     const { classes, inline, children } = this.props;
     const codeStyle = inline

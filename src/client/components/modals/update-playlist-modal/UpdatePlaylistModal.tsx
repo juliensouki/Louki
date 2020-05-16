@@ -51,13 +51,13 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   handleClose: () => void;
   open: boolean;
 }
 
 @observer
-class SelectPlaylistModal extends React.Component<IProps & WithSnackbarProps, NoState> {
+class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
   @observable name: string | null = null;
   @observable description: string = '';
 

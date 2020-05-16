@@ -1,6 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { Language } from '../../../shared/Languages';
-import { Settings } from '../../../shared/IUser';
+import { Settings } from '../../../shared/LoukiTypes';
 
 class SettingsForm {
   @observable private lang: Language = Language.English;

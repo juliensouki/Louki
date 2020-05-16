@@ -1,10 +1,10 @@
 import { observable, computed, action } from 'mobx';
-import IUser, { AccountSettings } from '../../../shared/IUser';
+import { User as UserType, AccountSettings } from '../../../shared/LoukiTypes';
 
 class User {
-  @observable private user: IUser | null = null;
+  @observable private user: UserType | null = null;
 
-  @action setUser = (user: IUser) => {
+  @action setUser = (user: UserType) => {
     this.user = user;
   };
 

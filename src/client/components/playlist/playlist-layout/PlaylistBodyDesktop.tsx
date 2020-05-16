@@ -14,7 +14,7 @@ import PlaylistOptions from '../../utils/PlaylistOptions';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import IMusic from '../../../../shared/IMusic';
+import { Music } from '../../../../shared/LoukiTypes';
 import LoukiStore from '../../../store/data/LoukiStore';
 import MusicPlayer from '../../../store/features/MusicPlayer';
 import Navigation from '../../../store/navigation/Navigation';
@@ -83,8 +83,8 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
-  playlist: Array<IMusic>;
+interface Props extends WithStyles<typeof styles> {
+  playlist: Array<Music>;
   canAddToFavorites?: boolean;
   favorites: boolean;
   customPlaylist?: boolean;
@@ -96,7 +96,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & RouteComponentProps, NoState> {
+class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & RouteComponentProps, NoState> {
   @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
 
   playMusic = (index: number): void => {
@@ -170,7 +170,7 @@ class PlaylistBodyDesktop extends React.Component<IProps & WithSnackbarProps & R
             </TableRow>
           </TableHead>
           <TableBody>
-            {playlist.map((music: IMusic, index: number) => (
+            {playlist.map((music: Music, index: number) => (
               <TableRow
                 key={music.__id}
                 style={searchResults != null && !searchResults.includes(music.__id) ? { display: 'none' } : {}}

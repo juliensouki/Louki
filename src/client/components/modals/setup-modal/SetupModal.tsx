@@ -33,7 +33,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   open: boolean;
   onClose: () => void;
 }
@@ -46,7 +46,7 @@ enum SetupSteps {
 }
 
 @observer
-class SetupModal extends React.Component<IProps, NoState> {
+class SetupModal extends React.Component<Props, NoState> {
   @observable currentStep: SetupSteps = SetupSteps.FIRST_USAGE;
 
   @action previousStep = () => {

@@ -1,13 +1,10 @@
 import { UpdateArtistOrAlbumResponse } from '../../shared/SocketIODefinitions';
-import IArtist from '../../shared/IArtist';
-import IAlbum from '../../shared/IAlbum';
-import IUser from '../../shared/IUser';
-import IMusic from '../../shared/IMusic';
+import { Artist, Album, User, Music } from '../../shared/LoukiTypes';
 
-import User from '../db/schemas/User';
-import Music from '../db/schemas/Music';
-import Artist from '../db/schemas/Artist';
-import Album from '../db/schemas/Album';
+import UserSchema from '../db/schemas/UserSchema';
+import MusicSchema from '../db/schemas/MusicSchema';
+import ArtistSchema from '../db/schemas/ArtistSchema';
+import AlbumSchema from '../db/schemas/AlbumSchema';
 
 import filesReader from '../filesReader';
 import logger from '../logger';
@@ -30,7 +27,7 @@ export default class DataLoader {
   }
 
   loadData = (callback: () => void) => {
-    this.databaseHandler.getCollectionContent(User).then(users => {
+    this.databaseHandler.getCollectionContent(UserSchema).then(users => {
       this.currentUser = this.selectCurrentUser(users);
       if (this.currentUser) {
         this.checkForObsoleteDataInDB();
@@ -41,7 +38,7 @@ export default class DataLoader {
   };
 
   checkForObsoleteDataInDB = (): void => {
-    this.databaseHandler.getCollectionContent(Music).then(musics => {
+    this.databaseHandler.getCollectionContent(MusicSchema).then(musics => {
       musics.forEach(music => {
         if (!fs.existsSync(music.path)) {
           this.deleteMusic(music);
@@ -51,7 +48,7 @@ export default class DataLoader {
   };
 
   detectDeletedSong = (path: string): void => {
-    this.databaseHandler.findOneInDocument(Music, 'path', path).then(music => {
+    this.databaseHandler.findOneInDocument(MusicSchema, 'path', path).then(music => {
       if (music && music.length > 0) {
         this.deleteMusic(music[0]);
       }
@@ -81,7 +78,7 @@ export default class DataLoader {
     logger.info('watching : ' + folder);
     fileWatcher.on('add', (newSongPath: string) => {
       logger.info('Detected new song');
-      this.databaseHandler.findOneInDocument(Music, 'path', newSongPath).then(musics => {
+      this.databaseHandler.findOneInDocument(MusicSchema, 'path', newSongPath).then(musics => {
         if (musics.length == 0) {
           filesReader.getMetadataAndAddToDB(newSongPath, folder, this.checkIfSongMustBeAdded);
         }
@@ -98,7 +95,7 @@ export default class DataLoader {
     });
   };
 
-  selectCurrentUser = (users: Array<any>): IUser | null => {
+  selectCurrentUser = (users: Array<any>): User | null => {
     for (let i = 0; i < users.length; i++) {
       if (users[i].selected) {
         return users[i];
@@ -108,7 +105,7 @@ export default class DataLoader {
   };
 
   checkIfSongMustBeAdded = (values: any, artists: Array<string>, album: string): void => {
-    this.databaseHandler.findOneInDocument(Music, '__id', values.path).then(musics => {
+    this.databaseHandler.findOneInDocument(MusicSchema, '__id', values.path).then(musics => {
       if (musics.length == 0) {
         logger.info('Creating music : ' + values.path);
         this.addMusic(values, artists[0], album);
@@ -116,7 +113,7 @@ export default class DataLoader {
     });
   };
 
-  checkIfArtistOrAlbumMustBeDeleted = (array: Array<IArtist | IAlbum>, id: string): number => {
+  checkIfArtistOrAlbumMustBeDeleted = (array: Array<Artist | Album>, id: string): number => {
     for (let i = 0; i < array.length; i++) {
       if (array[i].musics.includes(id)) {
         return i;
@@ -126,36 +123,36 @@ export default class DataLoader {
   };
 
   deleteArtist = (id: string): void => {
-    this.databaseHandler.deleteFromDocument(Artist, '__id', id).then(() => {
+    this.databaseHandler.deleteFromDocument(ArtistSchema, '__id', id).then(() => {
       logger.info('Deleted artist ' + id);
-      this.databaseHandler.getCollectionContent(Artist).then(artists => {
+      this.databaseHandler.getCollectionContent(ArtistSchema).then(artists => {
         this.io.sockets.emit('refresh_artists', artists);
       });
     });
   };
 
   deleteAlbum = (id: string): void => {
-    this.databaseHandler.deleteFromDocument(Album, '__id', id).then(() => {
+    this.databaseHandler.deleteFromDocument(AlbumSchema, '__id', id).then(() => {
       logger.info('Deleted album ' + id);
-      this.databaseHandler.getCollectionContent(Album).then(albums => {
+      this.databaseHandler.getCollectionContent(AlbumSchema).then(albums => {
         this.io.sockets.emit('refresh_albums', albums);
       });
     });
   };
 
   removeMusicFromArtist = (artistId: string, musicId: string): void => {
-    this.databaseHandler.removeFromArray(Artist, '__id', artistId, 'musics', musicId).then(artists => {
+    this.databaseHandler.removeFromArray(ArtistSchema, '__id', artistId, 'musics', musicId).then(artists => {
       logger.info('Removing song ' + musicId + ' from artist ' + artistId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: artistId,
-        data: artists as IArtist,
+        data: artists as Artist,
       };
       this.io.sockets.emit('udpate_artist', sendToClient);
     });
   };
 
   removeMusicFromAlbum = (albumId: string, musicId: string): void => {
-    this.databaseHandler.removeFromArray(Album, '__id', albumId, 'musics', musicId).then((album: IAlbum) => {
+    this.databaseHandler.removeFromArray(AlbumSchema, '__id', albumId, 'musics', musicId).then((album: Album) => {
       logger.info('Removing song ' + musicId + ' from artist ' + albumId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: albumId,
@@ -165,20 +162,20 @@ export default class DataLoader {
     });
   };
 
-  deleteMusic = async (music: IMusic) => {
-    this.databaseHandler.deleteFromDocument(Music, '__id', music.__id).then(() => {
+  deleteMusic = async (music: Music) => {
+    this.databaseHandler.deleteFromDocument(MusicSchema, '__id', music.__id).then(() => {
       logger.info('Deleted music ' + music.title);
-      this.databaseHandler.getCollectionContent(Music).then((musics: Array<IMusic>) => {
+      this.databaseHandler.getCollectionContent(MusicSchema).then((musics: Array<Music>) => {
         this.io.sockets.emit('refresh_musics', musics);
       });
-      this.databaseHandler.findOneInDocument(Music, 'artist', music.artist).then((musics: Array<IMusic>) => {
+      this.databaseHandler.findOneInDocument(MusicSchema, 'artist', music.artist).then((musics: Array<Music>) => {
         if (musics.length == 0) {
           this.deleteArtist(music.artist);
         } else {
           this.removeMusicFromArtist(music.artist, music.__id);
         }
       });
-      this.databaseHandler.findOneInDocument(Music, 'artist', music.album).then((musics: Array<IMusic>) => {
+      this.databaseHandler.findOneInDocument(MusicSchema, 'artist', music.album).then((musics: Array<Music>) => {
         if (musics.length == 0) {
           this.deleteAlbum(music.album);
         } else {
@@ -189,29 +186,29 @@ export default class DataLoader {
   };
 
   addMusicToArtist = (artistId: string, musicId: string): void => {
-    this.databaseHandler.addToArray(Artist, '__id', artistId, 'musics', musicId).then(artists => {
+    this.databaseHandler.addToArray(ArtistSchema, '__id', artistId, 'musics', musicId).then(artists => {
       logger.info('Adding music ' + musicId + ' to artist ' + artistId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: artistId,
-        data: artists as IArtist,
+        data: artists as Artist,
       };
       this.io.sockets.emit('update_artist', sendToClient);
     });
   };
 
   addMusicToAlbum = (albumId: string, musicId: string): void => {
-    this.databaseHandler.addToArray(Album, '__id', albumId, 'musics', musicId).then(albums => {
+    this.databaseHandler.addToArray(AlbumSchema, '__id', albumId, 'musics', musicId).then(albums => {
       logger.info('Adding music ' + musicId + ' to album ' + albumId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: albumId,
-        data: albums as IArtist,
+        data: albums as Artist,
       };
       this.io.sockets.emit('udpate_album', sendToClient);
     });
   };
 
   createMusic = (values: any, musicId: string, artistId: string, albumId: string): void => {
-    Music.create({ ...values, __id: musicId, artist: artistId, album: albumId }).then((music: IMusic) => {
+    MusicSchema.create({ ...values, __id: musicId, artist: artistId, album: albumId }).then((music: Music) => {
       logger.info('Added music ' + musicId);
       this.io.sockets.emit('new_music', music);
     });
@@ -228,10 +225,10 @@ export default class DataLoader {
     const albumId = albumName == undefined ? '' : sha1(albumName);
     const musicId = uuid.v4();
 
-    const artistPromise = this.databaseHandler.findOneInDocument(Artist, '__id', artistId);
-    const albumPromise = this.databaseHandler.findOneInDocument(Album, '__id', albumId);
+    const artistPromise = this.databaseHandler.findOneInDocument(ArtistSchema, '__id', artistId);
+    const albumPromise = this.databaseHandler.findOneInDocument(AlbumSchema, '__id', albumId);
 
-    Promise.all([artistPromise, albumPromise]).then((promisesValues: Array<Array<IArtist | IAlbum>>) => {
+    Promise.all([artistPromise, albumPromise]).then((promisesValues: Array<Array<Artist | Album>>) => {
       if (promisesValues[0].length > 0) {
         this.addMusicToArtist(artistId, values.__id);
       } else {
@@ -248,9 +245,9 @@ export default class DataLoader {
   };
 
   createArtist = (musicId: string, artistName: string, artistId: string): void => {
-    this.databaseHandler.findOneInDocument(Artist, '__id', artistId).then((artists: Array<IArtist>) => {
+    this.databaseHandler.findOneInDocument(ArtistSchema, '__id', artistId).then((artists: Array<Artist>) => {
       if (artists.length == 0 && artistName != '' && artistId != '') {
-        const artist = new Artist({
+        const artist = new ArtistSchema({
           name: artistName,
           __id: artistId,
           musics: [musicId],
@@ -268,9 +265,9 @@ export default class DataLoader {
   };
 
   createAlbum = (musicId: string, albumName: string, albumId: string, artistId: string): void => {
-    this.databaseHandler.findOneInDocument(Album, '__id', albumId).then((albums: Array<IAlbum>) => {
+    this.databaseHandler.findOneInDocument(AlbumSchema, '__id', albumId).then((albums: Array<Album>) => {
       if (albums.length == 0 && albumName != '' && albumId != '') {
-        const artist = new Album({
+        const artist = new AlbumSchema({
           title: albumName,
           author: artistId,
           __id: albumId,

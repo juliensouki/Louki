@@ -9,7 +9,7 @@ import { Grid, Typography } from '@material-ui/core';
 const styles = (theme: Theme) =>
   createStyles({
     '@global': {
-      'a': {
+      a: {
         color: theme.palette.primary.main,
         textDecoration: 'none',
       },
@@ -40,7 +40,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   text: string;
   routePath: string;
   playlist?: boolean;
@@ -51,7 +51,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 @observer
-class LeftPanelButton extends React.Component<IProps, NoState> {
+class LeftPanelButton extends React.Component<Props, NoState> {
   render() {
     const { classes, icon, routePath, playlist, aboutprops, playlistId } = this.props;
     const url = playlist ? routePath + '/' + playlistId : routePath;

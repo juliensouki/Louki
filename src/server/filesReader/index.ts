@@ -1,4 +1,4 @@
-import IMusic from '../../shared/IMusic';
+import { Music } from '../../shared/LoukiTypes';
 import * as fs from 'fs';
 import * as mm from 'music-metadata';
 import uuid from 'uuid';
@@ -23,7 +23,7 @@ class FilesReader {
       .then(metadata => {
         const artists = this.getFieldInMetadata(metadata, ['common', 'artists']);
         const album = this.getFieldInMetadata(metadata, ['common', 'album']);
-        const musicObject: IMusic = {
+        const musicObject: Music = {
           title: this.getFieldInMetadata(metadata, ['common', 'title']),
           artist: '',
           album: '',

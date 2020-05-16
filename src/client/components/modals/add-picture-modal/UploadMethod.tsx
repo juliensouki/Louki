@@ -28,13 +28,13 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface IProps extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   handleUrl: () => void;
   handleSearch: () => void;
 }
 
 @observer
-class UploadMethod extends React.Component<IProps, NoState> {
+class UploadMethod extends React.Component<Props, NoState> {
   render() {
     const { classes, handleUrl, handleSearch } = this.props;
     const T = texts.current;
