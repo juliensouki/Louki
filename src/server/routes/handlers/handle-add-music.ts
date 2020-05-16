@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import Playlist from '../../db/schemas/Playlist';
+import logger, { logError } from '../../logger';
 
 export const handleAddMusic = (req: Request, res: Response): void => {
   const { playlistId } = req.params;
@@ -8,11 +9,20 @@ export const handleAddMusic = (req: Request, res: Response): void => {
 
   databaseHandler.findOneInDocument(Playlist, '__id', playlistId).then(values => {
     if (values[0].musics.includes(musicId)) {
-      res.sendStatus(403);
-    } else {
+      logger.info(`music ${musicId} already in playlist ${playlistId}`);
+      res.status(403);    
+  } else {
       databaseHandler.addToArray(Playlist, '__id', playlistId, 'musics', musicId).then(() => {
         res.sendStatus(200);
+      },
+      error => {
+        logError(error);
+        res.status(422).send(error.message);    
       });
     }
+  },
+  error => {
+    logError(error);
+    res.status(422).send(error.message);
   });
 };

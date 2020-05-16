@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import User from '../../db/schemas/User';
 import { SetupLoukiResponse } from '../../../shared/RoutesResponses';
+import { logError } from '../../logger';
 
 export const handleSetupLouki = (req: Request, res: Response): void => {
   const file = (req as any).file;
@@ -16,6 +17,9 @@ export const handleSetupLouki = (req: Request, res: Response): void => {
       internetUsage: true,
     },
   }).then((response: SetupLoukiResponse) => {
-    res.status(200).json(response);
+    res.status(200).send(response);
+  }, error => {
+    logError(error);
+    res.status(422).send(error);
   });
 };

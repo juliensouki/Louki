@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import Playlist from '../../db/schemas/Playlist';
 import { DeletePlaylistResponse } from '../../../shared/RoutesResponses';
+import { logError } from '../../logger';
 
 export const handleDeletePlaylist = (req: Request, res: Response): void => {
   const { playlistId } = req.params;
@@ -9,6 +10,13 @@ export const handleDeletePlaylist = (req: Request, res: Response): void => {
   databaseHandler.deleteFromDocument(Playlist, '__id', playlistId).then(() => {
     databaseHandler.getCollectionContent(Playlist).then((response: DeletePlaylistResponse) => {
       res.status(200).send(response);
+    }, 
+    error => {
+      logError(error);
+      res.status(422).send(error.message);    
     });
+  }, error => {
+    logError(error);
+    res.status(422).send(error.message);    
   });
 };

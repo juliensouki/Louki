@@ -9,8 +9,10 @@ import Music from '../db/schemas/Music';
 import Artist from '../db/schemas/Artist';
 import Album from '../db/schemas/Album';
 
-import fs from 'fs';
 import filesReader from '../filesReader';
+import logger from '../logger';
+
+import fs from 'fs';
 import uuid from 'uuid';
 import sha1 from 'sha1';
 import chokidar from 'chokidar';
@@ -57,7 +59,7 @@ export default class DataLoader {
   };
 
   unwatchFolder = (folder: string): void => {
-    console.log('unwatch ' + folder);
+    logger.info('unwatch ' + folder);
     const watcher: chokidar.FSWatcher = this.watchersMap.get(folder);
     if (watcher) {
       watcher.close();
@@ -76,9 +78,9 @@ export default class DataLoader {
 
     this.watchersMap.set(folder, fileWatcher);
     fileWatcher.add(folder);
-    console.log('watching : ' + folder);
+    logger.info('watching : ' + folder);
     fileWatcher.on('add', (newSongPath: string) => {
-      console.log('Detected new song');
+      logger.info('Detected new song');
       this.databaseHandler.findOneInDocument(Music, 'path', newSongPath).then(musics => {
         if (musics.length == 0) {
           filesReader.getMetadataAndAddToDB(newSongPath, folder, this.checkIfSongMustBeAdded);
@@ -108,7 +110,7 @@ export default class DataLoader {
   checkIfSongMustBeAdded = (values: any, artists: Array<string>, album: string): void => {
     this.databaseHandler.findOneInDocument(Music, '__id', values.path).then(musics => {
       if (musics.length == 0) {
-        console.log('Creating music : ' + values.path);
+        logger.info('Creating music : ' + values.path);
         this.addMusic(values, artists[0], album);
       }
     });
@@ -125,7 +127,7 @@ export default class DataLoader {
 
   deleteArtist = (id: string): void => {
     this.databaseHandler.deleteFromDocument(Artist, '__id', id).then(() => {
-      console.log('Deleted artist ' + id);
+      logger.info('Deleted artist ' + id);
       this.databaseHandler.getCollectionContent(Artist).then(artists => {
         this.io.sockets.emit('refresh_artists', artists);
       });
@@ -134,7 +136,7 @@ export default class DataLoader {
 
   deleteAlbum = (id: string): void => {
     this.databaseHandler.deleteFromDocument(Album, '__id', id).then(() => {
-      console.log('Deleted album ' + id);
+      logger.info('Deleted album ' + id);
       this.databaseHandler.getCollectionContent(Album).then(albums => {
         this.io.sockets.emit('refresh_albums', albums);
       });
@@ -143,7 +145,7 @@ export default class DataLoader {
 
   removeMusicFromArtist = (artistId: string, musicId: string): void => {
     this.databaseHandler.removeFromArray(Artist, '__id', artistId, 'musics', musicId).then(artists => {
-      console.log('Removing song ' + musicId + ' from artist ' + artistId);
+      logger.info('Removing song ' + musicId + ' from artist ' + artistId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: artistId,
         data: artists as IArtist,
@@ -154,7 +156,7 @@ export default class DataLoader {
 
   removeMusicFromAlbum = (albumId: string, musicId: string): void => {
     this.databaseHandler.removeFromArray(Album, '__id', albumId, 'musics', musicId).then((album: IAlbum) => {
-      console.log('Removing song ' + musicId + ' from artist ' + albumId);
+      logger.info('Removing song ' + musicId + ' from artist ' + albumId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: albumId,
         data: album,
@@ -165,7 +167,7 @@ export default class DataLoader {
 
   deleteMusic = async (music: IMusic) => {
     this.databaseHandler.deleteFromDocument(Music, '__id', music.__id).then(() => {
-      console.log('Deleted music ' + music.title);
+      logger.info('Deleted music ' + music.title);
       this.databaseHandler.getCollectionContent(Music).then((musics: Array<IMusic>) => {
         this.io.sockets.emit('refresh_musics', musics);
       });
@@ -188,7 +190,7 @@ export default class DataLoader {
 
   addMusicToArtist = (artistId: string, musicId: string): void => {
     this.databaseHandler.addToArray(Artist, '__id', artistId, 'musics', musicId).then(artists => {
-      console.log('Adding music ' + musicId + ' to artist ' + artistId);
+      logger.info('Adding music ' + musicId + ' to artist ' + artistId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: artistId,
         data: artists as IArtist,
@@ -199,7 +201,7 @@ export default class DataLoader {
 
   addMusicToAlbum = (albumId: string, musicId: string): void => {
     this.databaseHandler.addToArray(Album, '__id', albumId, 'musics', musicId).then(albums => {
-      console.log('Adding music ' + musicId + ' to album ' + albumId);
+      logger.info('Adding music ' + musicId + ' to album ' + albumId);
       const sendToClient: UpdateArtistOrAlbumResponse = {
         id: albumId,
         data: albums as IArtist,
@@ -210,7 +212,7 @@ export default class DataLoader {
 
   createMusic = (values: any, musicId: string, artistId: string, albumId: string): void => {
     Music.create({ ...values, __id: musicId, artist: artistId, album: albumId }).then((music: IMusic) => {
-      console.log('Added music ' + musicId);
+      logger.info('Added music ' + musicId);
       this.io.sockets.emit('new_music', music);
     });
   };
@@ -255,7 +257,7 @@ export default class DataLoader {
         });
         artist.save((err, artist) => {
           if (!err) {
-            console.log('Artist ' + artistName + ' was created');
+            logger.info('Artist ' + artistName + ' was created');
             this.io.sockets.emit('new_artist', artist);
           } else {
             this.addMusicToArtist(artistId, musicId);
@@ -276,7 +278,7 @@ export default class DataLoader {
         });
         artist.save((err, album) => {
           if (!err) {
-            console.log('Album ' + albumName + ' was created');
+            logger.info('Album ' + albumName + ' was created');
             this.io.sockets.emit('new_album', album);
           } else {
             this.addMusicToAlbum(artistId, musicId);
