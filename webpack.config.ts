@@ -2,14 +2,9 @@ import path from 'path';
 import { Configuration } from 'webpack';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import cssnano from 'cssnano';
-import { SERVER_PORT, IS_DEV, WEBPACK_PORT } from './src/server/config';
+import { SERVER_PORT, IS_DEV, WEBPACK_PORT } from './src/server/config/config';
 
-const convertPathsToAliases = require('convert-tsconfig-paths-to-webpack-aliases').default;
 const plugins = [new ManifestPlugin()];
-
-// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-// plugins.push(new BundleAnalyzerPlugin());
-
 const nodeModulesPath = path.resolve(__dirname, 'node_modules');
 
 const config: Configuration = {

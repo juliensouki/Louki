@@ -6,11 +6,11 @@ import socketio from 'socket.io';
 import bodyParser from 'body-parser';
 import multer from 'multer';
 
-import { apiRouter } from './routes/api-router';
-import { pagesRouter } from './routes/pages-router';
-import { staticsRouter } from './routes/statics-router';
-import routes from './routes/handlers';
-import * as config from './config';
+import { apiRouter } from './config/api-router';
+import { pagesRouter } from './config/pages-router';
+import { staticsRouter } from './config/statics-router';
+import routes from './routes';
+import * as config from './config/config';
 
 import { playlistPictureStorage, profilePictureStorage } from './upload';
 import filesLoader from './filesLoader';
