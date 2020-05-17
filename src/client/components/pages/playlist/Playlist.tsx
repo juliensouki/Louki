@@ -13,6 +13,7 @@ import { Music, Playlist } from '../../../../shared/LoukiTypes';
 import { RemoveMusicFromPlaylist, RemoveMusicResponse } from '../../../requests/Playlists';
 
 import LoukiStore from '../../../store/data/LoukiStore';
+import MusicPlayer from '../../../store/features/MusicPlayer';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/custom-playlist';
@@ -25,6 +26,7 @@ class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarPro
 
     RemoveMusicFromPlaylist(id, playlistId).then((response: RemoveMusicResponse) => {
       LoukiStore.setCurrentPlaylist(response);
+      MusicPlayer.setCurrentPlaylist(LoukiStore.idsToMusics(response.musics));
       const snackbarOptions = { variant: 'success' as any };
       const musicName = LoukiStore.idToMusic(id).title;
       const playlistName = LoukiStore.idToPlaylist(playlistId).name;
@@ -62,7 +64,7 @@ class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarPro
       <div style={{ width: '100%' }}>
         <PlaylistHeader
           playlist={musics}
-          playlistId={playlist == null ? undefined : playlist.__id}
+          allowOptions
           subTitle={T.playlistHeader.subTitle}
           image={
             playlist == null || !playlist.picture || playlist.picture == '' ? defaultPlaylistImage : playlist.picture

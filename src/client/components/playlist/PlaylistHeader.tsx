@@ -129,7 +129,7 @@ const styles = (theme: Theme) =>
 
 interface Props extends WithStyles<typeof styles> {
   playlist?: Array<Music>;
-  playlistId?: string;
+  allowOptions?: boolean;
   subTitle: string;
   title: string;
   image: string;
@@ -214,7 +214,7 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
       <React.Fragment>
         <UpdatePlaylistModal open={this.openUpdatePlaylistModal} handleClose={this.handleCloseUpdateModal} />
         <Grid container direction='column' className={classes.root} justify='space-between'>
-          {this.props.playlistId ? (
+          {this.props.allowOptions ? (
             <div className={classes.playlistOptions}>
               <PlaylistOptions>
                 <PlaylistOptionsItem title='Update playlist' handleClick={this.handleOpenUpdateModal} />
@@ -281,4 +281,4 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
   }
 }
 
-export default withSnackbar(withRouter(withStyles(styles)(PlaylistHeader)));
+export default withStyles(styles)(withRouter(withSnackbar(PlaylistHeader)));
