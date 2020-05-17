@@ -11,10 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Installing dependencies
-    - run: npm install
-    - name: Running lint test
-      run: |
-        ./node_modules/.bin/eslint --init
-        npm run lint
-    - name: Running type check
+      run: npm install
+    - name: Eslint
+      run: npm run lint
+    - name: Typescript
       run: npm run type-check
