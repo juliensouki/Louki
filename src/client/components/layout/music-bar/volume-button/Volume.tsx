@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Popover, Slider } from '@material-ui/core';
 import MusicPlayer from '../../../../store/features/MusicPlayer';
@@ -22,39 +21,36 @@ interface Props extends WithStyles<typeof styles> {
   handleClose: () => void;
 }
 
-@observer
-class Volume extends React.Component<Props, NoState> {
-  handleChange = (event: any, newValue: number | number[]) => {
+const Volume: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
+  const { classes, handleClose, anchorEl } = props;
+  const open = anchorEl != null;
+
+  const handleChange = (event: any, newValue: number | number[]) => {
     MusicPlayer.setAudioLevel(newValue as number);
     event.stopPropagation();
   };
 
-  render() {
-    const { classes, anchorEl } = this.props;
-    const open = anchorEl != null;
-
-    return (
-      <Popover
-        open={open}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        classes={{
-          paper: classes.paper,
-        }}
-        onClose={this.props.handleClose}
-        disableRestoreFocus
-      >
-        <Slider value={MusicPlayer.volume} onChange={this.handleChange} orientation='vertical' />
-      </Popover>
-    );
-  }
-}
+  return (
+    <Popover
+      open={open}
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      classes={{
+        paper: classes.paper,
+      }}
+      onClose={handleClose}
+      disableRestoreFocus
+    >
+      <Slider value={MusicPlayer.volume} onChange={handleChange} orientation='vertical' />
+    </Popover>
+  );
+};
 
 export default withStyles(styles)(Volume);

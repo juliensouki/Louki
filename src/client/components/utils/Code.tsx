@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
     code: {
       backgroundColor: '#383838',
@@ -21,20 +20,18 @@ interface Props extends WithStyles<typeof styles> {
   inline?: boolean;
 }
 
-@observer
-class Pixabay extends React.Component<React.PropsWithChildren<Props>, NoState> {
-  render() {
-    const { classes, inline, children } = this.props;
-    const codeStyle = inline
-      ? { display: 'inline-block', marginLeft: '0.3em', marginRight: '0.3em' }
-      : { width: 'calc(100% - 24px)', display: 'block' };
+const Pixabay: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
+  const { classes, children, inline } = props;
 
-    return (
-      <Typography className={classes.code} style={codeStyle}>
-        {children}
-      </Typography>
-    );
-  }
-}
+  const codeStyle = inline
+    ? { display: 'inline-block', marginLeft: '0.3em', marginRight: '0.3em' }
+    : { width: 'calc(100% - 24px)', display: 'block' };
+
+  return (
+    <Typography className={classes.code} style={codeStyle}>
+      {children}
+    </Typography>
+  );
+};
 
 export default withStyles(styles)(Pixabay);

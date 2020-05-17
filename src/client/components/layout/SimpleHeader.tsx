@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import { Grid, Typography } from '@material-ui/core/';
@@ -28,18 +27,15 @@ interface Props extends WithStyles<typeof styles> {
   title: string;
 }
 
-@observer
-class SimpleHeader extends React.Component<Props, NoState> {
-  render() {
-    const { classes } = this.props;
+const LeftPanelButton: React.FunctionComponent<Props> = (props: Props) => {
+  const { classes, title } = props;
 
-    return (
-      <Grid container direction='column' justify='space-between' className={classes.root}>
-        <Typography className={classes.title}>{this.props.title}</Typography>
-        <div className={classes.line}></div>
-      </Grid>
-    );
-  }
-}
+  return (
+    <Grid container direction='column' justify='space-between' className={classes.root}>
+      <Typography className={classes.title}>{title}</Typography>
+      <div className={classes.line}></div>
+    </Grid>
+  );
+};
 
-export default withStyles(styles)(SimpleHeader);
+export default withStyles(styles)(LeftPanelButton);

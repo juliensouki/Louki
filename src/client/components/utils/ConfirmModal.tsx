@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Button, Typography } from '@material-ui/core';
 import Modal from './Modal';
@@ -35,30 +34,23 @@ interface Props extends WithStyles<typeof styles> {
   message: string;
 }
 
-@observer
-class ConfirmModal extends React.Component<React.PropsWithChildren<Props>, NoState> {
-  get buttons(): Array<JSX.Element> {
-    const { classes, onCancel, onConfirm } = this.props;
+const ConfirmModal: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
+  const { open, title, onCancel, onConfirm, message, classes } = props;
 
-    return [
-      <Button key={0} className={classes.cancelButton} onClick={onCancel}>
-        No
-      </Button>,
-      <Button key={1} className={classes.confirmButton} onClick={onConfirm}>
-        Yes
-      </Button>,
-    ];
-  }
+  const buttons: Array<JSX.Element> = [
+    <Button key={0} className={classes.cancelButton} onClick={onCancel}>
+      No
+    </Button>,
+    <Button key={1} className={classes.confirmButton} onClick={onConfirm}>
+      Yes
+    </Button>,
+  ];
 
-  render() {
-    const { open, title, onCancel, message, classes } = this.props;
-
-    return (
-      <Modal open={open} maxWidth='sm' title={title} onClose={onCancel} buttons={this.buttons}>
-        <Typography className={classes.message}>{message}</Typography>
-      </Modal>
-    );
-  }
-}
+  return (
+    <Modal open={open} maxWidth='sm' title={title} onClose={onCancel} buttons={buttons}>
+      <Typography className={classes.message}>{message}</Typography>
+    </Modal>
+  );
+};
 
 export default withStyles(styles)(ConfirmModal);
