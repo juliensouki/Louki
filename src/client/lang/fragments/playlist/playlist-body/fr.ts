@@ -5,17 +5,17 @@ export default {
   duration: 'Durée',
   favorites: {
     emptyText: "Vous n'avez aucune musique dans vos favoris",
-    emptyButton: 'Toutes vos musiques',
+    emptyButtonText: 'Toutes vos musiques',
   },
   allMusics: {
     emptyText:
       "Vous n'avez aucune musique pour le moment. Pensez à vérifier dans les options que vous avez bien ajouté au \
       moins un dossier de musiques.",
-    emptyButton: 'Options',
+    emptyButtonText: 'Options',
   },
   custom: {
     emptyText: 'Cette playlist est vide pour le moment',
-    emptyButton: 'Toutes vos musiques',
+    emptyButtonText: 'Toutes vos musiques',
   },
   addBookmarkNotif: (musicName: string): string => {
     return musicName + ' a été ajouté aux favoris';

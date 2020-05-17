@@ -13,8 +13,6 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import { IconButton, Button, Typography } from '@material-ui/core';
 
 import PlaylistOptions from '../../utils/PlaylistOptions';
-import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
-import SelectPlaylistModal from '../../modals/SelectPlaylistModal';
 
 import { Music } from '../../../../shared/LoukiTypes';
 import LoukiStore from '../../../store/data/LoukiStore';
@@ -28,6 +26,7 @@ import MusicPlayingIcon from './MusicPlayingIcon';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
+import { EmptyPlaylistTexts } from '../../utils/ClientTypes';
 import texts from '../../../lang/fragments/playlist/playlist-body';
 
 const styles = (theme: Theme) =>
@@ -88,19 +87,15 @@ const styles = (theme: Theme) =>
   });
 
 interface Props extends WithStyles<typeof styles> {
+  searchResults: Array<string> | null;
   playlist: Array<Music>;
-  canAddToFavorites?: boolean;
-  favorites: boolean;
-  customPlaylist?: boolean;
-  allSongs?: boolean;
-  emptyPlaylistText: string;
-  emptyPlaylistButtonText: string;
-  emptyPlaylistRedirectRoute: string;
-  searchResults: Array<string>;
+  addBookmarksEnabled?: boolean;
+  getPlaylistOptionsItems: (id: string) => Array<JSX.Element>;
+  emptySettings: EmptyPlaylistTexts;
 }
 
 @observer
-class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & RouteComponentProps, NoState> {
+class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps & WithSnackbarProps, NoState> {
   @observable openSelectPlaylistModal: boolean = false;
   @observable musicToAddToPlaylist: string = '';
 
@@ -126,103 +121,27 @@ class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & Ro
   };
 
   redirectHome = () => {
-    this.props.history.push(this.props.emptyPlaylistRedirectRoute);
+    const emptySettings: EmptyPlaylistTexts = this.props.emptySettings;
+    this.props.history.push(emptySettings.redirectRoute);
   };
-
-  handleEditMusic = () => {
-    const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar('This feature has not been developed yet.', snackbarOptions);
-  };
-
-  handleRemoveBookmark = (id: string) => {
-    const snackbarOptions = { variant: 'success' as any };
-    const musicName = LoukiStore.idToMusic(id).title;
-    this.props.enqueueSnackbar(texts.current.removeBookmarkNotif(musicName), snackbarOptions);
-    Bookmarks.deleteBookmark(id);
-  };
-
-  @action handleAddMusicToPlaylist = (id: string) => {
-    this.openSelectPlaylistModal = true;
-    this.musicToAddToPlaylist = id;
-  };
-
-  @action handleCloseModal = event => {
-    event.stopPropagation();
-    this.openSelectPlaylistModal = false;
-  };
-
-  @action removeFromPlaylist = (id: string) => {
-    const playlistId = LoukiStore.currentPlaylist.__id;
-
-    RemoveMusicFromPlaylist(id, playlistId).then((response: RemoveMusicResponse) => {
-      LoukiStore.setCurrentPlaylist(response);
-      const snackbarOptions = { variant: 'success' as any };
-      const musicName = LoukiStore.idToMusic(id).title;
-      const playlistName = LoukiStore.idToPlaylist(playlistId).name;
-      this.props.enqueueSnackbar('Song removed from playlist', snackbarOptions);
-    });
-  };
-
-  getPlaylistOptionsItems(id: string): Array<JSX.Element> {
-    if (this.props.favorites) {
-      return [
-        <PlaylistOptionsItem
-          key={0}
-          title='Remove bookmark'
-          handleClick={() => {
-            this.handleRemoveBookmark(id);
-          }}
-        />,
-        <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
-      ];
-    } else if (this.props.allSongs) {
-      return [
-        <PlaylistOptionsItem
-          key={0}
-          title='Add to playlist..'
-          handleClick={() => {
-            this.handleAddMusicToPlaylist(id);
-          }}
-        />,
-        <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
-      ];
-    } else if (this.props.customPlaylist) {
-      return [
-        <PlaylistOptionsItem
-          key={0}
-          title='Remove from playlist'
-          handleClick={() => {
-            this.removeFromPlaylist(id);
-          }}
-        />,
-        <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
-      ];
-    }
-    return [];
-  }
 
   render() {
-    const { classes, playlist, emptyPlaylistText, emptyPlaylistButtonText, searchResults } = this.props;
+    const { classes, playlist, searchResults, getPlaylistOptionsItems, emptySettings } = this.props;
 
     const T = texts.current;
 
     if (playlist == null || playlist.length == 0) {
       return (
         <React.Fragment>
-          <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>{emptyPlaylistText}</Typography>
+          <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>{emptySettings.emptyText}</Typography>
           <Button className={classes.button} onClick={this.redirectHome}>
-            {emptyPlaylistButtonText}
+            {emptySettings.emptyButtonText}
           </Button>
         </React.Fragment>
       );
     } else {
       return (
         <React.Fragment>
-          <SelectPlaylistModal
-            open={this.openSelectPlaylistModal}
-            handleClose={this.handleCloseModal}
-            musicId={this.musicToAddToPlaylist}
-          />
           <Table aria-label='simple table'>
             <TableHead className={classes.rowTitles}>
               <TableRow>
@@ -244,7 +163,7 @@ class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & Ro
                   }}
                 >
                   <TableCell className={classes.whiteTableRow} component='th' scope='row'>
-                    {this.props.canAddToFavorites ? (
+                    {this.props.addBookmarksEnabled ? (
                       Bookmarks.isInBookmarks(music.__id) ? (
                         <IconButton
                           onClick={event => {
@@ -274,7 +193,7 @@ class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & Ro
                   <TableCell className={classes.tableRow}>{LoukiStore.getAlbumNameById(music.album)}</TableCell>
                   <TableCell className={classes.tableRow}>{LoukiStore.msTosec(music.duration)}</TableCell>
                   <TableCell className={classes.tableRow} align='right'>
-                    <PlaylistOptions>{this.getPlaylistOptionsItems(music.__id)}</PlaylistOptions>
+                    <PlaylistOptions>{getPlaylistOptionsItems(music.__id)}</PlaylistOptions>
                   </TableCell>
                 </TableRow>
               ))}
@@ -286,4 +205,4 @@ class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & Ro
   }
 }
 
-export default withSnackbar(withRouter(withStyles(styles)(PlaylistBodyDesktop)));
+export default withStyles(styles)(withRouter(withSnackbar(PlaylistBodyDesktop)));

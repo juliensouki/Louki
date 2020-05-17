@@ -10,15 +10,15 @@ export interface Definition {
   duration: string;
   favorites: {
     emptyText: string;
-    emptyButton: string;
+    emptyButtonText: string;
   };
   allMusics: {
     emptyText: string;
-    emptyButton: string;
+    emptyButtonText: string;
   };
   custom: {
     emptyText: string;
-    emptyButton: string;
+    emptyButtonText: string;
   };
   addBookmarkNotif(musicName: string): string;
   removeBookmarkNotif(musicName: string): string;
