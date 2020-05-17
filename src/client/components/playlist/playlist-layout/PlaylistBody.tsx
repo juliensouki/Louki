@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { computed, observable } from 'mobx';
+import { computed } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
@@ -9,8 +9,8 @@ import PlaylistBodyMobile from './PlaylistBodyMobile';
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
 
 import SearchForm from '../../../store/features/Search';
-import Music from '../../../../shared/Music';
-import texts from '../../../lang/fragments/playlist/playlist-body';
+import { Music } from '../../../../shared/LoukiTypes';
+import { EmptyPlaylistTexts } from '../../utils/ClientTypes';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -25,10 +25,9 @@ const styles = (theme: Theme) =>
 
 interface Props extends WithStyles<typeof styles> {
   playlist: Array<Music>;
-  canAddToFavorites?: boolean;
-  favorites?: boolean;
-  customPlaylist?: boolean;
-  allSongs?: boolean;
+  emptySettings: EmptyPlaylistTexts;
+  addBookmarksEnabled?: boolean;
+  desktopPlaylistOptions: (id: string) => Array<JSX.Element>;
 }
 
 @observer
@@ -43,39 +42,8 @@ class PlaylistBody extends React.Component<Props, NoState> {
     }
   }
 
-  @computed get emptyPlaylistText(): string {
-    const T = texts.current;
-
-    if (this.props.allSongs) {
-      return T.allMusics.emptyText;
-    } else if (this.props.favorites) {
-      return T.favorites.emptyText;
-    }
-    return T.custom.emptyText;
-  }
-
-  @computed get emptyPlaylistButtonText(): string {
-    const T = texts.current;
-
-    if (this.props.allSongs) {
-      return T.allMusics.emptyButton;
-    } else if (this.props.favorites) {
-      return T.favorites.emptyButton;
-    }
-    return T.custom.emptyButton;
-  }
-
-  @computed get emptyPlaylistRedirectRoute(): string {
-    if (this.props.allSongs) {
-      return '/settings';
-    } else if (this.props.favorites) {
-      return '/all-music';
-    }
-    return '/all-music';
-  }
-
   render() {
-    const { classes, playlist, favorites, customPlaylist, canAddToFavorites, allSongs } = this.props;
+    const { classes, playlist, emptySettings, addBookmarksEnabled, desktopPlaylistOptions } = this.props;
 
     return (
       <div className={classes.root}>
@@ -83,15 +51,11 @@ class PlaylistBody extends React.Component<Props, NoState> {
           mobile={<PlaylistBodyMobile playlist={playlist} />}
           desktop={
             <PlaylistBodyDesktop
-              allSongs={allSongs}
-              searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
-              favorites={favorites}
               playlist={playlist}
-              customPlaylist={customPlaylist}
-              canAddToFavorites={canAddToFavorites}
-              emptyPlaylistText={this.emptyPlaylistText}
-              emptyPlaylistButtonText={this.emptyPlaylistButtonText}
-              emptyPlaylistRedirectRoute={this.emptyPlaylistRedirectRoute}
+              addBookmarksEnabled={addBookmarksEnabled}
+              emptySettings={emptySettings}
+              getPlaylistOptionsItems={desktopPlaylistOptions}
+              searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
             />
           }
         />

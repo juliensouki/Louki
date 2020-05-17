@@ -11,7 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { Typography } from '@material-ui/core';
 
 import texts from '../../../lang/fragments/add-picture-modal';
-import { Search, MusicSearchResponse } from '../../../requests/Playlists';
+import { PixabaySearch, PixabaySearchResponse } from '../../../requests/Pixabay';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -88,7 +88,7 @@ class UploadBySearch extends React.Component<Props, NoState> {
 
   search = () => {
     this.loading = true;
-    Search(this.props.searchText).then((results: MusicSearchResponse) => {
+    PixabaySearch(this.props.searchText).then((results: PixabaySearchResponse) => {
       this.resultsArray = results;
       this.loading = false;
     });
