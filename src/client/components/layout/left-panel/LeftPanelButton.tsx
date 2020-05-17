@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
 import MobileMenu from '../../../store/features/MobileMenu';
 
@@ -50,33 +49,30 @@ interface Props extends WithStyles<typeof styles> {
   icon: any; //Find type
 }
 
-@observer
-class LeftPanelButton extends React.Component<Props, NoState> {
-  render() {
-    const { classes, icon, routePath, playlist, aboutprops, playlistId } = this.props;
-    const url = playlist ? routePath + '/' + playlistId : routePath;
-    const Icon = icon;
+const LeftPanelButton: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
+  const { classes, icon, routePath, playlist, aboutprops, playlistId, text } = props;
+  const url = playlist ? routePath + '/' + playlistId : routePath;
+  const Icon = icon;
 
-    return (
-      <NavLink
-        to={url}
-        onClick={() => {
-          MobileMenu.setOpen(false);
-        }}
-        activeStyle={{ textDecoration: 'none', fontWeight: 'bolder', color: '#FFF' }}
-        aboutprops={aboutprops}
-      >
-        <Grid container direction='row' className={classes.root}>
-          <Grid item className={classes.text} style={{ marginRight: 5 }}>
-            <Icon className={classes.icon} />
-          </Grid>
-          <Grid item className={classes.textGridContainer}>
-            <Typography className={classes.text}>{this.props.text}</Typography>
-          </Grid>
+  return (
+    <NavLink
+      to={url}
+      onClick={() => {
+        MobileMenu.setOpen(false);
+      }}
+      activeStyle={{ textDecoration: 'none', fontWeight: 'bolder', color: '#FFF' }}
+      aboutprops={aboutprops}
+    >
+      <Grid container direction='row' className={classes.root}>
+        <Grid item className={classes.text} style={{ marginRight: 5 }}>
+          <Icon className={classes.icon} />
         </Grid>
-      </NavLink>
-    );
-  }
-}
+        <Grid item className={classes.textGridContainer}>
+          <Typography className={classes.text}>{text}</Typography>
+        </Grid>
+      </Grid>
+    </NavLink>
+  );
+};
 
 export default withStyles(styles)(LeftPanelButton);

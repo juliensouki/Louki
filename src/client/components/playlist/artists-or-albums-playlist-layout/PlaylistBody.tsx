@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
@@ -36,21 +35,18 @@ interface Props extends WithStyles<typeof styles> {
   page: Page;
 }
 
-@observer
-class PlaylistBody extends React.Component<Props, NoState> {
-  render() {
-    const { classes, page } = this.props;
-    const playlist = page == Page.ALBUMS ? MusicsData.allAlbums : MusicsData.allArtists;
+const PlaylistBody: React.FunctionComponent<Props> = (props: Props) => {
+  const { classes, page } = props;
+  const playlist = page == Page.ALBUMS ? MusicsData.allAlbums : MusicsData.allArtists;
 
-    return (
-      <div className={classes.root}>
-        <ResponsiveAdapter
-          mobile={<PlaylistBodyMobile playlist={playlist} />}
-          desktop={<PlaylistBodyDesktop playlist={playlist} page={page} />}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className={classes.root}>
+      <ResponsiveAdapter
+        mobile={<PlaylistBodyMobile playlist={playlist} />}
+        desktop={<PlaylistBodyDesktop playlist={playlist} page={page} />}
+      />
+    </div>
+  );
+};
 
 export default withStyles(styles)(PlaylistBody);

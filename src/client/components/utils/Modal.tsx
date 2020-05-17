@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import CloseIcon from '@material-ui/icons/Close';
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Grid, Typography } from '@material-ui/core';
 import ResponsiveAdapter from './ResponsiveAdapter';
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
     title: {
       fontSize: '1.8rem',
@@ -44,33 +43,30 @@ interface Props extends WithStyles<typeof styles> {
   steps?: string;
 }
 
-@observer
-class Modal extends React.Component<React.PropsWithChildren<Props>, NoState> {
-  render() {
-    const { classes, children, onClose, open, title, buttons, maxWidth, preventClosing, steps } = this.props;
+const Modal: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
+  const { classes, children, onClose, open, title, buttons, maxWidth, preventClosing, steps } = props;
 
-    return (
-      <ResponsiveAdapter
-        breakpoint='xs'
-        desktop={<Dialog maxWidth={maxWidth ? maxWidth : 'sm'} open={open} onClose={onClose} fullWidth />}
-        mobile={<Dialog fullScreen open={open} onClose={onClose} />}
-      >
-        <Grid container direction='row' justify='space-between' alignItems='center'>
-          <DialogTitle>
-            <Typography className={classes.steps}>{steps}</Typography>
-            <Typography className={classes.title}>{title}</Typography>
-          </DialogTitle>
-          {!preventClosing && (
-            <IconButton className={classes.closeIcon} onClick={onClose} aria-label='close'>
-              <CloseIcon />
-            </IconButton>
-          )}
-        </Grid>
-        <DialogContent>{children}</DialogContent>
-        <DialogActions className={classes.buttonsContainer}>{buttons}</DialogActions>
-      </ResponsiveAdapter>
-    );
-  }
-}
+  return (
+    <ResponsiveAdapter
+      breakpoint='xs'
+      desktop={<Dialog maxWidth={maxWidth ? maxWidth : 'sm'} open={open} onClose={onClose} fullWidth />}
+      mobile={<Dialog fullScreen open={open} onClose={onClose} />}
+    >
+      <Grid container direction='row' justify='space-between' alignItems='center'>
+        <DialogTitle>
+          <Typography className={classes.steps}>{steps}</Typography>
+          <Typography className={classes.title}>{title}</Typography>
+        </DialogTitle>
+        {!preventClosing && (
+          <IconButton className={classes.closeIcon} onClick={onClose} aria-label='close'>
+            <CloseIcon />
+          </IconButton>
+        )}
+      </Grid>
+      <DialogContent>{children}</DialogContent>
+      <DialogActions className={classes.buttonsContainer}>{buttons}</DialogActions>
+    </ResponsiveAdapter>
+  );
+};
 
 export default withStyles(styles)(Modal);

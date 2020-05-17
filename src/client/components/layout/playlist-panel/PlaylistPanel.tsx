@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
@@ -25,13 +24,10 @@ const styles = (theme: Theme) =>
     },
   });
 
-@observer
-class PlaylistPanel extends React.Component<WithStyles, NoState> {
-  render() {
-    const { classes, children } = this.props;
+const LeftPanelButton: React.FunctionComponent<WithStyles> = (props: React.PropsWithChildren<WithStyles>) => {
+  const { classes, children } = props;
 
-    return <div className={classes.root}>{children}</div>;
-  }
-}
+  return <div className={classes.root}>{children}</div>;
+};
 
-export default withStyles(styles)(PlaylistPanel);
+export default withStyles(styles)(LeftPanelButton);
