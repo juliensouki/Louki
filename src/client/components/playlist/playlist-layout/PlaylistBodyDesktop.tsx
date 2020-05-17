@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -8,17 +8,21 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import { IconButton, Button, Typography } from '@material-ui/core';
 
 import PlaylistOptions from '../../utils/PlaylistOptions';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
+import SelectPlaylistModal from '../../modals/SelectPlaylistModal';
 
 import { Music } from '../../../../shared/LoukiTypes';
 import LoukiStore from '../../../store/data/LoukiStore';
 import MusicPlayer from '../../../store/features/MusicPlayer';
 import Navigation from '../../../store/navigation/Navigation';
 import Bookmarks from '../../../store/data/Bookmarks';
+
+import { RemoveMusicFromPlaylist, RemoveMusicResponse } from '../../../requests/Playlists';
 
 import MusicPlayingIcon from './MusicPlayingIcon';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
@@ -97,21 +101,12 @@ interface Props extends WithStyles<typeof styles> {
 
 @observer
 class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & RouteComponentProps, NoState> {
-  @observable arrayOfAnchorEl: Array<HTMLElement | null> = [];
+  @observable openSelectPlaylistModal: boolean = false;
+  @observable musicToAddToPlaylist: string = '';
 
-  playMusic = (index: number): void => {
+  @action playMusic = (index: number): void => {
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
     MusicPlayer.playMusic(index);
-  };
-
-  handleMenu = (event, index) => {
-    event.stopPropagation();
-    this.arrayOfAnchorEl[index] = event.currentTarget;
-  };
-
-  handleClose = (event, index: number) => {
-    event.stopPropagation();
-    this.arrayOfAnchorEl[index] = null;
   };
 
   addBookmark = (event, id: string) => {
@@ -134,17 +129,80 @@ class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & Ro
     this.props.history.push(this.props.emptyPlaylistRedirectRoute);
   };
 
+  handleEditMusic = () => {
+    const snackbarOptions = { variant: 'info' as any };
+    this.props.enqueueSnackbar('This feature has not been developed yet.', snackbarOptions);
+  };
+
+  handleRemoveBookmark = (id: string) => {
+    const snackbarOptions = { variant: 'success' as any };
+    const musicName = LoukiStore.idToMusic(id).title;
+    this.props.enqueueSnackbar(texts.current.removeBookmarkNotif(musicName), snackbarOptions);
+    Bookmarks.deleteBookmark(id);
+  };
+
+  @action handleAddMusicToPlaylist = (id: string) => {
+    this.openSelectPlaylistModal = true;
+    this.musicToAddToPlaylist = id;
+  };
+
+  @action handleCloseModal = event => {
+    event.stopPropagation();
+    this.openSelectPlaylistModal = false;
+  };
+
+  @action removeFromPlaylist = (id: string) => {
+    const playlistId = LoukiStore.currentPlaylist.__id;
+
+    RemoveMusicFromPlaylist(id, playlistId).then((response: RemoveMusicResponse) => {
+      LoukiStore.setCurrentPlaylist(response);
+      const snackbarOptions = { variant: 'success' as any };
+      const musicName = LoukiStore.idToMusic(id).title;
+      const playlistName = LoukiStore.idToPlaylist(playlistId).name;
+      this.props.enqueueSnackbar('Song removed from playlist', snackbarOptions);
+    });
+  };
+
+  getPlaylistOptionsItems(id: string): Array<JSX.Element> {
+    if (this.props.favorites) {
+      return [
+        <PlaylistOptionsItem
+          key={0}
+          title='Remove bookmark'
+          handleClick={() => {
+            this.handleRemoveBookmark(id);
+          }}
+        />,
+        <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
+      ];
+    } else if (this.props.allSongs) {
+      return [
+        <PlaylistOptionsItem
+          key={0}
+          title='Add to playlist..'
+          handleClick={() => {
+            this.handleAddMusicToPlaylist(id);
+          }}
+        />,
+        <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
+      ];
+    } else if (this.props.customPlaylist) {
+      return [
+        <PlaylistOptionsItem
+          key={0}
+          title='Remove from playlist'
+          handleClick={() => {
+            this.removeFromPlaylist(id);
+          }}
+        />,
+        <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
+      ];
+    }
+    return [];
+  }
+
   render() {
-    const {
-      classes,
-      playlist,
-      favorites,
-      customPlaylist,
-      allSongs,
-      emptyPlaylistText,
-      emptyPlaylistButtonText,
-      searchResults,
-    } = this.props;
+    const { classes, playlist, emptyPlaylistText, emptyPlaylistButtonText, searchResults } = this.props;
 
     const T = texts.current;
 
@@ -159,68 +217,70 @@ class PlaylistBodyDesktop extends React.Component<Props & WithSnackbarProps & Ro
       );
     } else {
       return (
-        <Table aria-label='simple table'>
-          <TableHead className={classes.rowTitles}>
-            <TableRow>
-              <TableCell className={classes.rowTitles}>{T.song}</TableCell>
-              <TableCell className={classes.rowTitles}>{T.artist}</TableCell>
-              <TableCell className={classes.rowTitles}>{T.album}</TableCell>
-              <TableCell className={classes.rowTitles}>{T.duration}</TableCell>
-              <TableCell align='right'></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {playlist.map((music: Music, index: number) => (
-              <TableRow
-                key={music.__id}
-                style={searchResults != null && !searchResults.includes(music.__id) ? { display: 'none' } : {}}
-                className={MusicPlayer.playingMusicId == music.__id ? classes.rowSelected : classes.row}
-                onClick={() => {
-                  this.playMusic(index);
-                }}
-              >
-                <TableCell className={classes.whiteTableRow} component='th' scope='row'>
-                  {this.props.canAddToFavorites ? (
-                    Bookmarks.isInBookmarks(music.__id) ? (
-                      <IconButton
-                        onClick={event => {
-                          this.deleteBookmark(event, music.__id);
-                        }}
-                      >
-                        <FavoriteIcon className={classes.fillFavIcon} />
-                      </IconButton>
-                    ) : (
-                      <IconButton
-                        onClick={event => {
-                          this.addBookmark(event, music.__id);
-                        }}
-                      >
-                        <FavoriteBorderIcon />
-                      </IconButton>
-                    )
-                  ) : null}
-                  {MusicPlayer.isPlaying &&
-                  MusicPlayer.playingMusicId == music.__id &&
-                  Navigation.currentRoute == MusicPlayer.playlistRoute ? (
-                    <MusicPlayingIcon />
-                  ) : null}
-                  {music.title}
-                </TableCell>
-                <TableCell className={classes.whiteTableRow}>{LoukiStore.getArtistNameById(music.artist)}</TableCell>
-                <TableCell className={classes.tableRow}>{LoukiStore.getAlbumNameById(music.album)}</TableCell>
-                <TableCell className={classes.tableRow}>{LoukiStore.msTosec(music.duration)}</TableCell>
-                <TableCell className={classes.tableRow} align='right'>
-                  <PlaylistOptions
-                    music={music}
-                    allSongs={allSongs}
-                    removeBookmark={favorites}
-                    musicInPlaylist={customPlaylist}
-                  />
-                </TableCell>
+        <React.Fragment>
+          <SelectPlaylistModal
+            open={this.openSelectPlaylistModal}
+            handleClose={this.handleCloseModal}
+            musicId={this.musicToAddToPlaylist}
+          />
+          <Table aria-label='simple table'>
+            <TableHead className={classes.rowTitles}>
+              <TableRow>
+                <TableCell className={classes.rowTitles}>{T.song}</TableCell>
+                <TableCell className={classes.rowTitles}>{T.artist}</TableCell>
+                <TableCell className={classes.rowTitles}>{T.album}</TableCell>
+                <TableCell className={classes.rowTitles}>{T.duration}</TableCell>
+                <TableCell align='right'></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {playlist.map((music: Music, index: number) => (
+                <TableRow
+                  key={music.__id}
+                  style={searchResults != null && !searchResults.includes(music.__id) ? { display: 'none' } : {}}
+                  className={MusicPlayer.playingMusicId == music.__id ? classes.rowSelected : classes.row}
+                  onClick={() => {
+                    this.playMusic(index);
+                  }}
+                >
+                  <TableCell className={classes.whiteTableRow} component='th' scope='row'>
+                    {this.props.canAddToFavorites ? (
+                      Bookmarks.isInBookmarks(music.__id) ? (
+                        <IconButton
+                          onClick={event => {
+                            this.deleteBookmark(event, music.__id);
+                          }}
+                        >
+                          <FavoriteIcon className={classes.fillFavIcon} />
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          onClick={event => {
+                            this.addBookmark(event, music.__id);
+                          }}
+                        >
+                          <FavoriteBorderIcon />
+                        </IconButton>
+                      )
+                    ) : null}
+                    {MusicPlayer.isPlaying &&
+                    MusicPlayer.playingMusicId == music.__id &&
+                    Navigation.currentRoute == MusicPlayer.playlistRoute ? (
+                      <MusicPlayingIcon />
+                    ) : null}
+                    {music.title}
+                  </TableCell>
+                  <TableCell className={classes.whiteTableRow}>{LoukiStore.getArtistNameById(music.artist)}</TableCell>
+                  <TableCell className={classes.tableRow}>{LoukiStore.getAlbumNameById(music.album)}</TableCell>
+                  <TableCell className={classes.tableRow}>{LoukiStore.msTosec(music.duration)}</TableCell>
+                  <TableCell className={classes.tableRow} align='right'>
+                    <PlaylistOptions>{this.getPlaylistOptionsItems(music.__id)}</PlaylistOptions>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </React.Fragment>
       );
     }
   }
