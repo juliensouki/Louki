@@ -1,18 +1,24 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Fab, Typography } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import PlaylistOptions from '../utils/PlaylistOptions';
+import PlaylistOptionsItem from '../utils/PlaylistOptionsItem';
 import MusicPlayer from '../../store/features/MusicPlayer';
 import Navigation from '../../store/navigation/Navigation';
-import { Music } from '../../../shared/LoukiTypes';
 import { Stats, getStat } from '../../store/statistics/Stats';
-
+import LoukiStore from '../../store/data/LoukiStore';
+import { Music } from '../../../shared/LoukiTypes';
+import { DeletePlaylist, DeletePlaylistResponse } from '../../requests/Playlists';
 import texts from '../../lang/fragments/playlist/playlist-header';
+import notifsTexts from '../../lang/fragments/options';
+import UpdatePlaylistModal from '../modals/update-playlist-modal/UpdatePlaylistModal';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -134,8 +140,9 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistHeader extends React.Component<Props, NoState> {
+class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteComponentProps, NoState> {
   @observable ref: React.RefObject<HTMLInputElement> = React.createRef();
+  @observable openUpdatePlaylistModal: boolean = false;
   @observable pictureHeight: number | null = null;
 
   componentDidMount() {
@@ -161,6 +168,28 @@ class PlaylistHeader extends React.Component<Props, NoState> {
     }
   };
 
+  handleOpenUpdateModal = () => {
+    this.openUpdatePlaylistModal = true;
+  };
+
+  handleCloseUpdateModal = () => {
+    this.openUpdatePlaylistModal = false;
+  };
+
+  deletePlaylist = event => {
+    event.stopPropagation();
+    const playlistId = LoukiStore.currentPlaylist.__id;
+
+    DeletePlaylist(playlistId).then((response: DeletePlaylistResponse) => {
+      const snackbarOptions = { variant: 'success' as any };
+      const playlistName = LoukiStore.idToPlaylist(playlistId).name;
+
+      LoukiStore.setPlaylists(response);
+      this.props.enqueueSnackbar(notifsTexts.current.playlistHasBeenDeletedNotif(playlistName), snackbarOptions);
+      this.props.history.push(Navigation.previousRoute);
+    });
+  };
+
   render() {
     const { classes, playlist, description, image, noStartButton, stat, statArg } = this.props;
     const T = texts.current;
@@ -182,68 +211,74 @@ class PlaylistHeader extends React.Component<Props, NoState> {
       this.pictureHeight > 0 ? 'calc(100% - 4em - 20px - ' + this.pictureHeight + 'px)' : 'calc(100% - 4em)';
 
     return (
-      <Grid container direction='column' className={classes.root} justify='space-between'>
-        {this.props.playlistId ? (
-          <div className={classes.playlistOptions}>
-            <PlaylistOptions playlist />
-          </div>
-        ) : null}
-        <Grid container item direction='row' style={{ width: '100%' }}>
-          <div
-            ref={this.ref}
-            className={classes.playlistPictureContainer}
-            style={this.pictureHeight ? { height: this.pictureHeight } : {}}
-          >
-            <Grid container alignItems='center' justify='center' style={{ width: '100%', height: '100%' }}>
-              <img src={image} className={classes.playlistPicture}></img>
-            </Grid>
-          </div>
-          <Grid
-            item
-            container
-            direction='column'
-            className={classes.playlistInfoContainer}
-            alignItems='flex-start'
-            justify='space-between'
-            style={{ width: containerInformationWidth }}
-          >
-            <Grid item>
-              <Typography className={classes.playlistCategory}>{this.props.subTitle}</Typography>
-              <Grid container direction='row' alignItems='center' justify='center'>
-                <Grid item>
-                  <Typography className={classes.playlistName}>{this.props.title}</Typography>
-                </Grid>
-                {noStartButton ? null : (
+      <React.Fragment>
+        <UpdatePlaylistModal open={this.openUpdatePlaylistModal} handleClose={this.handleCloseUpdateModal} />
+        <Grid container direction='column' className={classes.root} justify='space-between'>
+          {this.props.playlistId ? (
+            <div className={classes.playlistOptions}>
+              <PlaylistOptions>
+                <PlaylistOptionsItem title='Update playlist' handleClick={this.handleOpenUpdateModal} />
+                <PlaylistOptionsItem title='Delete' handleClick={this.deletePlaylist} />
+              </PlaylistOptions>
+            </div>
+          ) : null}
+          <Grid container item direction='row' style={{ width: '100%' }}>
+            <div
+              ref={this.ref}
+              className={classes.playlistPictureContainer}
+              style={this.pictureHeight ? { height: this.pictureHeight } : {}}
+            >
+              <Grid container alignItems='center' justify='center' style={{ width: '100%', height: '100%' }}>
+                <img src={image} className={classes.playlistPicture}></img>
+              </Grid>
+            </div>
+            <Grid
+              item
+              container
+              direction='column'
+              className={classes.playlistInfoContainer}
+              alignItems='flex-start'
+              justify='space-between'
+              style={{ width: containerInformationWidth }}
+            >
+              <Grid item>
+                <Typography className={classes.playlistCategory}>{this.props.subTitle}</Typography>
+                <Grid container direction='row' alignItems='center' justify='center'>
                   <Grid item>
-                    <Fab
-                      variant='extended'
-                      size='medium'
-                      className={classes.playlistButton}
-                      disabled={!MusicPlayer.canPlayPlaylist}
-                      aria-label='play'
-                      onClick={this.startPlaylist}
-                    >
-                      {icon}
-                      {buttonText}
-                    </Fab>
+                    <Typography className={classes.playlistName}>{this.props.title}</Typography>
                   </Grid>
-                )}
+                  {noStartButton ? null : (
+                    <Grid item>
+                      <Fab
+                        variant='extended'
+                        size='medium'
+                        className={classes.playlistButton}
+                        disabled={!MusicPlayer.canPlayPlaylist}
+                        aria-label='play'
+                        onClick={this.startPlaylist}
+                      >
+                        {icon}
+                        {buttonText}
+                      </Fab>
+                    </Grid>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid item style={{ width: '100%' }}>
+                <Typography className={classes.playlistDescription}>
+                  {description ? description : playlist ? T.nbMusics(playlist.length) : ''}
+                </Typography>
+                <Typography className={classes.playlistDescription}>{getStat(stat, statArg)}</Typography>
               </Grid>
             </Grid>
-            <Grid item style={{ width: '100%' }}>
-              <Typography className={classes.playlistDescription}>
-                {description ? description : playlist ? T.nbMusics(playlist.length) : ''}
-              </Typography>
-              <Typography className={classes.playlistDescription}>{getStat(stat, statArg)}</Typography>
-            </Grid>
+          </Grid>
+          <Grid item>
+            <div className={classes.headerLine}></div>
           </Grid>
         </Grid>
-        <Grid item>
-          <div className={classes.headerLine}></div>
-        </Grid>
-      </Grid>
+      </React.Fragment>
     );
   }
 }
 
-export default withStyles(styles)(PlaylistHeader);
+export default withSnackbar(withRouter(withStyles(styles)(PlaylistHeader)));
