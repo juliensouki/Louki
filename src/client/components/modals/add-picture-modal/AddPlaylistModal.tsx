@@ -11,7 +11,7 @@ import UploadByUrl from './UploadByUrl';
 import UploadBySearch from './UploadBySearch';
 import UploadConfirmation from './UploadConfirmation';
 
-import texts from '../../../lang/fragments/add-picture-modal';
+import texts from '../../../lang/modals/add-picture-modal';
 
 import NewPlaylistForm from '../../../store/forms/NewPlaylistForm';
 

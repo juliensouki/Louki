@@ -4,7 +4,6 @@ import { action, observable } from 'mobx';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import emptyTexts from '../../../lang/fragments/playlist/playlist-body';
 
 import PlaylistHeader from '../../playlist/PlaylistHeader';
 import SearchContainer from '../../playlist/SearchContainer';
@@ -16,6 +15,8 @@ import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/all-songs';
+import optionsTexts from '../../../lang/options';
+import notifsTexts from '../../../lang/notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -41,19 +42,20 @@ class AllMusic extends React.Component<WithStyles & WithSnackbarProps, NoState> 
 
   handleEditMusic = () => {
     const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar('This feature has not been developed yet.', snackbarOptions);
+    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
   };
 
   desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
+    const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
         key={0}
-        title='Add to playlist'
+        title={T.addToPlaylist}
         handleClick={() => {
           this.handleAddMusicToPlaylist(id);
         }}
       />,
-      <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
+      <PlaylistOptionsItem key={1} title={T.edit} handleClick={this.handleEditMusic} />,
     ];
   };
 
@@ -78,8 +80,8 @@ class AllMusic extends React.Component<WithStyles & WithSnackbarProps, NoState> 
         <PlaylistBody
           playlist={LoukiStore.allMusics}
           emptySettings={{
-            ...emptyTexts.current.custom,
-            redirectRoute: '/all-musics',
+            ...T.emptyTexts,
+            redirectRoute: '/settings',
           }}
           addBookmarksEnabled
           desktopPlaylistOptions={this.desktopPlaylistOptions}

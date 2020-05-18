@@ -17,12 +17,14 @@ import MusicPlayer from '../../../store/features/MusicPlayer';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/custom-playlist';
-import emptyTexts from '../../../lang/fragments/playlist/playlist-body';
+import optionsTexts from '../../../lang/options';
+import notifsTexts from '../../../lang/notifications';
 
 @observer
 class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarProps, NoState> {
   @action removeFromPlaylist = (id: string) => {
     const playlistId = LoukiStore.currentPlaylist.__id;
+    const T = notifsTexts.current;
 
     RemoveMusicFromPlaylist(id, playlistId).then((response: RemoveMusicResponse) => {
       LoukiStore.setCurrentPlaylist(response);
@@ -30,25 +32,26 @@ class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarPro
       const snackbarOptions = { variant: 'success' as any };
       const musicName = LoukiStore.idToMusic(id).title;
       const playlistName = LoukiStore.idToPlaylist(playlistId).name;
-      this.props.enqueueSnackbar(`${musicName} removed from ${playlistName}`, snackbarOptions);
+      this.props.enqueueSnackbar(T.removedFromPlaylist(musicName, playlistName), snackbarOptions);
     });
   };
 
   handleEditMusic = () => {
     const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar('This feature has not been developed yet.', snackbarOptions);
+    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
   };
 
   desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
+    const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
         key={0}
-        title='Remove from playlist'
+        title={T.removeFromPlaylist}
         handleClick={() => {
           this.removeFromPlaylist(id);
         }}
       />,
-      <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
+      <PlaylistOptionsItem key={1} title={T.edit} handleClick={this.handleEditMusic} />,
     ];
   };
 
@@ -77,8 +80,8 @@ class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarPro
         <PlaylistBody
           playlist={musics}
           emptySettings={{
-            ...emptyTexts.current.custom,
-            redirectRoute: '/settings',
+            ...T.emptyTexts,
+            redirectRoute: '/all-music',
           }}
           addBookmarksEnabled
           desktopPlaylistOptions={this.desktopPlaylistOptions}

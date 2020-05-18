@@ -27,6 +27,7 @@ import User from '../../../store/data/User';
 
 import { Language } from '../../../../shared/Languages';
 import texts from '../../../lang/pages/settings/';
+import notifsTexts from '../../../lang/notifications';
 
 import { UpdateUserSettings, ResetLouki, UpdateSettingsResponse } from '../../../requests/Users';
 import { TestPixabayResponse, TestPixabay } from '../../../requests/Pixabay';
@@ -127,11 +128,13 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
 
   handleSave = () => {
     const form = document.getElementById('settings-form') as HTMLFormElement;
+    const T = notifsTexts.current;
+
     if (form != null) {
       UpdateUserSettings(form, SettingsForm.settings, SettingsForm.id).then((response: UpdateSettingsResponse) => {
         User.setUser(response);
         const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(texts.current.settingsUpdated, snackbarOptions);
+        this.props.enqueueSnackbar(T.settingsUpdated, snackbarOptions);
         this.props.history.push(Navigation.previousRoute);
       });
     }

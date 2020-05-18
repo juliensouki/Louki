@@ -16,6 +16,7 @@ import PublicIcon from '@material-ui/icons/Public';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import texts from '../../../lang/pages/new-playlist';
+import notifsTexts from '../../../lang/notifications';
 import { CreatePlaylist, CreatePlaylistResponse } from '../../../requests/Playlists';
 
 const styles = (theme: Theme) =>
@@ -104,7 +105,9 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & Wit
   handleRedirect = event => {
     event.stopPropagation();
     const T = texts.current;
+    const nT = notifsTexts.current;
     const form = document.getElementById('new-playlist-form');
+
     if (form != null && this.formValidation()) {
       const data: FormData = new FormData(form as HTMLFormElement);
 
@@ -115,7 +118,7 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & Wit
       CreatePlaylist(data).then((result: CreatePlaylistResponse) => {
         LoukiStore.setPlaylists(result);
         const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(texts.current.playlistCreated(NewPlaylistForm.name), snackbarOptions);
+        this.props.enqueueSnackbar(nT.playlistCreated(NewPlaylistForm.name), snackbarOptions);
         this.props.history.push('/all-music');
       });
     } else {

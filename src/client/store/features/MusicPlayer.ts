@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import Navigation from '../navigation/Navigation';
 import { addSecondsOfPlaying } from '../statistics/Stats';
 import { Music } from '../../../shared/LoukiTypes';
-import texts from '../../lang/fragments/music-preview';
+import texts from '../../lang/layout/music-bar';
 
 export enum MusicLoop {
   NO_REPEAT = 0,

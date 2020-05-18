@@ -5,7 +5,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 
 import SearchIcon from '@material-ui/icons/Search';
 import SearchForm from '../../store/features/Search';
-import texts from '../../lang/fragments/search-container';
+import texts from '../../lang/playlist/search-container';
 
 const styles = (theme: Theme) =>
   createStyles({

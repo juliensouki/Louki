@@ -4,13 +4,8 @@ import { Language } from '../../../../shared/Languages';
 import LanguagesManager from '../../../store/languages/LanguagesManager';
 
 export interface Definition {
-  noListen: string;
-  listened: (time: string) => string;
-  nbArtists: (nb: number) => string;
-  nbAlbums: (nb: number) => string;
-  days: (nb: number) => string;
-  hours: (nb: number) => string;
-  minutes: (nb: number) => string;
+  title: string;
+  cancel: string;
 }
 
 export default new LanguagesManager<Definition>(

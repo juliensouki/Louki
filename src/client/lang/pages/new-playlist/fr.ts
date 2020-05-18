@@ -17,5 +17,4 @@ export default {
     placeholder: 'Ajoutez une description',
     helper: 'Vous devez ajouter une description à votre playlist',
   },
-  playlistCreated: (playlist: string) => `La playlist ${playlist} a été créée`,
 };

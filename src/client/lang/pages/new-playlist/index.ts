@@ -22,7 +22,6 @@ export interface Definition {
     placeholder: string;
     helper: string;
   };
-  playlistCreated: (playlist: string) => string;
 }
 
 export default new LanguagesManager<Definition>(

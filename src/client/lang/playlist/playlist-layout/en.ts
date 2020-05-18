@@ -15,10 +15,4 @@ export default {
     emptyText: 'This playlist is currently empty',
     emptyButtonText: 'All your musics',
   },
-  addBookmarkNotif: (musicName: string): string => {
-    return musicName + ' has been added to favorites';
-  },
-  removeBookmarkNotif: (musicName: string): string => {
-    return musicName + ' has been removed from favorites';
-  },
 };

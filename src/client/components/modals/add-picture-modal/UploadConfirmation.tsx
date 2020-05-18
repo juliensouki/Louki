@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Typography, Grid } from '@material-ui/core';
-import texts from '../../../lang/fragments/add-picture-modal';
+import texts from '../../../lang/modals/add-picture-modal';
 
 const styles = (theme: Theme) =>
   createStyles({

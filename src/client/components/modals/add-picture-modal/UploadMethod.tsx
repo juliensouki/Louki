@@ -7,7 +7,7 @@ import { Typography, Button, Divider } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 
-import texts from '../../../lang/fragments/add-picture-modal';
+import texts from '../../../lang/modals/add-picture-modal';
 
 const styles = (theme: Theme) =>
   createStyles({

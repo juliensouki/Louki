@@ -8,6 +8,10 @@ export interface Definition {
     subTitle: string;
     title: string;
   };
+  emptyTexts: {
+    emptyText: string;
+    emptyButtonText: string;
+  };
 }
 
 export default new LanguagesManager<Definition>(
