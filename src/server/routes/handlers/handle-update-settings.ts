@@ -6,10 +6,9 @@ import { UpdateSettingsResponse, CustomError } from '../../../shared/RoutesRespo
 import { logError } from '../../logger';
 
 export const handleUpdateSettings = async (req: Request, res: Response) => {
-  const id: string = req.body.id;
   const settings: Settings = JSON.parse(req.body.settings) as Settings;
   const file = (req as any).file;
-  const user = await databaseHandler.findOneInDocument(UserSchema, 'selected', true);
+  const user = (await databaseHandler.findOneInDocument(UserSchema, 'selected', true))[0];
 
   const newAccountSettings: AccountSettings = {
     language: settings.language,
@@ -18,11 +17,11 @@ export const handleUpdateSettings = async (req: Request, res: Response) => {
 
   const jsonUpdate = {
     name: settings.username,
-    picture: file ? `/assets/uploads/${id}.${file['mimetype'].split('image/')[1]}` : user[0].picture,
+    picture: file ? `/assets/uploads/${user.__id}.${file['mimetype'].split('image/')[1]}` : user.picture,
     settings: newAccountSettings,
   };
 
-  databaseHandler.updateDocument(UserSchema, id, jsonUpdate).then(
+  databaseHandler.updateDocument(UserSchema, user.__id, jsonUpdate).then(
     () => {
       databaseHandler.findOneInDocument(UserSchema, 'selected', true).then(
         users => {
