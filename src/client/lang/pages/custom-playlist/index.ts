@@ -7,6 +7,10 @@ export interface Definition {
   playlistHeader: {
     subTitle: string;
   };
+  emptyTexts: {
+    emptyText: string;
+    emptyButtonText: string;
+  };
 }
 
 export default new LanguagesManager<Definition>(

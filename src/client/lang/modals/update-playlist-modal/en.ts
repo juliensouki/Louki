@@ -4,5 +4,4 @@ export default {
   save: 'Modify',
   namePlaceholder: 'Name',
   description: 'Description',
-  playlistUpdated: (playlist: string) => `Playlist ${playlist} has been updated`,
 };

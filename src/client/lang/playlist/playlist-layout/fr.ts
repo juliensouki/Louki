@@ -17,10 +17,4 @@ export default {
     emptyText: 'Cette playlist est vide pour le moment',
     emptyButtonText: 'Toutes vos musiques',
   },
-  addBookmarkNotif: (musicName: string): string => {
-    return musicName + ' a été ajouté aux favoris';
-  },
-  removeBookmarkNotif: (musicName: string): string => {
-    return musicName + ' a été enlevé des favoris';
-  },
 };

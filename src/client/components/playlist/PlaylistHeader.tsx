@@ -16,9 +16,10 @@ import { Stats, getStat } from '../../store/statistics/Stats';
 import LoukiStore from '../../store/data/LoukiStore';
 import { Music } from '../../../shared/LoukiTypes';
 import { DeletePlaylist, DeletePlaylistResponse } from '../../requests/Playlists';
-import texts from '../../lang/fragments/playlist/playlist-header';
-import notifsTexts from '../../lang/fragments/options';
+import texts from '../../lang/playlist/playlist-header';
 import UpdatePlaylistModal from '../modals/update-playlist-modal/UpdatePlaylistModal';
+import optionsTexts from '../../lang/options';
+import notifsTexts from '../../lang/notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -179,13 +180,14 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
   deletePlaylist = event => {
     event.stopPropagation();
     const playlistId = LoukiStore.currentPlaylist.__id;
+    const T = notifsTexts.current;
 
     DeletePlaylist(playlistId).then((response: DeletePlaylistResponse) => {
       const snackbarOptions = { variant: 'success' as any };
       const playlistName = LoukiStore.idToPlaylist(playlistId).name;
 
       LoukiStore.setPlaylists(response);
-      this.props.enqueueSnackbar(notifsTexts.current.playlistHasBeenDeletedNotif(playlistName), snackbarOptions);
+      this.props.enqueueSnackbar(T.playlistDeleted(playlistName), snackbarOptions);
       this.props.history.push(Navigation.previousRoute);
     });
   };
@@ -193,6 +195,7 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
   render() {
     const { classes, playlist, description, image, noStartButton, stat, statArg } = this.props;
     const T = texts.current;
+    const oT = optionsTexts.current;
     let icon: JSX.Element;
     let buttonText: string;
 
@@ -217,8 +220,8 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
           {this.props.allowOptions ? (
             <div className={classes.playlistOptions}>
               <PlaylistOptions>
-                <PlaylistOptionsItem title='Update playlist' handleClick={this.handleOpenUpdateModal} />
-                <PlaylistOptionsItem title='Delete' handleClick={this.deletePlaylist} />
+                <PlaylistOptionsItem title={oT.updatePlaylist} handleClick={this.handleOpenUpdateModal} />
+                <PlaylistOptionsItem title={oT.delete} handleClick={this.deletePlaylist} />
               </PlaylistOptions>
             </div>
           ) : null}

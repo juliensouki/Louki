@@ -20,14 +20,13 @@ import MusicPlayer from '../../../store/features/MusicPlayer';
 import Navigation from '../../../store/navigation/Navigation';
 import Bookmarks from '../../../store/data/Bookmarks';
 
-import { RemoveMusicFromPlaylist, RemoveMusicResponse } from '../../../requests/Playlists';
-
 import MusicPlayingIcon from './MusicPlayingIcon';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { EmptyPlaylistTexts } from '../../utils/ClientTypes';
-import texts from '../../../lang/fragments/playlist/playlist-body';
+import texts from '../../../lang/playlist/playlist-layout';
+import notifsTexts from '../../../lang/notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -105,18 +104,22 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps & 
   };
 
   addBookmark = (event, id: string) => {
+    const T = notifsTexts.current;
+
     event.stopPropagation();
     Bookmarks.addBookmark(id);
     const snackbarOptions = { variant: 'success' as any };
     const musicName = LoukiStore.idToMusic(id).title;
-    this.props.enqueueSnackbar(texts.current.addBookmarkNotif(musicName), snackbarOptions);
+    this.props.enqueueSnackbar(T.addedBookmark(musicName), snackbarOptions);
   };
 
   deleteBookmark = (event, id: string) => {
+    const T = notifsTexts.current;
+
     event.stopPropagation();
     const snackbarOptions = { variant: 'success' as any };
     const musicName = LoukiStore.idToMusic(id).title;
-    this.props.enqueueSnackbar(texts.current.removeBookmarkNotif(musicName), snackbarOptions);
+    this.props.enqueueSnackbar(T.removedBookmark(musicName), snackbarOptions);
     Bookmarks.deleteBookmark(id);
   };
 

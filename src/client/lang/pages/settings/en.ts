@@ -19,12 +19,4 @@ export default {
   invalid: 'Invalid or not found',
   language: 'Language',
   folders: (nb: number) => (nb < 2 ? 'folder' : 'folders'),
-  manageFolders: {
-    title: 'Manage folders',
-    placeholder: 'Add a folder (full path)',
-    button: 'Add folder',
-  },
-  settingsUpdated: 'Your settings have been saved',
-  folderAdded: (folder: string) => `Folder ${folder} has been added`,
-  folderRemoved: (folder: string) => `Folder ${folder} has been removed`,
 };

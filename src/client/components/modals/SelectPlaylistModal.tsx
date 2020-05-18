@@ -10,7 +10,8 @@ import { Playlist } from '../../../shared/LoukiTypes';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { AddMusic } from '../../requests/Playlists';
 
-import texts from '../../lang/fragments/select-playlist-modal';
+import texts from '../../lang/modals/select-playlist-modal';
+import notifsTexts from '../../lang/notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -44,16 +45,18 @@ interface Props extends WithStyles<typeof styles> {
 @observer
 class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
   handleListItemClick = (playlist: Playlist) => {
+    const T = notifsTexts.current;
+
     AddMusic(playlist.__id, this.props.musicId).then((response: Response) => {
       const musicName = LoukiStore.idToMusic(this.props.musicId).title;
       const playlistName = LoukiStore.idToPlaylist(playlist.__id).name;
 
       if (response.status == 200) {
         const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(texts.current.addedToPlaylistNotif(musicName, playlistName), snackbarOptions);
+        this.props.enqueueSnackbar(T.addedToPlaylistNotif(musicName, playlistName), snackbarOptions);
       } else if (response.status == 403) {
         const snackbarOptions = { variant: 'error' as any };
-        this.props.enqueueSnackbar(texts.current.alreadyInPlaylistNotif(musicName, playlistName), snackbarOptions);
+        this.props.enqueueSnackbar(T.alreadyInPlaylistNotif(musicName, playlistName), snackbarOptions);
       }
     });
   };

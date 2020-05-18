@@ -10,7 +10,8 @@ import SettingsForm from '../../store/forms/SettingsForm';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import User from '../../store/data/User';
-import texts from '../../lang/pages/settings';
+import texts from '../../lang/modals/manage-folders-modal';
+import notifsTexts from '../../lang/notifications';
 
 import { AddFolder, AddFolderResponse, RemoveFolder, RemoveFolderResponse } from '../../requests/Users';
 
@@ -88,19 +89,23 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
   };
 
   @action deleteFolder = (folder: string) => {
+    const T = notifsTexts.current;
+
     RemoveFolder(folder).then((response: RemoveFolderResponse) => {
       const snackbarOptions = { variant: 'success' as any };
-      this.props.enqueueSnackbar(texts.current.folderRemoved(folder), snackbarOptions);
+      this.props.enqueueSnackbar(T.folderRemoved(folder), snackbarOptions);
       User.setUser(response);
     });
   };
 
   @action addNewFolder = () => {
+    const T = notifsTexts.current;
+
     if (this.folderToAdd.length > 0) {
       AddFolder(this.folderToAdd).then((response: AddFolderResponse) => {
         User.setUser(response);
         const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(texts.current.folderAdded(this.folderToAdd), snackbarOptions);
+        this.props.enqueueSnackbar(T.folderAdded(this.folderToAdd), snackbarOptions);
         this.folderToAdd = '';
       });
     }
@@ -111,7 +116,7 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
     const T = texts.current;
 
     return (
-      <Modal open={open} title={T.manageFolders.title} buttons={[]} onClose={this.onClose}>
+      <Modal open={open} title={T.title} buttons={[]} onClose={this.onClose}>
         <Paper className={classes.root}>
           <InputBase
             className={classes.input}
@@ -119,11 +124,11 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
             onChange={e => {
               this.handleChange(e.target.value);
             }}
-            placeholder={T.manageFolders.placeholder}
-            inputProps={{ 'aria-label': T.manageFolders.placeholder }}
+            placeholder={T.placeholder}
+            inputProps={{ 'aria-label': T.placeholder }}
           />
           <Button className={classes.confirmButton} onClick={this.addNewFolder}>
-            {T.manageFolders.button}
+            {T.button}
           </Button>
         </Paper>
         <Paper className={classes.folderContainer}>

@@ -14,7 +14,8 @@ import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
 
 import texts from '../../../lang/pages/favorites';
-import emptyTexts from '../../../lang/fragments/playlist/playlist-body';
+import optionsTexts from '../../../lang/options';
+import notifsTexts from '../../../lang/notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -28,25 +29,28 @@ class Favorites extends React.Component<WithStyles & WithSnackbarProps, NoState>
   handleRemoveBookmark = (id: string) => {
     const snackbarOptions = { variant: 'success' as any };
     const musicName = LoukiStore.idToMusic(id).title;
-    this.props.enqueueSnackbar(`Removed ${musicName} from favorites`, snackbarOptions);
+    const T = notifsTexts.current;
+
+    this.props.enqueueSnackbar(T.removedBookmark(musicName), snackbarOptions);
     Bookmarks.deleteBookmark(id);
   };
 
   handleEditMusic = () => {
     const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar('This feature has not been developed yet.', snackbarOptions);
+    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
   };
 
   desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
+    const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
         key={0}
-        title='Remove bookmark'
+        title={T.removeBookmark}
         handleClick={() => {
           this.handleRemoveBookmark(id);
         }}
       />,
-      <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
+      <PlaylistOptionsItem key={1} title={T.edit} handleClick={this.handleEditMusic} />,
     ];
   };
 
@@ -66,7 +70,7 @@ class Favorites extends React.Component<WithStyles & WithSnackbarProps, NoState>
         <PlaylistBody
           playlist={Bookmarks.bookmarks}
           emptySettings={{
-            ...emptyTexts.current.custom,
+            ...T.emptyTexts,
             redirectRoute: '/all-musics',
           }}
           desktopPlaylistOptions={this.desktopPlaylistOptions}

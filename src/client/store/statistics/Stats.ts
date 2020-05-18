@@ -1,4 +1,4 @@
-import texts from '../../lang/fragments/statistics';
+import texts from '../../lang/statistics';
 
 export enum Stats {
   TIME_SPENT_LISTENING = 0,
@@ -15,7 +15,7 @@ const nbTimesCustomPlaylist = (playlist: string): string => {
 
 const timeSpentListening = (): string => {
   const seconds: number = Number(localStorage.getItem('time_listening_music')) || 0;
-  return seconds == 0 ? texts.current.noListen : texts.current.listened(secondsToDhms(seconds));
+  return seconds < 60 ? texts.current.noListen : texts.current.listened(secondsToDhms(seconds));
 };
 
 const recentlyAdded = (type: string): string => {

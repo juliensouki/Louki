@@ -18,7 +18,7 @@ import LoukiStore from '../../../store/data/LoukiStore';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
-import texts from '../../../lang/fragments/left-panel';
+import texts from '../../../lang/layout/left-panel';
 
 const styles = (theme: Theme) =>
   createStyles({

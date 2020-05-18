@@ -7,7 +7,8 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { TextField, Button } from '@material-ui/core';
 import Modal from '../../utils/Modal';
 
-import texts from '../../../lang/fragments/update-playlist-modal';
+import texts from '../../../lang/modals/update-playlist-modal';
+import notifsTexts from '../../../lang/notifications';
 import LoukiStore from '../../../store/data/LoukiStore';
 import { UpdatePlaylist, UpdatePlaylistResponse } from '../../../requests/Playlists';
 
@@ -78,6 +79,8 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
   };
 
   updatePlaylist = () => {
+    const T = notifsTexts.current;
+
     if (LoukiStore.currentPlaylist != null) {
       UpdatePlaylist(LoukiStore.currentPlaylist.__id, this.name, this.description).then(
         (response: UpdatePlaylistResponse) => {
@@ -85,7 +88,7 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
           LoukiStore.setCurrentPlaylist(response.currentPlaylist);
           LoukiStore.setPlaylists(response.playlists);
           const snackbarOptions = { variant: 'success' as any };
-          this.props.enqueueSnackbar(texts.current.playlistUpdated(this.name), snackbarOptions);
+          this.props.enqueueSnackbar(T.playlistUpdated(this.name), snackbarOptions);
         },
       );
     }

@@ -22,14 +22,6 @@ export interface Definition {
   invalid: string;
   language: string;
   folders: (nb: number) => string;
-  manageFolders: {
-    title: string;
-    placeholder: string;
-    button: string;
-  };
-  settingsUpdated: string;
-  folderAdded: (folder: string) => string;
-  folderRemoved: (folder: string) => string;
 }
 
 export default new LanguagesManager<Definition>(

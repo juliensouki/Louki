@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import CheckIcon from '@material-ui/icons/Check';
-import texts from '../../../lang/fragments/add-picture-modal';
+import texts from '../../../lang/modals/add-picture-modal';
 
 const styles = (theme: Theme) =>
   createStyles({

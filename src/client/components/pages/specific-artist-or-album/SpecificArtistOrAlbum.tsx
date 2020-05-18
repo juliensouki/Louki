@@ -15,7 +15,8 @@ import PlaylistHeader from '../../playlist/PlaylistHeader';
 import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
 
 import texts from '../../../lang/pages/specific-artist-or-album';
-import emptyTexts from '../../../lang/fragments/playlist/playlist-body';
+import notifsTexts from '../../../lang/notifications';
+import optionsTexts from '../../../lang/options';
 
 @observer
 class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSnackbarProps, NoState> {
@@ -53,25 +54,27 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
 
   handleEditMusic = () => {
     const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar('This feature has not been developed yet.', snackbarOptions);
+    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
   };
 
   desktopPlaylistOptions(id: string): Array<JSX.Element> {
+    const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
         key={0}
-        title='Add to playlist..'
+        title={T.addToPlaylist}
         handleClick={() => {
           this.handleAddMusicToPlaylist(id);
         }}
       />,
-      <PlaylistOptionsItem key={1} title='Edit music' handleClick={this.handleEditMusic} />,
+      <PlaylistOptionsItem key={1} title={T.edit} handleClick={this.handleEditMusic} />,
     ];
   }
 
   render() {
     const image = this.artistOrAlbum == 'artist' ? '/assets/images/artists.png' : '/assets/images/albums.png';
     const subTitle = this.artistOrAlbum == 'artist' ? texts.current.artist : texts.current.album;
+    const T = texts.current;
 
     return (
       <div style={{ width: '100%' }}>
@@ -86,7 +89,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
         <PlaylistBody
           playlist={this.playlist}
           emptySettings={{
-            ...emptyTexts.current.custom,
+            ...T.emptyTexts,
             redirectRoute: '/all-musics',
           }}
           addBookmarksEnabled

@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { Typography } from '@material-ui/core';
 
-import texts from '../../../lang/fragments/add-picture-modal';
+import texts from '../../../lang/modals/add-picture-modal';
 import { PixabaySearch, PixabaySearchResponse } from '../../../requests/Pixabay';
 
 const styles = (theme: Theme) =>

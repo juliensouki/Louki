@@ -18,7 +18,7 @@ import { Artist, Album } from '../../../../shared/LoukiTypes';
 import { Page } from '../../pages/artists-or-albums/ArtistsOrAlbums';
 import MusicsData from '../../../store/data/LoukiStore';
 
-import texts from '../../../lang/fragments/playlist/playlist-body-artists-or-albums';
+import texts from '../../../lang/playlist/artists-or-albums-playlist-layout';
 
 const styles = (theme: Theme) =>
   createStyles({

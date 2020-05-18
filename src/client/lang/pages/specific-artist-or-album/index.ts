@@ -6,6 +6,10 @@ import LanguagesManager from '../../../store/languages/LanguagesManager';
 export interface Definition {
   artist: string;
   album: string;
+  emptyTexts: {
+    emptyText: string;
+    emptyButtonText: string;
+  };
 }
 
 export default new LanguagesManager<Definition>(

@@ -4,15 +4,11 @@ import { Language } from '../../../../shared/Languages';
 import LanguagesManager from '../../../store/languages/LanguagesManager';
 
 export interface Definition {
-  addPlaylist: string;
-  edit: string;
-  removeBookmark: string;
-  removeFromPlaylist: string;
-  editPlaylist: string;
-  deletePlaylist: string;
-  removeBookmarkNotif(musicName: string): string;
-  playlistHasBeenDeletedNotif(playlistName: string): string;
-  removedFromPlaylistNotif(musicName: string, playlistName: string): string;
+  title: string;
+  cancel: string;
+  save: string;
+  namePlaceholder: string;
+  description: string;
 }
 
 export default new LanguagesManager<Definition>(
