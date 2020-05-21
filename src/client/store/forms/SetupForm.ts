@@ -38,6 +38,13 @@ class SetupForm {
     return SetupLouki(data);
   };
 
+  @action init = (): void => {
+    this.pseudo = '';
+    this.image = null;
+    this.acceptLocalStorage = false;
+    this.form = null;
+  };
+
   @computed get pictureName(): string {
     return this.image == null ? 'No picture seleted.' : this.image.name;
   }

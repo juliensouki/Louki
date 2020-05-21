@@ -159,10 +159,12 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
   };
 
   resetLouki = () => {
-    SettingsForm.setOpen(false);
-    localStorage.clear();
-    ResetLouki().then(() => {
-      Loading.reloadApp();
+    ResetLouki().then((responseStatus: number) => {
+      if (responseStatus == 204) {
+        SettingsForm.setOpen(false);
+        localStorage.clear();
+        Loading.reloadApp();
+      }
     });
   };
 

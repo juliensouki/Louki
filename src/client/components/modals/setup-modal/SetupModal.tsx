@@ -49,6 +49,10 @@ enum SetupSteps {
 class SetupModal extends React.Component<Props, NoState> {
   @observable currentStep: SetupSteps = SetupSteps.FIRST_USAGE;
 
+  componentDidMount() {
+    SetupForm.init();
+  }
+
   @action previousStep = () => {
     if (this.currentStep > SetupSteps.FIRST_USAGE) {
       this.currentStep--;
