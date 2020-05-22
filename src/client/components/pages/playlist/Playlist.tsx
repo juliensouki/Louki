@@ -27,8 +27,8 @@ class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarPro
     const T = notifsTexts.current;
 
     RemoveMusicFromPlaylist(id, playlistId).then((response: RemoveMusicResponse) => {
-      LoukiStore.setCurrentPlaylist(response);
-      MusicPlayer.setCurrentPlaylist(LoukiStore.idsToMusics(response.musics));
+      LoukiStore.setCurrentPlaylist(response.data);
+      MusicPlayer.setCurrentPlaylist(LoukiStore.idsToMusics(response.data.musics));
       const snackbarOptions = { variant: 'success' as any };
       const musicName = LoukiStore.idToMusic(id).title;
       const playlistName = LoukiStore.idToPlaylist(playlistId).name;

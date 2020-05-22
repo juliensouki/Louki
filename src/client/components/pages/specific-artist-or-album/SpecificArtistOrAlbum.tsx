@@ -17,6 +17,7 @@ import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
 import texts from '../../../lang/pages/specific-artist-or-album';
 import notifsTexts from '../../../lang/notifications';
 import optionsTexts from '../../../lang/options';
+import SelectPlaylistModal from '../../modals/SelectPlaylistModal';
 
 @observer
 class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSnackbarProps, NoState> {
@@ -35,8 +36,8 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
       if (response == null) {
         this.props.history.push('/all-musics');
       } else {
-        const arrayOfIds: Array<string> = response.musics;
-        this.artistOrAlbumName = (response as Artist).name || (response as Album).title;
+        const arrayOfIds: Array<string> = response.data.musics;
+        this.artistOrAlbumName = (response.data as Artist).name || (response.data as Album).title;
         this.playlist = LoukiStore.idsToMusics(arrayOfIds);
       }
     });
@@ -57,7 +58,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
     this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
   };
 
-  desktopPlaylistOptions(id: string): Array<JSX.Element> {
+  desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
     const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
@@ -69,7 +70,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
       />,
       <PlaylistOptionsItem key={1} title={T.edit} handleClick={this.handleEditMusic} />,
     ];
-  }
+  };
 
   render() {
     const image = this.artistOrAlbum == 'artist' ? '/assets/images/artists.png' : '/assets/images/albums.png';
@@ -78,6 +79,11 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
 
     return (
       <div style={{ width: '100%' }}>
+        <SelectPlaylistModal
+          open={this.openSelectPlaylistModal}
+          handleClose={this.handleCloseModal}
+          musicId={this.musicToAddToPlaylist}
+        />
         <PlaylistHeader
           title={this.artistOrAlbumName}
           subTitle={subTitle}

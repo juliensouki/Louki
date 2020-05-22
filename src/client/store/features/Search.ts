@@ -26,7 +26,7 @@ class Search {
   @action startSearch = (musics: Array<string>) => {
     this.change = false;
     SearchRequest(musics, this.searchText).then((response: MusicSearchResponse) => {
-      this.results = response;
+      this.results = response.data;
     });
   };
 }

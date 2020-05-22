@@ -49,6 +49,9 @@ const styles = (theme: Theme) =>
       fontSize: '1.5rem',
       fontFamily: 'Roboto',
       display: 'inline-block',
+      '&:focus': {
+        outline: 'none',
+      },
     },
     button: {
       backgroundColor: theme.palette.background.default,
@@ -117,7 +120,7 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
 
   componentDidMount() {
     TestPixabay().then((result: TestPixabayResponse) => {
-      this.isPixabayAPIKeyValid = result;
+      this.isPixabayAPIKeyValid = result.data;
       this.pixabayTestLoading = false;
     });
   }

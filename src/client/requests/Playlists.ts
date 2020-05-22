@@ -7,14 +7,17 @@ import {
   MusicSearch,
   CreatePlaylist as CreatePlaylistType,
   DeletePlaylist as DeletePlaylistType,
+  APIResponse,
+  buildResponse,
 } from '../../shared/RoutesResponses';
 
-export type UpdatePlaylistResponse = UpdatePlaylistType;
-export type GetPlaylistResponse = GetPlaylistType;
-export type RemoveMusicResponse = RemoveMusic;
-export type MusicSearchResponse = MusicSearch;
-export type CreatePlaylistResponse = CreatePlaylistType;
-export type DeletePlaylistResponse = DeletePlaylistType;
+export type UpdatePlaylistResponse = APIResponse<UpdatePlaylistType>;
+export type GetPlaylistResponse = APIResponse<GetPlaylistType>;
+export type RemoveMusicResponse = APIResponse<RemoveMusic>;
+export type MusicSearchResponse = APIResponse<MusicSearch>;
+export type CreatePlaylistResponse = APIResponse<CreatePlaylistType>;
+export type DeletePlaylistResponse = APIResponse<DeletePlaylistType>;
+export type AddMusicResponse = APIResponse<{}>;
 
 export const LoadPlaylists = async (): Promise<void> => {
   fetch(`/api/v1/list-playlists`)
@@ -42,8 +45,8 @@ export const UpdatePlaylist = async (
       playlistName: playlistName,
       playlistDescription: playlistDescription,
     }),
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 
@@ -57,8 +60,8 @@ export const RemoveMusicFromPlaylist = async (musicId: string, playlistId: strin
     body: JSON.stringify({
       musicId: musicId,
     }),
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 
@@ -73,8 +76,8 @@ export const Search = async (musics: Array<string>, searchText: string): Promise
       musics: musics,
       searchText: searchText,
     }),
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 
@@ -82,12 +85,12 @@ export const CreatePlaylist = async (form: FormData): Promise<CreatePlaylistResp
   return fetch(`/api/v1/create-playlist`, {
     method: 'POST',
     body: form,
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 
-export const AddMusic = (playlistId: string, musicId: string): Promise<Response> => {
+export const AddMusic = (playlistId: string, musicId: string): Promise<AddMusicResponse> => {
   return fetch(`/api/v1/playlist/${playlistId}/add-music`, {
     method: 'POST',
     headers: {
@@ -97,19 +100,21 @@ export const AddMusic = (playlistId: string, musicId: string): Promise<Response>
     body: JSON.stringify({
       musicId: musicId,
     }),
+  }).then(res => {
+    return buildResponse(res.status, {});
   });
 };
 
 export const DeletePlaylist = (playlistId: string): Promise<DeletePlaylistResponse> => {
   return fetch(`/api/v1/playlist/${playlistId}/delete-playlist`, {
     method: 'POST',
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 
 export const GetPlaylist = async (playlistId: string): Promise<GetPlaylistResponse> => {
-  return fetch(`/api/v1/playlist/${playlistId}`).then(res => {
-    return res.json();
+  return fetch(`/api/v1/playlist/${playlistId}`).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };

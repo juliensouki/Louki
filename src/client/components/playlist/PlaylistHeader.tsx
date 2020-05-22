@@ -186,7 +186,7 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
       const snackbarOptions = { variant: 'success' as any };
       const playlistName = LoukiStore.idToPlaylist(playlistId).name;
 
-      LoukiStore.setPlaylists(response);
+      LoukiStore.setPlaylists(response.data);
       this.props.enqueueSnackbar(T.playlistDeleted(playlistName), snackbarOptions);
       this.props.history.push(Navigation.previousRoute);
     });

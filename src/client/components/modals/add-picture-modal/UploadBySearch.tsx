@@ -89,7 +89,7 @@ class UploadBySearch extends React.Component<Props, NoState> {
   search = () => {
     this.loading = true;
     PixabaySearch(this.props.searchText).then((results: PixabaySearchResponse) => {
-      this.resultsArray = results;
+      this.resultsArray = results.data;
       this.loading = false;
     });
   };

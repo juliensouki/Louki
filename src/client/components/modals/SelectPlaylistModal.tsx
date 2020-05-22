@@ -8,7 +8,7 @@ import Modal from '../utils/Modal';
 import LoukiStore from '../../store/data/LoukiStore';
 import { Playlist } from '../../../shared/LoukiTypes';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
-import { AddMusic } from '../../requests/Playlists';
+import { AddMusic, AddMusicResponse } from '../../requests/Playlists';
 
 import texts from '../../lang/modals/select-playlist-modal';
 import notifsTexts from '../../lang/notifications';
@@ -47,10 +47,9 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
   handleListItemClick = (playlist: Playlist) => {
     const T = notifsTexts.current;
 
-    AddMusic(playlist.__id, this.props.musicId).then((response: Response) => {
+    AddMusic(playlist.__id, this.props.musicId).then((response: AddMusicResponse) => {
       const musicName = LoukiStore.idToMusic(this.props.musicId).title;
       const playlistName = LoukiStore.idToPlaylist(playlist.__id).name;
-
       if (response.status == 200) {
         const snackbarOptions = { variant: 'success' as any };
         this.props.enqueueSnackbar(T.addedToPlaylistNotif(musicName, playlistName), snackbarOptions);
