@@ -6,6 +6,7 @@ export default {
   internet: 'Use data from the Internet',
   browse: 'Browse',
   reset: 'Reset',
+  localStorage: 'Usage of local storage',
   resetWarning:
     'Warning ! Reseting Louki will delete all your playlists and all the data collected about the \
     artists, albums and songs you listen to. It can NOT be undone.',

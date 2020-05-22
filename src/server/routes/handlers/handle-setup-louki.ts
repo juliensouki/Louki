@@ -14,6 +14,7 @@ export const handleSetupLouki = (req: Request, res: Response): void => {
     __id: 0,
     settings: {
       language: 'english',
+      localStorageUsage: req.body['local-storage-usage'] === 'true',
       internetUsage: true,
     },
   }).then(

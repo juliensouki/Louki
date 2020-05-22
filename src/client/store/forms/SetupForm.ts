@@ -35,6 +35,7 @@ class SetupForm {
     const data = new FormData(this.form != null ? this.form : undefined);
     data.append('username', this.pseudo);
     data.append('profile-picture', this.image);
+    data.append('local-storage-usage', String(this.acceptLocalStorage));
     return SetupLouki(data);
   };
 

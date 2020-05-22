@@ -14,6 +14,7 @@ export interface Definition {
   resetWarning: string;
   cancel: string;
   save: string;
+  localStorage: string;
   confirmModal: {
     title: string;
     message: string;

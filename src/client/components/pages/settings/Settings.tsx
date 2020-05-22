@@ -244,6 +244,14 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
               />
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>{T.localStorage}</Typography>
+              <Switch
+                checked={SettingsForm.useLocalStorage}
+                onChange={SettingsForm.toggleLocalStorageUsage}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
               <Typography className={classes.text}>{T.language} : </Typography>
               <Select
                 id='demo-customized-select-native'

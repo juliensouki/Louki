@@ -13,6 +13,7 @@ export const handleUpdateSettings = async (req: Request, res: Response) => {
   const newAccountSettings: AccountSettings = {
     language: settings.language,
     internetUsage: settings.internetUsage,
+    localStorageUsage: settings.localStorageUsage,
   };
 
   const jsonUpdate = {

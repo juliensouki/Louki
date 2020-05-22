@@ -1,4 +1,5 @@
 import texts from '../../lang/statistics';
+import User from '../data/User';
 
 export enum Stats {
   TIME_SPENT_LISTENING = 0,
@@ -14,8 +15,11 @@ const nbTimesCustomPlaylist = (playlist: string): string => {
 };
 
 const timeSpentListening = (): string => {
-  const seconds: number = Number(localStorage.getItem('time_listening_music')) || 0;
-  return seconds < 60 ? texts.current.noListen : texts.current.listened(secondsToDhms(seconds));
+  if (User.settings.localStorageUsage) {
+    const seconds: number = Number(localStorage.getItem('time_listening_music')) || 0;
+    return seconds < 60 ? texts.current.noListen : texts.current.listened(secondsToDhms(seconds));
+  }
+  return 'This playlist was created today'; //todo : Find a new stat
 };
 
 const recentlyAdded = (type: string): string => {
@@ -60,6 +64,8 @@ export const getStat = (stat: Stats, arg?: any): string => {
 };
 
 export const addSecondsOfPlaying = (seconds: number) => {
-  const secondsBefore: number = Number(localStorage.getItem('time_listening_music')) || 0;
-  localStorage.setItem('time_listening_music', String(Number(secondsBefore) + seconds));
+  if (User.settings.localStorageUsage) {
+    const secondsBefore: number = Number(localStorage.getItem('time_listening_music')) || 0;
+    localStorage.setItem('time_listening_music', String(Number(secondsBefore) + seconds));
+  }
 };
