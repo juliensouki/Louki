@@ -49,6 +49,10 @@ enum SetupSteps {
 class SetupModal extends React.Component<Props, NoState> {
   @observable currentStep: SetupSteps = SetupSteps.FIRST_USAGE;
 
+  componentDidMount() {
+    SetupForm.init();
+  }
+
   @action previousStep = () => {
     if (this.currentStep > SetupSteps.FIRST_USAGE) {
       this.currentStep--;
@@ -106,7 +110,7 @@ class SetupModal extends React.Component<Props, NoState> {
         <Button key={0} onClick={this.previousStep} className={classes.cancelButton}>
           Previous
         </Button>,
-        <Button disabled={!SetupForm.checkbox} key={1} onClick={this.validation} className={classes.confirmButton}>
+        <Button key={1} onClick={this.validation} className={classes.confirmButton}>
           Enjoy Louki
         </Button>,
       ],

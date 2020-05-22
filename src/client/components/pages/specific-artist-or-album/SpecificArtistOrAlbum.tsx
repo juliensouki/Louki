@@ -33,7 +33,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
 
     GetArtistOrAlbum(this.artistOrAlbum, this.artistOrAlbumId).then((response: GetArtistOrAlbumResponse) => {
       if (response == null) {
-        this.props.history.push('/all-music');
+        this.props.history.push('/all-musics');
       } else {
         const arrayOfIds: Array<string> = response.musics;
         this.artistOrAlbumName = (response as Artist).name || (response as Album).title;

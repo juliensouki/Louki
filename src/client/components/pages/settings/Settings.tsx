@@ -159,10 +159,12 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
   };
 
   resetLouki = () => {
-    SettingsForm.setOpen(false);
-    localStorage.clear();
-    ResetLouki().then(() => {
-      Loading.reloadApp();
+    ResetLouki().then((responseStatus: number) => {
+      if (responseStatus == 204) {
+        SettingsForm.setOpen(false);
+        localStorage.clear();
+        Loading.reloadApp();
+      }
     });
   };
 
@@ -238,6 +240,14 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
               <Switch
                 checked={SettingsForm.useInternet}
                 onChange={SettingsForm.toggleInternetUsage}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
+            </Grid>
+            <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
+              <Typography className={classes.text}>{T.localStorage}</Typography>
+              <Switch
+                checked={SettingsForm.useLocalStorage}
+                onChange={SettingsForm.toggleLocalStorageUsage}
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
               />
             </Grid>

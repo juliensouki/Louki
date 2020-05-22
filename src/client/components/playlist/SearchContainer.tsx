@@ -31,6 +31,9 @@ const styles = (theme: Theme) =>
       fontSize: '1.7rem',
       fontFamily: 'Roboto',
       display: 'inline-block',
+      '&:focus': {
+        outline: 'none',
+      },
     },
   });
 

@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   settings: {
     language: String,
     internetUsage: Boolean,
+    localStorageUsage: Boolean,
   },
 });
 

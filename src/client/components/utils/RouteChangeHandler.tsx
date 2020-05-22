@@ -29,7 +29,7 @@ class RouteChangerHandler extends React.Component<RouteComponentProps, NoState> 
       if (response != null) {
         LoukiStore.setCurrentPlaylist(response);
       } else {
-        this.props.history.push('/all-music');
+        this.props.history.push('/all-musics');
       }
     });
   };

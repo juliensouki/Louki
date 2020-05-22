@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/LoukiTypes';
 class SettingsForm {
   @observable private lang: Language = Language.English;
   @observable private internet: boolean = true;
+  @observable private localStorage: boolean = true;
   @observable private pseudo: string = '';
   @observable private file: File | null = null;
   @observable private picturePath: string = '';
@@ -36,6 +37,10 @@ class SettingsForm {
     this.internet = !this.internet;
   };
 
+  @action toggleLocalStorageUsage = () => {
+    this.localStorage = !this.localStorage;
+  };
+
   @computed get openManage(): boolean {
     return this.openManageFoldersModal;
   }
@@ -64,6 +69,10 @@ class SettingsForm {
     return this.internet;
   }
 
+  @computed get useLocalStorage(): boolean {
+    return this.localStorage;
+  }
+
   setUserId = (id: string | null) => {
     this.userId = id;
   };
@@ -78,6 +87,7 @@ class SettingsForm {
       language: this.language,
       picture: '',
       internetUsage: this.internet,
+      localStorageUsage: this.localStorage,
     };
   }
 
@@ -86,6 +96,7 @@ class SettingsForm {
       this.lang = settings.language;
       this.picturePath = settings.picture;
       this.internet = settings.internetUsage;
+      this.localStorage = settings.localStorageUsage;
     }
   };
 }

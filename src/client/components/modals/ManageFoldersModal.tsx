@@ -9,6 +9,7 @@ import Modal from '../utils/Modal';
 import SettingsForm from '../../store/forms/SettingsForm';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
+import InfoIcon from '@material-ui/icons/Info';
 import User from '../../store/data/User';
 import texts from '../../lang/modals/manage-folders-modal';
 import notifsTexts from '../../lang/notifications';
@@ -57,7 +58,7 @@ const styles = (theme: Theme) =>
         backgroundColor: '#656565',
       },
     },
-    folderIcon: {
+    inlineIcon: {
       position: 'relative',
       top: '0.2em',
       fontSize: '1.5rem',
@@ -68,6 +69,10 @@ const styles = (theme: Theme) =>
       color: theme.palette.primary.main,
       top: '-0.5em',
       float: 'right',
+    },
+    text: {
+      display: 'inline',
+      fontSize: '1.3rem',
     },
   });
 
@@ -131,10 +136,17 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
             {T.button}
           </Button>
         </Paper>
+        <div style={{ marginTop: '1em' }}>
+          <InfoIcon className={classes.inlineIcon} />
+          <Typography className={classes.text}>{T.info}</Typography>
+          <Typography className={classes.text} style={{ display: 'block' }}>
+            Ex : /home/user/musics.
+          </Typography>
+        </div>
         <Paper className={classes.folderContainer}>
           {folders.map((folder, index) => (
             <Typography className={classes.folder} key={index}>
-              <FolderIcon className={classes.folderIcon} />
+              <FolderIcon className={classes.inlineIcon} />
               {folder}
               <IconButton
                 className={classes.delete}

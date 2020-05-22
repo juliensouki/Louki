@@ -7,6 +7,7 @@ export interface Definition {
   title: string;
   placeholder: string;
   button: string;
+  info: string;
 }
 
 export default new LanguagesManager<Definition>(

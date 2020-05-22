@@ -33,21 +33,19 @@ export interface Music {
 
 export interface User {
   __id: string;
-
   name: string;
   selected: boolean;
   picture: string;
-
   musicPaths: Array<string>;
   history: Array<string>;
   favorites: Array<string>;
-
   settings: AccountSettings;
 }
 
 export interface Settings {
   language: Language;
   internetUsage: boolean;
+  localStorageUsage: boolean;
   username: string;
   picture: string;
 }
@@ -55,4 +53,5 @@ export interface Settings {
 export interface AccountSettings {
   language: Language;
   internetUsage: boolean;
+  localStorageUsage: boolean;
 }

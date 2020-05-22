@@ -14,7 +14,7 @@ import SelectPlaylistModal from '../../modals/SelectPlaylistModal';
 import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
 
-import texts from '../../../lang/pages/all-songs';
+import texts from '../../../lang/pages/all-musics';
 import optionsTexts from '../../../lang/options';
 import notifsTexts from '../../../lang/notifications';
 
@@ -26,7 +26,7 @@ const styles = (theme: Theme) =>
   });
 
 @observer
-class AllMusic extends React.Component<WithStyles & WithSnackbarProps, NoState> {
+class AllMusics extends React.Component<WithStyles & WithSnackbarProps, NoState> {
   @observable openSelectPlaylistModal: boolean = false;
   @observable musicToAddToPlaylist: string = '';
 
@@ -91,4 +91,4 @@ class AllMusic extends React.Component<WithStyles & WithSnackbarProps, NoState> 
   }
 }
 
-export default withStyles(styles)(withSnackbar(AllMusic));
+export default withStyles(styles)(withSnackbar(AllMusics));

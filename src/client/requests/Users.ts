@@ -48,8 +48,10 @@ export const SetupLouki = (form: FormData): Promise<Response> => {
   });
 };
 
-export const ResetLouki = (): Promise<Response> => {
-  return fetch(`/api/v1/reset-louki`, { method: 'POST' });
+export const ResetLouki = (): Promise<number> => {
+  return fetch(`/api/v1/reset-louki`, { method: 'POST' }).then(res => {
+    return res.status;
+  });
 };
 
 export const AddFolder = (folderToAdd: string): Promise<AddFolderResponse> => {
