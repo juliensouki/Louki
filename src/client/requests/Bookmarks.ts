@@ -1,10 +1,10 @@
 import Bookmarks from '../store/data/Bookmarks';
 import LoukiStore from '../store/data/LoukiStore';
 import Loading from '../store/loading/Loading';
-import * as Responses from '../../shared/RoutesResponses';
+import { AddBookmark as AddBookmarkType, RemoveBookmark as RemoveBookmarkType } from '../../shared/RoutesResponses';
 
-export type AddBookmarkResponse = Responses.AddBookmarkResponse;
-export type RemoveBookmarkResponse = Responses.RemoveBookmarkResponse;
+export type AddBookmarkResponse = AddBookmarkType;
+export type RemoveBookmarkResponse = RemoveBookmarkType;
 
 export const LoadBookmarks = async () => {
   fetch(`/api/v1/list-bookmarks`)

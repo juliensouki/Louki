@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import UserSchema from '../../db/schemas/UserSchema';
 import { User } from '../../../shared/LoukiTypes';
-import { ListBookmarksResponse, CustomError } from '../../../shared/RoutesResponses';
+import { ListBookmarks as ListBookmarksResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleListBookmarks = (req: Request, res: Response): void => {

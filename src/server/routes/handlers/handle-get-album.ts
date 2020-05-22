@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import AlbumSchema from '../../db/schemas/AlbumSchema';
-import { GetPlaylistResponse, CustomError } from '../../../shared/RoutesResponses';
+import { GetPlaylist as GetPlaylistResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleGetAlbum = (req: Request, res: Response): void => {

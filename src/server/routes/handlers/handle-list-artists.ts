@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import ArtistSchema from '../../db/schemas/ArtistSchema';
-import { ListArtistsResponse } from '../../../shared/RoutesResponses';
+import { ListArtists as ListArtistsResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleListArtists = (req: Request, res: Response): void => {

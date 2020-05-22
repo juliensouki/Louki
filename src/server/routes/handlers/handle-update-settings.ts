@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import UserSchema from '../../db/schemas/UserSchema';
 import { Settings, AccountSettings } from '../../../shared/LoukiTypes';
-import { UpdateSettingsResponse, CustomError } from '../../../shared/RoutesResponses';
+import { UpdateSettings as UpdateSettingsResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleUpdateSettings = async (req: Request, res: Response) => {
@@ -23,26 +23,9 @@ export const handleUpdateSettings = async (req: Request, res: Response) => {
   };
 
   databaseHandler.updateDocument(UserSchema, user.__id, jsonUpdate).then(
-    () => {
-      databaseHandler.findOneInDocument(UserSchema, 'selected', true).then(
-        users => {
-          if (users && users.length > 0) {
-            const response: UpdateSettingsResponse = users[0];
-            res.status(200).send(response);
-          } else {
-            const response: CustomError = {
-              name: `Update user settings error`,
-              message: `Unable to get current user`,
-            };
-            logError(response);
-            res.status(500).send(response);
-          }
-        },
-        error => {
-          logError(error);
-          res.status(500).send(error);
-        },
-      );
+    user => {
+      const response: UpdateSettingsResponse = user;
+      res.status(200).send(response);
     },
     error => {
       logError(error);

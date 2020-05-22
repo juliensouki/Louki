@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import UserSchema from '../../db/schemas/UserSchema';
-import { GetCurrentUserResponse, CustomError } from '../../../shared/RoutesResponses';
+import { GetCurrentUser as GetCurrentUserResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleGetCurrentUser = (req: Request, res: Response): void => {

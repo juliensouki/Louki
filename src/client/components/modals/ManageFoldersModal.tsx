@@ -99,7 +99,7 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
     RemoveFolder(folder).then((response: RemoveFolderResponse) => {
       const snackbarOptions = { variant: 'success' as any };
       this.props.enqueueSnackbar(T.folderRemoved(folder), snackbarOptions);
-      User.setUser(response);
+      User.setUser(response.data);
     });
   };
 
@@ -107,12 +107,19 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
     const T = notifsTexts.current;
 
     if (this.folderToAdd.length > 0) {
-      AddFolder(this.folderToAdd).then((response: AddFolderResponse) => {
-        User.setUser(response);
-        const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(T.folderAdded(this.folderToAdd), snackbarOptions);
-        this.folderToAdd = '';
-      });
+      AddFolder(this.folderToAdd[this.folderToAdd.length - 1] == '/' ? this.folderToAdd : this.folderToAdd + '/').then(
+        (response: AddFolderResponse) => {
+          if (response.status == 200) {
+            User.setUser(response.data);
+            const snackbarOptions = { variant: 'success' as any };
+            this.props.enqueueSnackbar(T.folderAdded(this.folderToAdd), snackbarOptions);
+          } else {
+            const snackbarOptions = { variant: 'error' as any };
+            this.props.enqueueSnackbar(T.errors.folderNotAdded(this.folderToAdd), snackbarOptions);
+          }
+          this.folderToAdd = '';
+        },
+      );
     }
   };
 

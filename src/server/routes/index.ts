@@ -14,7 +14,6 @@ import { handleListArtists } from './handlers/handle-list-artists';
 import { handleListBookmarks } from './handlers/handle-list-bookmarks';
 import { handleListMusics } from './handlers/handle-list-musics';
 import { handleListPlaylists } from './handlers/handle-list-playlists';
-import { handleLoadLouki } from './handlers/handle-load-louki';
 import { handleMusicSearch } from './handlers/handle-music-search';
 import { handlePixabaySearch } from './handlers/handle-pixabay-search';
 import { handleRemoveBookmark } from './handlers/handle-remove-bookmark';
@@ -42,7 +41,6 @@ export type Routes = {
   listBookmarks: (req: Request, res: Response) => void;
   listMusics: (req: Request, res: Response) => void;
   listPlaylists: (req: Request, res: Response) => void;
-  loadLouki: (req: Request, res: Response) => void;
   musicSearch: (req: Request, res: Response) => void;
   pixabaySearch: (req: Request, res: Response) => void;
   removeBookmark: (req: Request, res: Response) => void;
@@ -71,7 +69,6 @@ const routes: Routes = {
   listBookmarks: handleListBookmarks,
   listMusics: handleListMusics,
   listPlaylists: handleListPlaylists,
-  loadLouki: handleLoadLouki,
   musicSearch: handleMusicSearch,
   pixabaySearch: handlePixabaySearch,
   removeBookmark: handleRemoveBookmark,

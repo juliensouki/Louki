@@ -39,7 +39,6 @@ app.get('/api/v1/artist/:artistId', (req, res) => routes.getArtist(req, res));
 app.get('/api/v1/album/:albumId', (req, res) => routes.getAlbum(req, res));
 app.get('/api/v1/playlist/:playlistId', (req, res) => routes.getPlaylist(req, res));
 app.get('/api/v1/current-user', (req, res) => routes.getCurrentUser(req, res));
-app.get('/api/v1/load-louki', (req, res) => routes.loadLouki(req, res));
 app.get('/api/v1/list-artists', (req, res) => routes.listArtists(req, res));
 app.get('/api/v1/list-albums', (req, res) => routes.listAlbums(req, res));
 app.get('/api/v1/list-playlists', (req, res) => routes.listPlaylists(req, res));

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import UserSchema from '../../db/schemas/UserSchema';
-import { SetupLoukiResponse } from '../../../shared/RoutesResponses';
+import { SetupLouki as SetupLoukiResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleSetupLouki = (req: Request, res: Response): void => {

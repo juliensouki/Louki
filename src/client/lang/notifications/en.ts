@@ -14,4 +14,7 @@ export default {
     `${musicName} is already in playlist ${playlistName}`,
   playlistUpdated: (playlist: string) => `Playlist ${playlist} has been updated`,
   playlistCreated: (playlist: string) => `Playlist ${playlist} has been created`,
+  errors: {
+    folderNotAdded: (folder: string): string => `${folder} could not be added`,
+  },
 };

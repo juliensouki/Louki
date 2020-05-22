@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import ArtistSchema from '../../db/schemas/ArtistSchema';
-import { GetArtistResponse, CustomError } from '../../../shared/RoutesResponses';
+import { GetArtist as GetArtistResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleGetArtist = (req: Request, res: Response): void => {

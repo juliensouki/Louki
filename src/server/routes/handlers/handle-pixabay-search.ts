@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { searchImages } from 'pixabay-api';
-import { PixabaySearchResponse, CustomError } from '../../../shared/RoutesResponses';
+import { PixabaySearch as PixabaySearchResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handlePixabaySearch = (req: Request, res: Response): void => {

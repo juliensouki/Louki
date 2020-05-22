@@ -89,6 +89,7 @@ class DatabaseHandler {
         {
           $pull: { [arrayToUpdate]: valueToAdd },
         },
+        { new: true },
       )
       .exec();
   };
