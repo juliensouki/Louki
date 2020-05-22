@@ -63,8 +63,8 @@ app.post('/api/v1/playlist/:playlistId/update-playlist', (req, res) => routes.up
 app.post('/api/v1/playlist/:playlistId/delete-playlist', (req, res) => routes.deletePlaylist(req, res));
 app.post('/api/v1/playlist/:playlistId/add-music', (req, res) => routes.addMusic(req, res));
 app.post('/api/v1/playlist/:playlistId/remove-music', (req, res) => routes.removeMusic(req, res));
-app.post('/api/v1/search-music', (req, res) => routes.pixabaySearch(req, res));
-app.get('/api/v1/search-pixabay', (req, res) => routes.musicSearch(req, res));
+app.post('/api/v1/search-music', (req, res) => routes.musicSearch(req, res));
+app.get('/api/v1/search-pixabay', (req, res) => routes.pixabaySearch(req, res));
 
 app.use(apiRouter());
 app.use(staticsRouter());
@@ -81,7 +81,7 @@ if (config.checkEnv()) {
   databaseHandler.connect();
 
   mongoose.connection.once('open', function() {
-    logger.info('Connected to database');
+    logger.info('Connected to database : ' + process.env.DATABASE_URL);
     fLoader.loadData(startServer);
   });
 }
