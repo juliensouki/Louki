@@ -85,8 +85,8 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
       UpdatePlaylist(LoukiStore.currentPlaylist.__id, this.name, this.description).then(
         (response: UpdatePlaylistResponse) => {
           this.props.handleClose();
-          LoukiStore.setCurrentPlaylist(response.currentPlaylist);
-          LoukiStore.setPlaylists(response.playlists);
+          LoukiStore.setCurrentPlaylist(response.data.currentPlaylist);
+          LoukiStore.setPlaylists(response.data.playlists);
           const snackbarOptions = { variant: 'success' as any };
           this.props.enqueueSnackbar(T.playlistUpdated(this.name), snackbarOptions);
         },

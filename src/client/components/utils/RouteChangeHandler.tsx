@@ -27,7 +27,7 @@ class RouteChangerHandler extends React.Component<RouteComponentProps, NoState> 
   getPlaylist = async (playlistId: string) => {
     GetPlaylist(playlistId).then((response: GetPlaylistResponse) => {
       if (response != null) {
-        LoukiStore.setCurrentPlaylist(response);
+        LoukiStore.setCurrentPlaylist(response.data);
       } else {
         this.props.history.push('/all-musics');
       }

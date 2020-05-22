@@ -117,7 +117,7 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
 
   componentDidMount() {
     TestPixabay().then((result: TestPixabayResponse) => {
-      this.isPixabayAPIKeyValid = result;
+      this.isPixabayAPIKeyValid = result.data;
       this.pixabayTestLoading = false;
     });
   }

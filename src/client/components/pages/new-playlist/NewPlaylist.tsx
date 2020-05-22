@@ -115,8 +115,8 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & Wit
         data.append('pictureUrl', NewPlaylistForm.pictureUrl);
       }
 
-      CreatePlaylist(data).then((result: CreatePlaylistResponse) => {
-        LoukiStore.setPlaylists(result);
+      CreatePlaylist(data).then((response: CreatePlaylistResponse) => {
+        LoukiStore.setPlaylists(response.data);
         const snackbarOptions = { variant: 'success' as any };
         this.props.enqueueSnackbar(nT.playlistCreated(NewPlaylistForm.name), snackbarOptions);
         this.props.history.push('/all-musics');

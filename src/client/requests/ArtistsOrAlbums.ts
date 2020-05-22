@@ -1,8 +1,8 @@
 import LoukiStore from '../store/data/LoukiStore';
 import Loading from '../store/loading/Loading';
-import { GetArtist, GetAlbum } from '../../shared/RoutesResponses';
+import { GetArtist, GetAlbum, buildResponse, APIResponse } from '../../shared/RoutesResponses';
 
-export type GetArtistOrAlbumResponse = GetArtist | GetAlbum;
+export type GetArtistOrAlbumResponse = APIResponse<GetArtist | GetAlbum>;
 
 export const LoadAlbums = (): void => {
   fetch(`/api/v1/list-albums`)
@@ -27,7 +27,7 @@ export const LoadArtists = (): void => {
 };
 
 export const GetArtistOrAlbum = (artistOrAlbum: string, id: string): Promise<GetArtistOrAlbumResponse> => {
-  return fetch(`/api/v1/${artistOrAlbum}/${id}`).then(res => {
-    return res.json();
+  return fetch(`/api/v1/${artistOrAlbum}/${id}`).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };

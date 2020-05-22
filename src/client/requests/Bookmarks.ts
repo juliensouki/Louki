@@ -1,10 +1,15 @@
 import Bookmarks from '../store/data/Bookmarks';
 import LoukiStore from '../store/data/LoukiStore';
 import Loading from '../store/loading/Loading';
-import { AddBookmark as AddBookmarkType, RemoveBookmark as RemoveBookmarkType } from '../../shared/RoutesResponses';
+import {
+  AddBookmark as AddBookmarkType,
+  RemoveBookmark as RemoveBookmarkType,
+  APIResponse,
+  buildResponse,
+} from '../../shared/RoutesResponses';
 
-export type AddBookmarkResponse = AddBookmarkType;
-export type RemoveBookmarkResponse = RemoveBookmarkType;
+export type AddBookmarkResponse = APIResponse<AddBookmarkType>;
+export type RemoveBookmarkResponse = APIResponse<RemoveBookmarkType>;
 
 export const LoadBookmarks = async () => {
   fetch(`/api/v1/list-bookmarks`)
@@ -27,8 +32,8 @@ export const RemoveBookmark = (musicId: string): Promise<RemoveBookmarkResponse>
     body: JSON.stringify({
       musicId: musicId,
     }),
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 
@@ -42,7 +47,7 @@ export const AddBookmark = (musicId: string): Promise<AddBookmarkResponse> => {
     body: JSON.stringify({
       musicId: musicId,
     }),
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };

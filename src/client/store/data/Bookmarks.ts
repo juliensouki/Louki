@@ -12,13 +12,13 @@ class Bookmarks {
 
   @action addBookmark = (musicId: string): void => {
     AddBookmark(musicId).then((response: AddBookmarkResponse) => {
-      this.bkmarks = LoukiStore.idsToMusics(response);
+      this.bkmarks = LoukiStore.idsToMusics(response.data);
     });
   };
 
   @action deleteBookmark = (musicId: string): void => {
     RemoveBookmark(musicId).then((response: RemoveBookmarkResponse) => {
-      this.bkmarks = LoukiStore.idsToMusics(response);
+      this.bkmarks = LoukiStore.idsToMusics(response.data);
     });
   };
 
