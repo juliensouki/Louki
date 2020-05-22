@@ -119,7 +119,7 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & Wit
         LoukiStore.setPlaylists(result);
         const snackbarOptions = { variant: 'success' as any };
         this.props.enqueueSnackbar(nT.playlistCreated(NewPlaylistForm.name), snackbarOptions);
-        this.props.history.push('/all-music');
+        this.props.history.push('/all-musics');
       });
     } else {
       if (NewPlaylistForm.name.length == 0) {

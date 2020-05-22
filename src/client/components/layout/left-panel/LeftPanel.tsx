@@ -73,7 +73,7 @@ class LeftPanel extends React.Component<WithStyles, NoState> {
       >
         <div className={classes.root}>
           <Typography className={classes.sectionTitle}>{T.music.title}</Typography>
-          <LeftPanelButton routePath='/all-music' text={T.music.allSongs} icon={MusicNoteIcon} />
+          <LeftPanelButton routePath='/all-musics' text={T.music.allSongs} icon={MusicNoteIcon} />
           <LeftPanelButton showArtist routePath='/artists' text={T.music.artists} icon={MicIcon} />
           <LeftPanelButton routePath='/albums' text={T.music.albums} icon={AlbumIcon} />
           <LeftPanelButton routePath='/favorites' text={T.music.favorites} icon={FavoriteIcon} />

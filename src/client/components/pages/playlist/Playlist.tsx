@@ -81,7 +81,7 @@ class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarPro
           playlist={musics}
           emptySettings={{
             ...T.emptyTexts,
-            redirectRoute: '/all-music',
+            redirectRoute: '/all-musics',
           }}
           addBookmarksEnabled
           desktopPlaylistOptions={this.desktopPlaylistOptions}

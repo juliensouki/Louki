@@ -11,7 +11,7 @@ import TopBar from './layout/topbar/TopBar';
 import LeftPanel from './layout/left-panel/LeftPanel';
 import MusicBar from './layout/music-bar/MusicBar';
 import PlaylistPanel from './layout/playlist-panel/PlaylistPanel';
-import AllMusic from './pages/all-music/AllMusic';
+import AllMusics from './pages/all-musics/AllMusics';
 import ArtistsOrAlbums from './pages/artists-or-albums/ArtistsOrAlbums';
 import NewPlaylist from './pages/new-playlist/NewPlaylist';
 import Playlist from './pages/playlist/Playlist';
@@ -73,8 +73,8 @@ class Layout extends React.Component<Props, NoState> {
             <LeftPanel />
             <PlaylistPanel>
               <Switch>
-                <Route path={'/'} component={AllMusic} exact />
-                <Route path={'/all-songs'} component={AllMusic} exact />
+                <Route path={'/'} component={AllMusics} exact />
+                <Route path={'/all-musics'} component={AllMusics} exact />
                 <Route path={'/favorites'} component={Favorites} exact />
                 <Route path={'/playlist/:id'} component={Playlist} exact />
                 <Route path={'/new-playlist'} component={NewPlaylist} exact />
@@ -83,7 +83,7 @@ class Layout extends React.Component<Props, NoState> {
                 <Route path={'/albums'} component={ArtistsOrAlbums} exact />
                 <Route path={'/album/:id'} component={SpecificArtistOrAlbum} exact />
                 <Route path={'/settings'} component={Settings} exact />
-                <Route component={AllMusic} />
+                <Route component={AllMusics} />
               </Switch>
             </PlaylistPanel>
           </Grid>

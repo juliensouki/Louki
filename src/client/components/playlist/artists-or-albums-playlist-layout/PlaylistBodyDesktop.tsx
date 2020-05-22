@@ -80,7 +80,7 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
   };
 
   redirectHome = () => {
-    this.props.history.push('/all-music');
+    this.props.history.push('/all-musics');
   };
 
   render() {
