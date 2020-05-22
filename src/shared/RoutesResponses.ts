@@ -25,7 +25,6 @@ export type GetAlbum = Album;
 export type GetPlaylist = Playlist;
 export type GetCurrentUser = User;
 export type UpdateSettings = User;
-export type LoadLouki = any;
 export type ListArtists = Array<Artist>;
 export type ListAlbums = Array<Album>;
 export type ListPlaylists = Array<Playlist>;
