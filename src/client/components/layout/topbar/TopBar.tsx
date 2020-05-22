@@ -113,7 +113,7 @@ class TopBar extends React.Component<WithStyles, NoState> {
               </Grid>
               <Grid item>
                 <div className={classes.profilePicture}>
-                  <img src={User.picture} className={classes.pic}></img>
+                  {User.picture != '' && <img src={User.picture} className={classes.pic}></img>}
                 </div>
               </Grid>
             </Grid>
