@@ -3,7 +3,7 @@ import databaseHandler from '../../db';
 import UserSchema from '../../db/schemas/UserSchema';
 import PlaylistSchema from '../../db/schemas/PlaylistSchema';
 import uuid from 'uuid';
-import { CreatePlaylistResponse } from '../../../shared/RoutesResponses';
+import { CreatePlaylist as CreatePlaylistResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleCreatePlaylist = (req: Request, res: Response): void => {

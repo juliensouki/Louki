@@ -1,8 +1,8 @@
 import LoukiStore from '../store/data/LoukiStore';
 import Loading from '../store/loading/Loading';
-import * as Responses from '../../shared/RoutesResponses';
+import { GetArtist, GetAlbum } from '../../shared/RoutesResponses';
 
-export type GetArtistOrAlbumResponse = Responses.GetArtistResponse | Responses.GetAlbumResponse;
+export type GetArtistOrAlbumResponse = GetArtist | GetAlbum;
 
 export const LoadAlbums = (): void => {
   fetch(`/api/v1/list-albums`)

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import PlaylistSchema from '../../db/schemas/PlaylistSchema';
-import { UpdatePlaylistResponse, CustomError } from '../../../shared/RoutesResponses';
+import { UpdatePlaylist as UpdatePlaylistResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleUpdatePlaylist = (req: Request, res: Response): void => {

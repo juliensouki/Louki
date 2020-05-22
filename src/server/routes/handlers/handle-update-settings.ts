@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import UserSchema from '../../db/schemas/UserSchema';
 import { Settings, AccountSettings } from '../../../shared/LoukiTypes';
-import { UpdateSettingsResponse, CustomError } from '../../../shared/RoutesResponses';
+import { UpdateSettings as UpdateSettingsResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleUpdateSettings = async (req: Request, res: Response) => {

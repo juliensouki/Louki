@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import UserSchema from '../../db/schemas/UserSchema';
-import { TestSetupResponse } from '../../../shared/RoutesResponses';
+import { TestSetup as TestSetupResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleTestSetup = (req: Request, res: Response): void => {

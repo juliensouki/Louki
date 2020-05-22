@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import databaseHandler from '../../db';
 import UserSchema from '../../db/schemas/UserSchema';
 import { User } from '../../../shared/LoukiTypes';
-import { RemoveBookmarkResponse, CustomError } from '../../../shared/RoutesResponses';
+import { RemoveBookmark as RemoveBookmarkResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleRemoveBookmark = (req: Request, res: Response): void => {
@@ -12,7 +12,7 @@ export const handleRemoveBookmark = (req: Request, res: Response): void => {
     () => {
       databaseHandler.findOneInDocument(UserSchema, 'selected', true).then(
         users => {
-          if (users && users.lenght > 0) {
+          if (users && users.length > 0) {
             const response: RemoveBookmarkResponse = (users[0] as User).favorites;
             res.status(200).send(response);
           } else {

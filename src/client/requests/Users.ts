@@ -1,12 +1,19 @@
 import User from '../store/data/User';
 import Loading from '../store/loading/Loading';
 import { AccountSettings } from '../../shared/LoukiTypes';
-import * as Responses from '../../shared/RoutesResponses';
+import {
+  AddFolder as AddFolderType,
+  RemoveFolder as RemoveFolderType,
+  TestSetup,
+  UpdateSettings,
+  buildResponse,
+  APIResponse,
+} from '../../shared/RoutesResponses';
 
-export type AddFolderResponse = Responses.AddFolderResponse;
-export type RemoveFolderResponse = Responses.RemoveFolderResponse;
-export type TestSetupResponse = Responses.TestSetupResponse;
-export type UpdateSettingsResponse = Responses.UpdateSettingsResponse;
+export type AddFolderResponse = APIResponse<AddFolderType>;
+export type RemoveFolderResponse = APIResponse<RemoveFolderType>;
+export type TestSetupResponse = TestSetup;
+export type UpdateSettingsResponse = UpdateSettings;
 
 export const LoadUser = async () => {
   fetch(`/api/v1/current-user`)
@@ -64,8 +71,8 @@ export const AddFolder = (folderToAdd: string): Promise<AddFolderResponse> => {
     body: JSON.stringify({
       folder: folderToAdd,
     }),
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 
@@ -79,7 +86,7 @@ export const RemoveFolder = (folderToRemove: string): Promise<RemoveFolderRespon
     body: JSON.stringify({
       folder: folderToRemove,
     }),
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };

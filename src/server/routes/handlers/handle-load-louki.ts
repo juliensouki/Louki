@@ -5,7 +5,7 @@ import ArtistSchema from '../../db/schemas/ArtistSchema';
 import MusicSchema from '../../db/schemas/MusicSchema';
 import UserSchema from '../../db/schemas/UserSchema';
 import { User } from '../../../shared/LoukiTypes';
-import { LoadLoukiResponse, CustomError } from '../../../shared/RoutesResponses';
+import { LoadLouki as LoadLoukiResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
 export const handleLoadLouki = async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
-import * as Responses from '../../shared/RoutesResponses';
+import { PixabaySearch as PixabaySearchType, TestPixabay as TestPixabayType } from '../../shared/RoutesResponses';
 
-export type PixabaySearchResponse = Responses.PixabaySearchResponse;
-export type TestPixabayResponse = Responses.TestPixabayResponse;
+export type PixabaySearchResponse = PixabaySearchType;
+export type TestPixabayResponse = TestPixabayType;
 
 export const PixabaySearch = async (searchText: string): Promise<PixabaySearchResponse> => {
   return fetch(`/api/v1/search-pixabay?search=${searchText}`).then(res => {

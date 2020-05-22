@@ -1,13 +1,20 @@
 import LoukiStore from '../store/data/LoukiStore';
 import Loading from '../store/loading/Loading';
-import * as Responses from '../../shared/RoutesResponses';
+import {
+  UpdatePlaylist as UpdatePlaylistType,
+  GetPlaylist as GetPlaylistType,
+  RemoveMusic,
+  MusicSearch,
+  CreatePlaylist as CreatePlaylistType,
+  DeletePlaylist as DeletePlaylistType,
+} from '../../shared/RoutesResponses';
 
-export type UpdatePlaylistResponse = Responses.UpdatePlaylistResponse;
-export type GetPlaylistResponse = Responses.GetPlaylistResponse;
-export type RemoveMusicResponse = Responses.RemoveMusicResponse;
-export type MusicSearchResponse = Responses.MusicSearchResponse;
-export type CreatePlaylistResponse = Responses.CreatePlaylistResponse;
-export type DeletePlaylistResponse = Responses.DeletePlaylistResponse;
+export type UpdatePlaylistResponse = UpdatePlaylistType;
+export type GetPlaylistResponse = GetPlaylistType;
+export type RemoveMusicResponse = RemoveMusic;
+export type MusicSearchResponse = MusicSearch;
+export type CreatePlaylistResponse = CreatePlaylistType;
+export type DeletePlaylistResponse = DeletePlaylistType;
 
 export const LoadPlaylists = async (): Promise<void> => {
   fetch(`/api/v1/list-playlists`)
