@@ -49,6 +49,9 @@ const styles = (theme: Theme) =>
       fontSize: '1.5rem',
       fontFamily: 'Roboto',
       display: 'inline-block',
+      '&:focus': {
+        outline: 'none',
+      },
     },
     button: {
       backgroundColor: theme.palette.background.default,
