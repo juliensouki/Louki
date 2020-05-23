@@ -1,5 +1,6 @@
 import { Music } from '../../shared/LoukiTypes';
-import * as fs from 'fs';
+import { supportedAudioFormats } from '../config/config';
+import { logError } from '../logger';
 import * as mm from 'music-metadata';
 import uuid from 'uuid';
 
@@ -21,8 +22,8 @@ class FilesReader {
   ): void => {
     mm.parseFile(music)
       .then(metadata => {
-        const artists = this.getFieldInMetadata(metadata, ['common', 'artists']);
-        const album = this.getFieldInMetadata(metadata, ['common', 'album']);
+        const artists: Array<string> = this.getFieldInMetadata(metadata, ['common', 'artists']);
+        const album: string = this.getFieldInMetadata(metadata, ['common', 'album']);
         const musicObject: Music = {
           title: this.getFieldInMetadata(metadata, ['common', 'title']),
           artist: '',
@@ -32,25 +33,19 @@ class FilesReader {
           duration: this.getFieldInMetadata(metadata, ['format', 'duration']),
         };
         if (musicObject.title == undefined || musicObject.title == null || musicObject.title == '') {
-          musicObject.title = music.replace(folder, '').replace('.mp3', '');
+          musicObject.title = music;
         }
+        supportedAudioFormats.forEach(extension => {
+          musicObject.title = musicObject.title.replace(folder, '').replace(`.${extension}`, '');
+        });
         callback(musicObject, artists, album);
       })
       .catch(err => {
-        console.error(err.message);
+        logError({
+          name: `File reader error`,
+          message: err.message,
+        });
       });
-  };
-
-  getArrayOfFiles = (musicPaths: Array<string>): Array<Array<string>> => {
-    const arrayOfPaths: Array<Array<string>> = [];
-    musicPaths.forEach(pathElement => {
-      const arrayOfFiles: Array<string> = [];
-      fs.readdirSync(pathElement, { withFileTypes: true }).filter(item => {
-        if (!item.isDirectory()) arrayOfFiles.push(pathElement + item.name);
-      });
-      arrayOfPaths.push(arrayOfFiles);
-    });
-    return arrayOfPaths;
   };
 }
 

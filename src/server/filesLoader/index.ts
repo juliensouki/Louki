@@ -13,6 +13,7 @@ import fs from 'fs';
 import uuid from 'uuid';
 import sha1 from 'sha1';
 import chokidar from 'chokidar';
+import { supportedAudioFormats } from '../config/config';
 
 export default class DataLoader {
   private databaseHandler: any;
@@ -67,6 +68,14 @@ export default class DataLoader {
     }
   };
 
+  buildWatchArray = (folder: string): Array<string> => {
+    const array: Array<string> = [];
+    supportedAudioFormats.forEach(extension => {
+      array.push(`${folder}*.${extension}`);
+    });
+    return array;
+  };
+
   watchFolder = (folder: string): void => {
     const fileWatcher = chokidar.watch('file', {
       ignored: /(^|[\/\\])\../,
@@ -74,7 +83,7 @@ export default class DataLoader {
     });
 
     this.watchersMap.set(folder, fileWatcher);
-    fileWatcher.add(folder);
+    fileWatcher.add(this.buildWatchArray(folder));
     logger.info('watching : ' + folder);
     fileWatcher.on('add', (newSongPath: string) => {
       logger.info('Detected new song');

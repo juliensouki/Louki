@@ -139,7 +139,6 @@ class LoukiStore {
     ids.forEach(id => {
       const music = this.getMusicFromId(id);
       if (music) result.push(music);
-      else console.log('Could not add music ' + id + ' in array');
     });
     return result;
   };
