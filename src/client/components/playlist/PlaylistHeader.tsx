@@ -17,7 +17,7 @@ import LoukiStore from '../../store/data/LoukiStore';
 import { Music } from '../../../shared/LoukiTypes';
 import { DeletePlaylist, DeletePlaylistResponse } from '../../requests/Playlists';
 import texts from '../../lang/playlist/playlist-header';
-import UpdatePlaylistModal from '../modals/update-playlist-modal/UpdatePlaylistModal';
+import UpdatePlaylistModal from '../modals/UpdatePlaylistModal';
 import optionsTexts from '../../lang/options';
 import notifsTexts from '../../lang/notifications';
 
