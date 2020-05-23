@@ -71,7 +71,7 @@ export default class DataLoader {
   buildWatchArray = (folder: string): Array<string> => {
     const array: Array<string> = [];
     supportedAudioFormats.forEach(extension => {
-      array.push(`${folder}*.${extension}`);
+      array.push(`${folder}**/*.${extension}`);
     });
     return array;
   };

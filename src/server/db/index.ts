@@ -3,8 +3,6 @@ import { logError } from '../logger';
 
 class DatabaseHandler {
   private url: string = process.env.DATABASE_URL;
-  private Users: any = null;
-  private Musics: any = null;
 
   connect = async () => {
     try {
@@ -29,16 +27,6 @@ class DatabaseHandler {
       })
       .catch(err => {
         return err;
-      });
-  };
-
-  getData = model => {
-    this.getCollectionContent(model)
-      .then(value => {
-        this[model.collection.collectionName] = value;
-      })
-      .catch(error => {
-        console.log('Failed to load ' + model.collection.collectionName + ' : ' + error);
       });
   };
 
@@ -128,10 +116,6 @@ class DatabaseHandler {
       .catch(err => {
         return err;
       });
-  };
-
-  get = (item: 'Musics' | 'Users') => {
-    return this[item];
   };
 
   close = async () => {
