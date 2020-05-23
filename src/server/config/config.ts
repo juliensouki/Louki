@@ -38,4 +38,6 @@ const checkEnv = (): boolean => {
   return true;
 };
 
-export { IS_DEV, VERSION, SERVER_PORT, WEBPACK_PORT, checkEnv };
+const supportedAudioFormats = ['mp3', 'ogg', 'wav'];
+
+export { IS_DEV, VERSION, SERVER_PORT, WEBPACK_PORT, checkEnv, supportedAudioFormats };
