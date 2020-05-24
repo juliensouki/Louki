@@ -245,7 +245,7 @@ class PlaylistHeader extends React.Component<Props & RouteComponentProps, NoStat
             >
               <Grid item>
                 <Typography className={classes.playlistCategory}>{this.props.subTitle}</Typography>
-                <Grid container direction='row' alignItems='center' justify='center'>
+                <Grid container direction='row'>
                   <Grid item>
                     <Typography className={classes.playlistName}>{this.props.title}</Typography>
                   </Grid>
