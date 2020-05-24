@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Button, Typography, Paper, InputBase, IconButton } from '@material-ui/core';
@@ -14,6 +13,7 @@ import User from '../../store/data/User';
 import texts from '../../lang/modals/manage-folders-modal';
 import notifsTexts from '../../lang/notifications';
 import SearchField from '../utils/SearchField';
+import Notifications, { NotificationType } from '../../store/features/Notifications';
 
 import { AddFolder, AddFolderResponse, RemoveFolder, RemoveFolderResponse } from '../../requests/Users';
 
@@ -83,7 +83,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 @observer
-class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
+class AddPlaylistModal extends React.Component<Props, NoState> {
   @observable folderToAdd: string = '';
 
   @action handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,8 +98,7 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
     const T = notifsTexts.current;
 
     RemoveFolder(folder).then((response: RemoveFolderResponse) => {
-      const snackbarOptions = { variant: 'success' as any };
-      this.props.enqueueSnackbar(T.folderRemoved(folder), snackbarOptions);
+      Notifications.addNotification(T.folderRemoved(folder), NotificationType.SUCCESS);
       User.setUser(response.data);
     });
   };
@@ -111,12 +110,10 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
       AddFolder(this.folderToAdd[this.folderToAdd.length - 1] == '/' ? this.folderToAdd : this.folderToAdd + '/').then(
         (response: AddFolderResponse) => {
           if (response.status == 200) {
+            Notifications.addNotification(T.folderAdded(this.folderToAdd), NotificationType.SUCCESS);
             User.setUser(response.data);
-            const snackbarOptions = { variant: 'success' as any };
-            this.props.enqueueSnackbar(T.folderAdded(this.folderToAdd), snackbarOptions);
           } else {
-            const snackbarOptions = { variant: 'error' as any };
-            this.props.enqueueSnackbar(T.errors.folderNotAdded(this.folderToAdd), snackbarOptions);
+            Notifications.addNotification(T.errors.folderNotAdded(this.folderToAdd), NotificationType.ERROR);
           }
           this.folderToAdd = '';
         },
@@ -165,4 +162,4 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
   }
 }
 
-export default withSnackbar(withStyles(styles)(AddPlaylistModal));
+export default withStyles(styles)(AddPlaylistModal);

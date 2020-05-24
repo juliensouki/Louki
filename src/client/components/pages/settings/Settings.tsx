@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import FolderIcon from '@material-ui/icons/Folder';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
@@ -24,6 +23,7 @@ import Navigation from '../../../store/navigation/Navigation';
 import SettingsForm from '../../../store/forms/SettingsForm';
 import Loading from '../../../store/loading/Loading';
 import User from '../../../store/data/User';
+import Notifications, { NotificationType } from '../../../store/features/Notifications';
 
 import { Language } from '../../../../shared/Languages';
 import texts from '../../../lang/pages/settings/';
@@ -114,7 +114,7 @@ const BootstrapInput = withStyles(theme => ({
 }))(InputBase);
 
 @observer
-class Settings extends React.Component<WithStyles & RouteComponentProps & WithSnackbarProps, NoState> {
+class Settings extends React.Component<WithStyles & RouteComponentProps, NoState> {
   @observable isPixabayAPIKeyValid: boolean = false;
   @observable pixabayTestLoading: boolean = true;
 
@@ -136,8 +136,7 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
     if (form != null) {
       UpdateUserSettings(form, SettingsForm.settings, SettingsForm.id).then((response: UpdateSettingsResponse) => {
         User.setUser(response);
-        const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(T.settingsUpdated, snackbarOptions);
+        Notifications.addNotification(T.settingsUpdated, NotificationType.SUCCESS);
         this.props.history.push(Navigation.previousRoute);
       });
     }
@@ -306,4 +305,4 @@ class Settings extends React.Component<WithStyles & RouteComponentProps & WithSn
   }
 }
 
-export default withSnackbar(withRouter(withStyles(styles)(Settings)));
+export default withRouter(withStyles(styles)(Settings));

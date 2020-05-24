@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
@@ -12,6 +11,7 @@ import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
 import Bookmarks from '../../../store/data/Bookmarks';
 import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
+import Notifications, { NotificationType } from '../../../store/features/Notifications';
 
 import texts from '../../../lang/pages/favorites';
 import optionsTexts from '../../../lang/options';
@@ -25,19 +25,17 @@ const styles = (theme: Theme) =>
   });
 
 @observer
-class Favorites extends React.Component<WithStyles & WithSnackbarProps, NoState> {
+class Favorites extends React.Component<WithStyles, NoState> {
   handleRemoveBookmark = (id: string) => {
-    const snackbarOptions = { variant: 'success' as any };
     const musicName = LoukiStore.idToMusic(id).title;
     const T = notifsTexts.current;
 
-    this.props.enqueueSnackbar(T.removedBookmark(musicName), snackbarOptions);
     Bookmarks.deleteBookmark(id);
+    Notifications.addNotification(T.removedBookmark(musicName), NotificationType.SUCCESS);
   };
 
   handleEditMusic = () => {
-    const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
+    Notifications.addNotification(notifsTexts.current.notDeveloped, NotificationType.INFO);
   };
 
   desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
@@ -80,4 +78,4 @@ class Favorites extends React.Component<WithStyles & WithSnackbarProps, NoState>
   }
 }
 
-export default withStyles(styles)(withSnackbar(Favorites));
+export default withStyles(styles)(Favorites);

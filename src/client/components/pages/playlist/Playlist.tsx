@@ -2,7 +2,6 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import PlaylistHeader from '../../playlist/PlaylistHeader';
 import SearchContainer from '../../playlist/SearchContainer';
@@ -11,6 +10,7 @@ import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
 
 import { Music, Playlist } from '../../../../shared/LoukiTypes';
 import { RemoveMusicFromPlaylist, RemoveMusicResponse } from '../../../requests/Playlists';
+import Notifications, { NotificationType } from '../../../store/features/Notifications';
 
 import LoukiStore from '../../../store/data/LoukiStore';
 import MusicPlayer from '../../../store/features/MusicPlayer';
@@ -21,24 +21,23 @@ import optionsTexts from '../../../lang/options';
 import notifsTexts from '../../../lang/notifications';
 
 @observer
-class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarProps, NoState> {
+class PlaylistPage extends React.Component<RouteComponentProps, NoState> {
   @action removeFromPlaylist = (id: string) => {
     const playlistId = LoukiStore.currentPlaylist.__id;
     const T = notifsTexts.current;
 
     RemoveMusicFromPlaylist(id, playlistId).then((response: RemoveMusicResponse) => {
-      LoukiStore.setCurrentPlaylist(response.data);
-      MusicPlayer.setCurrentPlaylist(LoukiStore.idsToMusics(response.data.musics));
-      const snackbarOptions = { variant: 'success' as any };
       const musicName = LoukiStore.idToMusic(id).title;
       const playlistName = LoukiStore.idToPlaylist(playlistId).name;
-      this.props.enqueueSnackbar(T.removedFromPlaylist(musicName, playlistName), snackbarOptions);
+
+      LoukiStore.setCurrentPlaylist(response.data);
+      MusicPlayer.setCurrentPlaylist(LoukiStore.idsToMusics(response.data.musics));
+      Notifications.addNotification(T.removedFromPlaylist(musicName, playlistName), NotificationType.SUCCESS);
     });
   };
 
   handleEditMusic = () => {
-    const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
+    Notifications.addNotification(notifsTexts.current.notDeveloped, NotificationType.INFO);
   };
 
   desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
@@ -91,4 +90,4 @@ class PlaylistPage extends React.Component<RouteComponentProps & WithSnackbarPro
   }
 }
 
-export default withSnackbar(withRouter(PlaylistPage));
+export default withRouter(PlaylistPage);

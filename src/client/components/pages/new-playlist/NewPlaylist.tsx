@@ -2,7 +2,6 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import NewPlaylistForm from '../../../store/forms/NewPlaylistForm';
 import LoukiStore from '../../../store/data/LoukiStore';
@@ -18,6 +17,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import texts from '../../../lang/pages/new-playlist';
 import notifsTexts from '../../../lang/notifications';
 import { CreatePlaylist, CreatePlaylistResponse } from '../../../requests/Playlists';
+import Notifications, { NotificationType } from '../../../store/features/Notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -76,7 +76,7 @@ const styles = (theme: Theme) =>
   });
 
 @observer
-class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & WithSnackbarProps, NoState> {
+class NewPlaylist extends React.Component<WithStyles & RouteComponentProps, NoState> {
   @observable nameHelper: string = '';
   @observable descriptionHelper: string = '';
   @observable open: boolean = false;
@@ -117,8 +117,7 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & Wit
 
       CreatePlaylist(data).then((response: CreatePlaylistResponse) => {
         LoukiStore.setPlaylists(response.data);
-        const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(nT.playlistCreated(NewPlaylistForm.name), snackbarOptions);
+        Notifications.addNotification(nT.playlistCreated(NewPlaylistForm.name), NotificationType.SUCCESS);
         this.props.history.push('/all-musics');
       });
     } else {
@@ -285,4 +284,4 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps & Wit
   }
 }
 
-export default withSnackbar(withRouter(withStyles(styles)(NewPlaylist)));
+export default withRouter(withStyles(styles)(NewPlaylist));

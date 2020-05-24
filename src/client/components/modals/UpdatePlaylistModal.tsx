@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
@@ -11,6 +10,7 @@ import texts from '../../lang/modals/update-playlist-modal';
 import notifsTexts from '../../lang/notifications';
 import LoukiStore from '../../store/data/LoukiStore';
 import { UpdatePlaylist, UpdatePlaylistResponse } from '../../requests/Playlists';
+import Notifications, { NotificationType } from '../../store/features/Notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -58,7 +58,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 @observer
-class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
+class SelectPlaylistModal extends React.Component<Props, NoState> {
   @observable name: string | null = null;
   @observable description: string = '';
 
@@ -87,8 +87,7 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
           this.props.handleClose();
           LoukiStore.setCurrentPlaylist(response.data.currentPlaylist);
           LoukiStore.setPlaylists(response.data.playlists);
-          const snackbarOptions = { variant: 'success' as any };
-          this.props.enqueueSnackbar(T.playlistUpdated(this.name), snackbarOptions);
+          Notifications.addNotification(T.playlistUpdated(this.name), NotificationType.SUCCESS);
         },
       );
     }
@@ -149,4 +148,4 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
   }
 }
 
-export default withSnackbar(withStyles(styles)(SelectPlaylistModal));
+export default withStyles(styles)(SelectPlaylistModal);
