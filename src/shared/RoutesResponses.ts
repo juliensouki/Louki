@@ -47,7 +47,7 @@ export type UpdatePlaylist = UpdatePlaylistBody;
 export const buildResponse = (status: number, response: any): APIResponse<any> => {
   return {
     status: status,
-    data: response instanceof Error ? null : response,
-    error: response instanceof Error ? response : null,
+    data: status >= 500 ? null : response,
+    error: status >= 500 ? response : null,
   };
 };

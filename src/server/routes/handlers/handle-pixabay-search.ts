@@ -17,8 +17,7 @@ export const handlePixabaySearch = (req: Request, res: Response): void => {
     pixabayError => {
       const response: CustomError = {
         name: `Pixabay search error`,
-        message: `An error occured `,
-        details: pixabayError,
+        message: pixabayError.message,
       };
       logError(response);
       res.status(500).send(response);
