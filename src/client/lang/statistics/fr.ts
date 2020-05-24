@@ -6,4 +6,5 @@ export default {
   days: (nb: number) => (nb < 2 ? ' jour' : ' jours'),
   hours: (nb: number) => (nb < 2 ? ' heure' : ' heures'),
   minutes: (nb: number) => (nb < 2 ? ' minute' : ' minutes'),
+  noLocalStorage: "L'utilisation du local storage est désactivé",
 };

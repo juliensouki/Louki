@@ -11,6 +11,7 @@ export interface Definition {
   days: (nb: number) => string;
   hours: (nb: number) => string;
   minutes: (nb: number) => string;
+  noLocalStorage: string;
 }
 
 export default new LanguagesManager<Definition>(

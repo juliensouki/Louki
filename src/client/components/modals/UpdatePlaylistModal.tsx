@@ -5,12 +5,12 @@ import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
-import Modal from '../../utils/Modal';
+import Modal from '../utils/Modal';
 
-import texts from '../../../lang/modals/update-playlist-modal';
-import notifsTexts from '../../../lang/notifications';
-import LoukiStore from '../../../store/data/LoukiStore';
-import { UpdatePlaylist, UpdatePlaylistResponse } from '../../../requests/Playlists';
+import texts from '../../lang/modals/update-playlist-modal';
+import notifsTexts from '../../lang/notifications';
+import LoukiStore from '../../store/data/LoukiStore';
+import { UpdatePlaylist, UpdatePlaylistResponse } from '../../requests/Playlists';
 
 const styles = (theme: Theme) =>
   createStyles({

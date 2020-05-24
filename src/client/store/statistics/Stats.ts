@@ -3,50 +3,27 @@ import User from '../data/User';
 
 export enum Stats {
   TIME_SPENT_LISTENING = 0,
-  NB_TIMES_CUSTOM_PLAYLIST = 1,
-  RECENTLY_ADDED = 2,
-  NUMBER_OF_SONGS = 3,
-  NUMBER_OF_ARTISTS = 4,
-  NUMBER_OF_ALBUMS = 5,
+  NUMBER_OF_ARTISTS = 1,
+  NUMBER_OF_ALBUMS = 2,
 }
-
-const nbTimesCustomPlaylist = (playlist: string): string => {
-  return `Number times listening to ${playlist}`;
-};
 
 const timeSpentListening = (): string => {
   if (User.settings.localStorageUsage) {
     const seconds: number = Number(localStorage.getItem('time_listening_music')) || 0;
     return seconds < 60 ? texts.current.noListen : texts.current.listened(secondsToDhms(seconds));
   }
-  return 'This playlist was created today'; //todo : Find a new stat
+  return texts.current.noLocalStorage;
 };
 
-const recentlyAdded = (type: string): string => {
-  return `Recently added ${type} :`;
+const numberOfArtists = (nb: number): string => {
+  return texts.current.nbArtists(nb);
 };
 
-const numberOfSongs = (nb: number) => {
-  const s = nb < 2 ? '' : 's';
-  return `There are ${nb} music${s} in this playlist.`; // translate later
+const numberOfAlbums = (nb: number): string => {
+  return texts.current.nbAlbums(nb);
 };
 
-const numberOfArtists = (nb: number) => {
-  return texts.current.nbArtists(nb); //You have ${nb} artists
-};
-
-const numberOfAlbums = (nb: number) => {
-  return texts.current.nbAlbums(nb); //You have ${nb} albums
-};
-
-const statistics: Array<(arg: any) => string> = [
-  timeSpentListening,
-  nbTimesCustomPlaylist,
-  recentlyAdded,
-  numberOfSongs,
-  numberOfArtists,
-  numberOfAlbums,
-];
+const statistics: Array<(arg: any) => string> = [timeSpentListening, numberOfArtists, numberOfAlbums];
 
 const secondsToDhms = (seconds: number): string => {
   const d = Math.floor(seconds / (3600 * 24));

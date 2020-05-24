@@ -13,6 +13,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import User from '../../store/data/User';
 import texts from '../../lang/modals/manage-folders-modal';
 import notifsTexts from '../../lang/notifications';
+import SearchField from '../utils/SearchField';
 
 import { AddFolder, AddFolderResponse, RemoveFolder, RemoveFolderResponse } from '../../requests/Users';
 
@@ -85,8 +86,8 @@ interface Props extends WithStyles<typeof styles> {
 class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
   @observable folderToAdd: string = '';
 
-  @action handleChange = (folderToAdd: string) => {
-    this.folderToAdd = folderToAdd;
+  @action handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.folderToAdd = e.target.value;
   };
 
   @action onClose = () => {
@@ -129,20 +130,13 @@ class AddPlaylistModal extends React.Component<Props & WithSnackbarProps, NoStat
 
     return (
       <Modal open={open} title={T.title} buttons={[]} onClose={this.onClose}>
-        <Paper className={classes.root}>
-          <InputBase
-            className={classes.input}
-            value={this.folderToAdd}
-            onChange={e => {
-              this.handleChange(e.target.value);
-            }}
-            placeholder={T.placeholder}
-            inputProps={{ 'aria-label': T.placeholder }}
-          />
-          <Button className={classes.confirmButton} onClick={this.addNewFolder}>
-            {T.button}
-          </Button>
-        </Paper>
+        <SearchField
+          buttonText={T.button}
+          placeholder={T.placeholder}
+          value={this.folderToAdd}
+          onChange={this.handleChange}
+          onSearch={this.addNewFolder}
+        />
         <div style={{ marginTop: '1em' }}>
           <InfoIcon className={classes.inlineIcon} />
           <Typography className={classes.text}>{T.info}</Typography>
