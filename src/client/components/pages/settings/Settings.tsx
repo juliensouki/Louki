@@ -95,13 +95,14 @@ class Settings extends React.Component<WithStyles & RouteComponentProps, NoState
 
   handleSave = () => {
     const form = document.getElementById('settings-form') as HTMLFormElement;
-    const T = notifsTexts.current;
 
     if (form != null) {
-      UpdateUserSettings(form, SettingsForm.settings, SettingsForm.id).then((response: UpdateSettingsResponse) => {
-        User.setUser(response);
-        Notifications.addNotification(T.settingsUpdated, NotificationType.SUCCESS);
-        this.props.history.push(Navigation.previousRoute);
+      UpdateUserSettings(form, SettingsForm.settings).then((response: UpdateSettingsResponse) => {
+        if (response.error == null) {
+          User.setUser(response.data);
+          this.props.history.push(Navigation.previousRoute);
+          Notifications.addNotification(notifsTexts.current.settingsUpdated, NotificationType.SUCCESS);
+        }
       });
     }
   };
