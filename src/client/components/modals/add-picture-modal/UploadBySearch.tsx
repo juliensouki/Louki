@@ -26,6 +26,9 @@ const styles = (theme: Theme) =>
       padding: '0.5em',
       overflowY: 'auto',
       overflowX: 'hidden',
+      [theme.breakpoints.down('sm')]: {
+        height: '100%',
+      },
     },
     pictureContainer: {
       width: 'calc(33% - 2px)',
@@ -34,6 +37,9 @@ const styles = (theme: Theme) =>
       marginTop: 2,
       textAlign: 'center',
       backgroundColor: '#515151',
+      [theme.breakpoints.down('sm')]: {
+        height: 70,
+      },
     },
     image: {
       width: 'auto',
@@ -134,7 +140,11 @@ class UploadBySearch extends React.Component<Props, NoState> {
                 >
                   {imageRow.map((image, imageIndex) => {
                     return (
-                      <div
+                      <Grid
+                        container
+                        direction='column'
+                        justify='center'
+                        alignItems='center'
                         onClick={() => {
                           this.pickPicture(image);
                         }}
@@ -143,7 +153,7 @@ class UploadBySearch extends React.Component<Props, NoState> {
                         style={this.currentUrl == image ? { border: '1px solid #FFB13B' } : {}}
                       >
                         <img className={classes.image} src={image}></img>
-                      </div>
+                      </Grid>
                     );
                   })}
                 </Grid>

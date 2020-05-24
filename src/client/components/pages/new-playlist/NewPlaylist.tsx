@@ -36,7 +36,7 @@ const styles = (theme: Theme) =>
       },
     },
     root: {
-      padding: '2.5em',
+      padding: '2em',
       paddingTop: '1em',
       color: theme.palette.primary.main,
     },
@@ -46,6 +46,13 @@ const styles = (theme: Theme) =>
       textTransform: 'none',
       marginLeft: '1em',
       marginRight: '1em',
+      fontSize: '1.3rem',
+    },
+    saveButton: {
+      backgroundColor: theme.palette.background.default,
+      color: theme.palette.primary.main,
+      textTransform: 'none',
+      marginTop: theme.spacing(1),
       fontSize: '1.3rem',
     },
     title: {
@@ -72,6 +79,9 @@ const styles = (theme: Theme) =>
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: 'calc(100vw - 7em)',
+      },
     },
   });
 
@@ -273,7 +283,7 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps, NoSt
               </Grid>
             </Grid>
             <Grid item container direction='column' alignItems='flex-end'>
-              <Button className={classes.button} onClick={this.handleRedirect}>
+              <Button className={classes.saveButton} onClick={this.handleRedirect}>
                 {T.save}
               </Button>
             </Grid>

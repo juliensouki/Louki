@@ -36,6 +36,9 @@ const styles = (theme: Theme) =>
     root: {
       padding: 30,
       color: theme.palette.primary.main,
+      [theme.breakpoints.down('sm')]: {
+        padding: 20,
+      },
     },
     usernameInput: {
       color: theme.palette.primary.main,
@@ -74,6 +77,11 @@ const styles = (theme: Theme) =>
       top: '0.25em',
       left: '-0.3em',
       fontSize: '2rem',
+    },
+    mobileContainer: {
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: 120,
+      },
     },
   });
 
@@ -175,32 +183,40 @@ class Settings extends React.Component<WithStyles & RouteComponentProps, NoState
               />
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-              <Typography className={classes.text}>
-                {T.profilePic} : {SettingsForm.path}
-              </Typography>
-              <Button className={classes.button} onClick={this.openFileExplorer}>
-                <input
-                  id='hidden-file-input'
-                  type='file'
-                  name='profile-picture'
-                  style={{ display: 'none' }}
-                  onChange={this.handleFileChange}
-                />
-                <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
-              </Button>
+              <Grid item className={classes.mobileContainer}>
+                <Typography className={classes.text}>
+                  {T.profilePic} : {SettingsForm.path}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button className={classes.button} onClick={this.openFileExplorer}>
+                  <input
+                    id='hidden-file-input'
+                    type='file'
+                    name='profile-picture'
+                    style={{ display: 'none' }}
+                    onChange={this.handleFileChange}
+                  />
+                  <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
+                </Button>
+              </Grid>
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
-              <Typography className={classes.text}>
-                {T.directories} : {User.folders.length} {T.folders(User.folders.length)}
-              </Typography>
-              <Button
-                className={classes.button}
-                onClick={() => {
-                  SettingsForm.setOpenManage(true);
-                }}
-              >
-                <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
-              </Button>
+              <Grid item className={classes.mobileContainer}>
+                <Typography className={classes.text}>
+                  {T.directories} : {User.folders.length} {T.folders(User.folders.length)}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  className={classes.button}
+                  onClick={() => {
+                    SettingsForm.setOpenManage(true);
+                  }}
+                >
+                  <FolderIcon style={{ marginRight: '0.7em' }} /> {T.browse}
+                </Button>
+              </Grid>
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
               <Typography className={classes.text}>{T.internet}</Typography>

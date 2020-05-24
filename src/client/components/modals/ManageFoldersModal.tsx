@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Button, Typography, Paper, InputBase, IconButton } from '@material-ui/core';
+import { Typography, Paper, Grid, IconButton } from '@material-ui/core';
 import Modal from '../utils/Modal';
 import SettingsForm from '../../store/forms/SettingsForm';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -40,13 +40,18 @@ const styles = (theme: Theme) =>
       fontSize: '1.3rem',
     },
     folderContainer: {
-      width: '100%',
       maxHeight: 300,
       overflowY: 'auto',
       overflowX: 'hidden',
       borderRadius: 3,
       border: '0.5px solid #BABABA',
+      padding: '1em',
       marginTop: '2em',
+      width: 'calc(100% - 2em)',
+      [theme.breakpoints.down('sm')]: {
+        maxHeight: 'unset',
+        height: 'calc(100% - 140px)',
+      },
     },
     folder: {
       width: 'calc(100% - 24px)',
@@ -61,19 +66,37 @@ const styles = (theme: Theme) =>
     },
     inlineIcon: {
       position: 'relative',
-      top: '0.2em',
       fontSize: '1.5rem',
       marginRight: '0.5em',
+      top: '-0.15em',
+      [theme.breakpoints.down('sm')]: {
+        display: 'inline-block',
+        top: 0,
+      },
     },
     delete: {
       position: 'relative',
       color: theme.palette.primary.main,
-      top: '-0.5em',
       float: 'right',
+      [theme.breakpoints.down('sm')]: {
+        top: '0.1em',
+      },
     },
     text: {
       display: 'inline',
       fontSize: '1.3rem',
+    },
+    folderText: {
+      display: 'inline-block',
+      fontSize: '1.3rem',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      maxWidth: 'calc(100% - 2em)',
+      [theme.breakpoints.down('sm')]: {
+        position: 'relative',
+        top: '0.2em',
+      },
     },
   });
 
@@ -143,9 +166,11 @@ class AddPlaylistModal extends React.Component<Props, NoState> {
         </div>
         <Paper className={classes.folderContainer}>
           {folders.map((folder, index) => (
-            <Typography className={classes.folder} key={index}>
-              <FolderIcon className={classes.inlineIcon} />
-              {folder}
+            <Grid key={index} container direction='row' justify='space-between' alignItems='center'>
+              <Grid item style={{ maxWidth: 'calc(100% - 4em)', width: '100%', display: 'inline-block' }}>
+                <FolderIcon className={classes.inlineIcon} />
+                <Typography className={classes.folderText}>{folder}</Typography>
+              </Grid>
               <IconButton
                 className={classes.delete}
                 onClick={() => {
@@ -154,7 +179,7 @@ class AddPlaylistModal extends React.Component<Props, NoState> {
               >
                 <DeleteIcon />
               </IconButton>
-            </Typography>
+            </Grid>
           ))}
         </Paper>
       </Modal>

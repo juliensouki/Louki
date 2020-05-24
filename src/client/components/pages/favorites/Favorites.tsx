@@ -38,7 +38,7 @@ class Favorites extends React.Component<WithStyles, NoState> {
     Notifications.addNotification(notifsTexts.current.notDeveloped, NotificationType.INFO);
   };
 
-  desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
+  options = (id: string): Array<JSX.Element> => {
     const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
@@ -71,7 +71,7 @@ class Favorites extends React.Component<WithStyles, NoState> {
             ...T.emptyTexts,
             redirectRoute: '/all-musics',
           }}
-          desktopPlaylistOptions={this.desktopPlaylistOptions}
+          options={this.options}
         />
       </div>
     );

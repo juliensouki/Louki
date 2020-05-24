@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
@@ -35,7 +35,7 @@ const styles = (theme: Theme) =>
       position: 'absolute',
       bottom: 0,
       fontFamilty: 'Roboto',
-      right: 15,
+      right: 3,
       height: 13,
       width: 13,
       fontSize: 10,
@@ -65,7 +65,7 @@ const styles = (theme: Theme) =>
       },
     },
     playPauseIcon: {
-      fontSize: 55,
+      fontSize: 40,
       transition: 'color .5s ease-in-out',
       '&:hover': {
         cursor: 'pointer',
@@ -88,6 +88,7 @@ const styles = (theme: Theme) =>
       },
     },
     audioControlIcons: {
+      position: 'relative',
       fontSize: 25,
       transition: 'color .5s ease-in-out',
       '&:hover': {
@@ -157,7 +158,7 @@ class MusicBarMobile extends React.Component<WithStyles, NoState> {
             }
           >
             <Grid container item alignItems='center' justify='space-between' direction='row'>
-              <Grid item>
+              <Grid item style={{ position: 'relative' }}>
                 <ShuffleIcon
                   onClick={MusicPlayer.changeRandom}
                   style={{ color: MusicPlayer.random ? '#FFB13B' : '' }}
@@ -168,16 +169,26 @@ class MusicBarMobile extends React.Component<WithStyles, NoState> {
                   style={{ color: MusicPlayer.repeat == MusicLoop.NO_REPEAT ? '' : '#FFB13B' }}
                   className={classes.controlIcons}
                 />
-                {MusicPlayer.repeat == MusicLoop.REPEAT_ONE ? <div className={classes.bubbleRepeat}>1</div> : null}
-              </Grid>
-              <Grid item>
-                <SkipPreviousIcon onClick={MusicPlayer.prevSong} className={classes.audioControlIcons} />
-                {MusicPlayer.isPlaying ? (
-                  <PauseIcon onClick={MusicPlayer.pauseOrPlay} className={classes.audioControlIcons} />
-                ) : (
-                  <PlayArrowIcon onClick={MusicPlayer.pauseOrPlay} className={classes.audioControlIcons} />
+                {MusicPlayer.repeat == MusicLoop.REPEAT_ONE && (
+                  <Typography className={classes.bubbleRepeat}>1</Typography>
                 )}
-                <SkipNextIcon onClick={MusicPlayer.nextSong} className={classes.audioControlIcons} />
+              </Grid>
+              <Grid item container direction='row' justify='center' alignItems='center' style={{ width: 'auto' }}>
+                <SkipPreviousIcon
+                  onClick={MusicPlayer.prevSong}
+                  className={classes.audioControlIcons}
+                  style={{ marginRight: -5 }}
+                />
+                {MusicPlayer.isPlaying ? (
+                  <PauseIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
+                ) : (
+                  <PlayArrowIcon onClick={MusicPlayer.pauseOrPlay} className={classes.playPauseIcon} />
+                )}
+                <SkipNextIcon
+                  onClick={MusicPlayer.nextSong}
+                  className={classes.audioControlIcons}
+                  style={{ marginLeft: -5 }}
+                />
               </Grid>
               <Grid item>
                 <VolumeUpIcon className={classes.controlIcons} />

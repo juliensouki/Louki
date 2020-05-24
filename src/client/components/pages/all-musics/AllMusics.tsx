@@ -30,7 +30,7 @@ class AllMusics extends React.Component<WithStyles, NoState> {
   @observable openSelectPlaylistModal: boolean = false;
   @observable musicToAddToPlaylist: string = '';
 
-  @action handleAddMusicToPlaylist = (id: string) => {
+  @action handleAddMusicToPlaylist = (id: string): void => {
     this.openSelectPlaylistModal = true;
     this.musicToAddToPlaylist = id;
   };
@@ -40,11 +40,11 @@ class AllMusics extends React.Component<WithStyles, NoState> {
     this.openSelectPlaylistModal = false;
   };
 
-  handleEditMusic = () => {
+  handleEditMusic = (): void => {
     Notifications.addNotification(notifsTexts.current.notDeveloped, NotificationType.INFO);
   };
 
-  desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
+  options = (id: string): Array<JSX.Element> => {
     const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
@@ -83,7 +83,7 @@ class AllMusics extends React.Component<WithStyles, NoState> {
             redirectRoute: '/settings',
           }}
           addBookmarksEnabled
-          desktopPlaylistOptions={this.desktopPlaylistOptions}
+          options={this.options}
         />
       </div>
     );

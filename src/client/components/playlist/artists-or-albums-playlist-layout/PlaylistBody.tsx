@@ -42,7 +42,7 @@ const PlaylistBody: React.FunctionComponent<Props> = (props: Props) => {
   return (
     <div className={classes.root}>
       <ResponsiveAdapter
-        mobile={<PlaylistBodyMobile playlist={playlist} />}
+        mobile={<PlaylistBodyMobile playlist={playlist} page={page} />}
         desktop={<PlaylistBodyDesktop playlist={playlist} page={page} />}
       />
     </div>

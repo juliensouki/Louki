@@ -26,7 +26,7 @@ interface Props extends WithStyles<typeof styles> {
   playlist: Array<Music>;
   emptySettings: EmptyPlaylistTexts;
   addBookmarksEnabled?: boolean;
-  desktopPlaylistOptions: (id: string) => Array<JSX.Element>;
+  options: (id: string) => Array<JSX.Element>;
 }
 
 @observer
@@ -42,18 +42,26 @@ class PlaylistBody extends React.Component<Props, NoState> {
   }
 
   render() {
-    const { classes, playlist, emptySettings, addBookmarksEnabled, desktopPlaylistOptions } = this.props;
+    const { classes, playlist, emptySettings, addBookmarksEnabled, options } = this.props;
 
     return (
       <div className={classes.root}>
         <ResponsiveAdapter
-          mobile={<PlaylistBodyMobile playlist={playlist} />}
+          mobile={
+            <PlaylistBodyMobile
+              playlist={playlist}
+              addBookmarksEnabled={addBookmarksEnabled}
+              emptySettings={emptySettings}
+              getPlaylistOptionsItems={options}
+              searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
+            />
+          }
           desktop={
             <PlaylistBodyDesktop
               playlist={playlist}
               addBookmarksEnabled={addBookmarksEnabled}
               emptySettings={emptySettings}
-              getPlaylistOptionsItems={desktopPlaylistOptions}
+              getPlaylistOptionsItems={options}
               searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
             />
           }
