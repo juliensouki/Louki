@@ -13,7 +13,7 @@ import {
 export type AddFolderResponse = APIResponse<AddFolderType>;
 export type RemoveFolderResponse = APIResponse<RemoveFolderType>;
 export type TestSetupResponse = TestSetup;
-export type UpdateSettingsResponse = UpdateSettings;
+export type UpdateSettingsResponse = APIResponse<UpdateSettings>;
 
 export const LoadUser = async () => {
   fetch(`/api/v1/current-user`)
@@ -26,10 +26,9 @@ export const LoadUser = async () => {
     });
 };
 
-export const UpdateUserSettings = async (
+export const UpdateUserSettings = (
   form: HTMLFormElement,
   settings: AccountSettings,
-  id: string,
 ): Promise<UpdateSettingsResponse> => {
   const data = new FormData(form as HTMLFormElement);
   data.append('settings', JSON.stringify(settings));
@@ -37,8 +36,8 @@ export const UpdateUserSettings = async (
   return fetch(`/api/v1/update-user-settings`, {
     method: 'POST',
     body: data,
-  }).then(res => {
-    return res.json();
+  }).then(async res => {
+    return buildResponse(res.status, await res.json());
   });
 };
 

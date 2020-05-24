@@ -32,7 +32,7 @@ class DatabaseHandler {
 
   updateDocument = async (model, id, update: any) => {
     return model
-      .findOneAndUpdate({ __id: id }, update)
+      .findOneAndUpdate({ __id: id }, update, { new: true })
       .exec()
       .then(result => {
         return result;
