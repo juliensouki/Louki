@@ -34,6 +34,10 @@ const styles = (theme: Theme) =>
       '&:focus': {
         outline: 'none',
       },
+      [theme.breakpoints.down('sm')]: {
+        marginTop: '0.35em',
+        fontSize: '1.4rem',
+      },
     },
   });
 
