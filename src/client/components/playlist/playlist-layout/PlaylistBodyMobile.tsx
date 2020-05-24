@@ -27,6 +27,9 @@ const styles = (theme: Theme) =>
       marginLeft: '1em',
       marginRight: '1em',
       fontSize: '1.3rem',
+      [theme.breakpoints.down('sm')]: {
+        marginTop: theme.spacing(2),
+      },
     },
     songContainer: {
       width: '100%',
@@ -111,12 +114,18 @@ class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, No
 
     if (playlist == null || playlist.length == 0) {
       return (
-        <React.Fragment>
+        <Grid
+          container
+          direction='column'
+          justify='center'
+          alignItems='center'
+          style={{ width: '100%', textAlign: 'center' }}
+        >
           <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>{emptySettings.emptyText}</Typography>
           <Button className={classes.button} onClick={this.redirectHome}>
             {emptySettings.emptyButtonText}
           </Button>
-        </React.Fragment>
+        </Grid>
       );
     } else {
       return (
