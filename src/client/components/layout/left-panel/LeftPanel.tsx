@@ -5,6 +5,8 @@ import { observable } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import Slide from '@material-ui/core/Slide';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { NavLink } from 'react-router-dom';
 
 import AlbumIcon from '@material-ui/icons/Album';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
@@ -50,10 +52,20 @@ const styles = (theme: Theme) =>
         marginTop: '2em',
       },
       marginBottom: '1em',
+      [theme.breakpoints.down('sm')]: {
+        '&:first-child': {
+          marginBottom: '0',
+        },
+      },
     },
     playlistsContainer: {
       overflowY: 'auto',
       flexWrap: 'unset',
+    },
+    settingsIcon: {
+      fontSize: '2rem',
+      position: 'relative',
+      top: '0.1em',
     },
   });
 
@@ -72,7 +84,23 @@ class LeftPanel extends React.Component<WithStyles, NoState> {
         mobile={<Slide direction='right' in={MobileMenu.isOpen} mountOnEnter unmountOnExit />}
       >
         <div className={classes.root}>
-          <Typography className={classes.sectionTitle}>{T.music.title}</Typography>
+          <Grid container direction='row' justify='space-between' alignItems='center'>
+            <Typography className={classes.sectionTitle}>{T.music.title}</Typography>
+            <ResponsiveAdapter
+              breakpoint='sm'
+              desktop={<React.Fragment />}
+              mobile={
+                <NavLink
+                  to='/settings'
+                  onClick={() => {
+                    MobileMenu.setOpen(false);
+                  }}
+                >
+                  <SettingsIcon className={classes.settingsIcon} />
+                </NavLink>
+              }
+            />
+          </Grid>
           <LeftPanelButton routePath='/all-musics' text={T.music.allSongs} icon={MusicNoteIcon} />
           <LeftPanelButton showArtist routePath='/artists' text={T.music.artists} icon={MicIcon} />
           <LeftPanelButton routePath='/albums' text={T.music.albums} icon={AlbumIcon} />
