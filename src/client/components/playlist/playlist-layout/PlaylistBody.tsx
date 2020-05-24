@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import { observer } from 'mobx-react';
+
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import PlaylistBodyDesktop from './PlaylistBodyDesktop';
@@ -27,35 +29,38 @@ interface Props extends WithStyles<typeof styles> {
   desktopPlaylistOptions: (id: string) => Array<JSX.Element>;
 }
 
-const PlaylistBody: React.FunctionComponent<Props> = (props: Props) => {
-  const { classes, playlist, emptySettings, addBookmarksEnabled, desktopPlaylistOptions } = props;
-
-  useEffect(() => {
+@observer
+class PlaylistBody extends React.Component<Props, NoState> {
+  componentDidUpdate() {
     if (SearchForm.hasChanged) {
       const ids = [];
-      playlist.forEach(music => {
+      this.props.playlist.forEach(music => {
         ids.push(music.__id);
       });
       SearchForm.startSearch(ids);
     }
-  });
+  }
 
-  return (
-    <div className={classes.root}>
-      <ResponsiveAdapter
-        mobile={<PlaylistBodyMobile playlist={playlist} />}
-        desktop={
-          <PlaylistBodyDesktop
-            playlist={playlist}
-            addBookmarksEnabled={addBookmarksEnabled}
-            emptySettings={emptySettings}
-            getPlaylistOptionsItems={desktopPlaylistOptions}
-            searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
-          />
-        }
-      />
-    </div>
-  );
-};
+  render() {
+    const { classes, playlist, emptySettings, addBookmarksEnabled, desktopPlaylistOptions } = this.props;
+
+    return (
+      <div className={classes.root}>
+        <ResponsiveAdapter
+          mobile={<PlaylistBodyMobile playlist={playlist} />}
+          desktop={
+            <PlaylistBodyDesktop
+              playlist={playlist}
+              addBookmarksEnabled={addBookmarksEnabled}
+              emptySettings={emptySettings}
+              getPlaylistOptionsItems={desktopPlaylistOptions}
+              searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
+            />
+          }
+        />
+      </div>
+    );
+  }
+}
 
 export default withStyles(styles)(PlaylistBody);
