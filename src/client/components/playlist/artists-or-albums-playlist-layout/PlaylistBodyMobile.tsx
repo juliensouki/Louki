@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { action } from 'mobx';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { IconButton, Grid, Typography } from '@material-ui/core';
+import { Page } from '../../pages/artists-or-albums/ArtistsOrAlbums';
+import { Artist, Album } from '../../../../shared/LoukiTypes';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -39,16 +42,14 @@ const styles = (theme: Theme) =>
 
 interface Props extends WithStyles<typeof styles> {
   playlist: any;
+  page: Page;
 }
 
 @observer
 class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, NoState> {
-  goTo = (row: any) => {
-    if (row.title) {
-      this.props.history.push('/artist/' + row.__id);
-    } else {
-      this.props.history.push('/album/' + row.__id);
-    }
+  @action redirectToSpecificArtistOrAlbum = (item: Artist | Album) => {
+    const page = this.props.page == Page.ARTISTS ? 'artist' : 'album';
+    this.props.history.push('/' + page + '/' + item.__id);
   };
 
   render() {
@@ -63,12 +64,10 @@ class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, No
             alignItems='center'
             justify='space-between'
             className={classes.songContainer}
+            onClick={() => {
+              this.redirectToSpecificArtistOrAlbum(row);
+            }}
           >
-            <Grid item style={{ marginLeft: -15 }}>
-              <IconButton aria-label='options'>
-                <MoreVertIcon />
-              </IconButton>
-            </Grid>
             <Grid
               item
               container
