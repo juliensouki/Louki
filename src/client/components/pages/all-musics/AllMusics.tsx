@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
@@ -13,6 +12,7 @@ import SelectPlaylistModal from '../../modals/SelectPlaylistModal';
 
 import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
+import Notifications, { NotificationType } from '../../../store/features/Notifications';
 
 import texts from '../../../lang/pages/all-musics';
 import optionsTexts from '../../../lang/options';
@@ -26,7 +26,7 @@ const styles = (theme: Theme) =>
   });
 
 @observer
-class AllMusics extends React.Component<WithStyles & WithSnackbarProps, NoState> {
+class AllMusics extends React.Component<WithStyles, NoState> {
   @observable openSelectPlaylistModal: boolean = false;
   @observable musicToAddToPlaylist: string = '';
 
@@ -41,8 +41,7 @@ class AllMusics extends React.Component<WithStyles & WithSnackbarProps, NoState>
   };
 
   handleEditMusic = () => {
-    const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
+    Notifications.addNotification(notifsTexts.current.notDeveloped, NotificationType.INFO);
   };
 
   desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
@@ -91,4 +90,4 @@ class AllMusics extends React.Component<WithStyles & WithSnackbarProps, NoState>
   }
 }
 
-export default withStyles(styles)(withSnackbar(AllMusics));
+export default withStyles(styles)(AllMusics);

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Music, Artist, Album } from '../../../../shared/LoukiTypes';
+import Notifications, { NotificationType } from '../../../store/features/Notifications';
 import { GetArtistOrAlbum, GetArtistOrAlbumResponse } from '../../../requests/ArtistsOrAlbums';
 import LoukiStore from '../../../store/data/LoukiStore';
 import { Stats } from '../../../store/statistics/Stats';
@@ -20,7 +20,7 @@ import optionsTexts from '../../../lang/options';
 import SelectPlaylistModal from '../../modals/SelectPlaylistModal';
 
 @observer
-class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSnackbarProps, NoState> {
+class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState> {
   @observable artistOrAlbumId: string = '';
   @observable artistOrAlbumName: string = '';
   @observable artistOrAlbum: 'artist' | 'album' | '' = '';
@@ -54,8 +54,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
   };
 
   handleEditMusic = () => {
-    const snackbarOptions = { variant: 'info' as any };
-    this.props.enqueueSnackbar(notifsTexts.current.notDeveloped, snackbarOptions);
+    Notifications.addNotification(notifsTexts.current.notDeveloped, NotificationType.INFO);
   };
 
   desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
@@ -106,4 +105,4 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps & WithSn
   }
 }
 
-export default withSnackbar(withRouter(SpecificArtistOrAlbum));
+export default withRouter(SpecificArtistOrAlbum);

@@ -19,6 +19,7 @@ import Settings from './pages/settings/Settings';
 import Favorites from './pages/favorites/Favorites';
 import SpecificArtistOrAlbum from './pages/specific-artist-or-album/SpecificArtistOrAlbum';
 import SetupModal from './modals/setup-modal/SetupModal';
+import NotificationsHandler from './utils/NotificationsHandler';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -68,6 +69,7 @@ class Layout extends React.Component<Props, NoState> {
       return (
         <BrowserRouter>
           <RouteChangeHandler />
+          <NotificationsHandler />
           <TopBar />
           <Grid container direction='row' className={classes.mainContainer}>
             <LeftPanel />

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid, Fab, Typography } from '@material-ui/core';
@@ -20,6 +19,7 @@ import texts from '../../lang/playlist/playlist-header';
 import UpdatePlaylistModal from '../modals/UpdatePlaylistModal';
 import optionsTexts from '../../lang/options';
 import notifsTexts from '../../lang/notifications';
+import Notifications, { NotificationType } from '../../store/features/Notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -141,7 +141,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteComponentProps, NoState> {
+class PlaylistHeader extends React.Component<Props & RouteComponentProps, NoState> {
   @observable ref: React.RefObject<HTMLInputElement> = React.createRef();
   @observable openUpdatePlaylistModal: boolean = false;
   @observable pictureHeight: number | null = null;
@@ -183,11 +183,10 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
     const T = notifsTexts.current;
 
     DeletePlaylist(playlistId).then((response: DeletePlaylistResponse) => {
-      const snackbarOptions = { variant: 'success' as any };
       const playlistName = LoukiStore.idToPlaylist(playlistId).name;
 
       LoukiStore.setPlaylists(response.data);
-      this.props.enqueueSnackbar(T.playlistDeleted(playlistName), snackbarOptions);
+      Notifications.addNotification(T.playlistDeleted(playlistName), NotificationType.SUCCESS);
       this.props.history.push(Navigation.previousRoute);
     });
   };
@@ -284,4 +283,4 @@ class PlaylistHeader extends React.Component<Props & WithSnackbarProps & RouteCo
   }
 }
 
-export default withStyles(styles)(withRouter(withSnackbar(PlaylistHeader)));
+export default withStyles(styles)(withRouter(PlaylistHeader));

@@ -7,8 +7,8 @@ import Modal from '../utils/Modal';
 
 import LoukiStore from '../../store/data/LoukiStore';
 import { Playlist } from '../../../shared/LoukiTypes';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { AddMusic, AddMusicResponse } from '../../requests/Playlists';
+import Notifications, { NotificationType } from '../../store/features/Notifications';
 
 import texts from '../../lang/modals/select-playlist-modal';
 import notifsTexts from '../../lang/notifications';
@@ -43,7 +43,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 @observer
-class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoState> {
+class SelectPlaylistModal extends React.Component<Props, NoState> {
   handleListItemClick = (playlist: Playlist) => {
     const T = notifsTexts.current;
 
@@ -51,11 +51,9 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
       const musicName = LoukiStore.idToMusic(this.props.musicId).title;
       const playlistName = LoukiStore.idToPlaylist(playlist.__id).name;
       if (response.status == 200) {
-        const snackbarOptions = { variant: 'success' as any };
-        this.props.enqueueSnackbar(T.addedToPlaylistNotif(musicName, playlistName), snackbarOptions);
+        Notifications.addNotification(T.addedToPlaylistNotif(musicName, playlistName), NotificationType.SUCCESS);
       } else if (response.status == 403) {
-        const snackbarOptions = { variant: 'error' as any };
-        this.props.enqueueSnackbar(T.alreadyInPlaylistNotif(musicName, playlistName), snackbarOptions);
+        Notifications.addNotification(T.alreadyInPlaylistNotif(musicName, playlistName), NotificationType.ERROR);
       }
     });
   };
@@ -97,4 +95,4 @@ class SelectPlaylistModal extends React.Component<Props & WithSnackbarProps, NoS
   }
 }
 
-export default withSnackbar(withStyles(styles)(SelectPlaylistModal));
+export default withStyles(styles)(SelectPlaylistModal);

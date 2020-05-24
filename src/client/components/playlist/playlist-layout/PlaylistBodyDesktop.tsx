@@ -19,9 +19,9 @@ import LoukiStore from '../../../store/data/LoukiStore';
 import MusicPlayer from '../../../store/features/MusicPlayer';
 import Navigation from '../../../store/navigation/Navigation';
 import Bookmarks from '../../../store/data/Bookmarks';
+import Notifications, { NotificationType } from '../../../store/features/Notifications';
 
 import MusicPlayingIcon from './MusicPlayingIcon';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { EmptyPlaylistTexts } from '../../utils/ClientTypes';
@@ -94,7 +94,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 @observer
-class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps & WithSnackbarProps, NoState> {
+class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, NoState> {
   @observable openSelectPlaylistModal: boolean = false;
   @observable musicToAddToPlaylist: string = '';
 
@@ -108,18 +108,16 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps & 
 
     event.stopPropagation();
     Bookmarks.addBookmark(id);
-    const snackbarOptions = { variant: 'success' as any };
     const musicName = LoukiStore.idToMusic(id).title;
-    this.props.enqueueSnackbar(T.addedBookmark(musicName), snackbarOptions);
+    Notifications.addNotification(T.addedBookmark(musicName), NotificationType.SUCCESS);
   };
 
   deleteBookmark = (event, id: string) => {
     const T = notifsTexts.current;
 
     event.stopPropagation();
-    const snackbarOptions = { variant: 'success' as any };
     const musicName = LoukiStore.idToMusic(id).title;
-    this.props.enqueueSnackbar(T.removedBookmark(musicName), snackbarOptions);
+    Notifications.addNotification(T.removedBookmark(musicName), NotificationType.SUCCESS);
     Bookmarks.deleteBookmark(id);
   };
 
@@ -208,4 +206,4 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps & 
   }
 }
 
-export default withStyles(styles)(withRouter(withSnackbar(PlaylistBodyDesktop)));
+export default withStyles(styles)(withRouter(PlaylistBodyDesktop));
