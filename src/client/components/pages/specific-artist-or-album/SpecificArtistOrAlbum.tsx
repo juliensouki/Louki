@@ -57,7 +57,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
     Notifications.addNotification(notifsTexts.current.notDeveloped, NotificationType.INFO);
   };
 
-  desktopPlaylistOptions = (id: string): Array<JSX.Element> => {
+  options = (id: string): Array<JSX.Element> => {
     const T = optionsTexts.current;
     return [
       <PlaylistOptionsItem
@@ -98,7 +98,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
             redirectRoute: '/all-musics',
           }}
           addBookmarksEnabled
-          desktopPlaylistOptions={this.desktopPlaylistOptions}
+          options={this.options}
         />
       </div>
     );
