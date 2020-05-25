@@ -36,7 +36,10 @@ const styles = (theme: Theme) =>
       },
     },
     musicImage: {
+      width: 'auto',
       maxWidth: '100%',
+      height: 'auto',
+      maxHeight: '100%',
     },
     musicTitle: {
       color: theme.palette.primary.light,
@@ -57,7 +60,8 @@ const styles = (theme: Theme) =>
       ...textProperties,
       maxWidth: 'calc(17vw - 6.5em)',
     },
-    pictureConatainer: {
+    pictureContainer: {
+      backgroundColor: '#252525',
       [theme.breakpoints.up('md')]: {
         height: '6.5em',
         width: '6.5em',
@@ -76,8 +80,15 @@ class MusicPreview extends React.Component<WithStyles & RoutePropsComponent, NoS
 
     return (
       <Grid container item direction='row' className={classes.root} onClick={this.handleClick}>
-        <Grid item className={classes.pictureConatainer}>
-          <img src='/assets/images/all-musics.png' className={classes.musicImage} />
+        <Grid
+          item
+          container
+          direction='column'
+          justify='center'
+          alignItems='center'
+          className={classes.pictureContainer}
+        >
+          <img src={MusicPlayer.previewImage} className={classes.musicImage} />
         </Grid>
         <Grid
           item

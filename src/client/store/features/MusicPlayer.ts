@@ -21,7 +21,7 @@ class MusicPlayer {
   @observable private audioLevel: number = 100;
   @observable private isMute: boolean = false;
   @observable private route: string = '';
-
+  @observable private image: string | null = null;
   @observable private timeStart: Date | null;
 
   @action muteUnMute = () => {
@@ -165,6 +165,10 @@ class MusicPlayer {
     this.isOrderRandom = !this.isOrderRandom;
   };
 
+  @action setPreviewImage = (image: string | null) => {
+    this.image = image;
+  };
+
   @computed get volume(): number {
     return this.audioLevel;
   }
@@ -216,6 +220,10 @@ class MusicPlayer {
 
   @computed get canPlayPlaylist(): boolean {
     return true;
+  }
+
+  @computed get previewImage(): string {
+    return this.image || '/assets/images/all-musics.png';
   }
 }
 

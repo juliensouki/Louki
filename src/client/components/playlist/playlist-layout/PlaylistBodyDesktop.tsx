@@ -91,6 +91,7 @@ interface Props extends WithStyles<typeof styles> {
   addBookmarksEnabled?: boolean;
   getPlaylistOptionsItems: (id: string) => Array<JSX.Element>;
   emptySettings: EmptyPlaylistTexts;
+  image: string;
 }
 
 @observer
@@ -100,6 +101,7 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
 
   @action playMusic = (index: number): void => {
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
+    MusicPlayer.setPreviewImage(this.props.image);
     MusicPlayer.playMusic(index);
   };
 
