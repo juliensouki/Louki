@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import path from 'path';
 import http from 'http';
 import mongoose from 'mongoose';
@@ -7,7 +7,6 @@ import bodyParser from 'body-parser';
 import multer from 'multer';
 
 import { apiRouter } from './config/api-router';
-import { pagesRouter } from './config/pages-router';
 import { staticsRouter } from './config/statics-router';
 import routes from './routes';
 import * as config from './config/config';
@@ -65,19 +64,19 @@ app.post('/api/v1/playlist/:playlistId/remove-music', (req, res) => routes.remov
 app.post('/api/v1/search-music', (req, res) => routes.musicSearch(req, res));
 app.get('/api/v1/search-pixabay', (req, res) => routes.pixabaySearch(req, res));
 
-app.use(apiRouter());
-app.use(staticsRouter());
-app.use(pagesRouter());
-
 if (config.checkEnv()) {
-  const startServer = () => {
+  app.use(apiRouter());
+  app.use(staticsRouter());
+
+  const startServer = (router: Router) => {
+    app.use(router);
     logger.info('Starting server');
     server.listen(config.SERVER_PORT, () => {
       logger.info(`App listening on port ${config.SERVER_PORT}!`);
     });
   };
 
-  databaseHandler.connect();
+  databaseHandler.connect(startServer);
 
   mongoose.connection.once('open', function() {
     logger.info('Connected to database : ' + process.env.DATABASE_URL);

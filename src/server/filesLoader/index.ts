@@ -1,3 +1,6 @@
+import { Router } from 'express';
+import { pagesRouter } from '../config/pages-router';
+
 import { UpdateArtistOrAlbumResponse } from '../../shared/SocketIODefinitions';
 import { Artist, Album, User, Music } from '../../shared/LoukiTypes';
 
@@ -27,14 +30,14 @@ export default class DataLoader {
     this.io = io;
   }
 
-  loadData = (callback: () => void) => {
+  loadData = (callback: (router: Router) => void) => {
     this.databaseHandler.getCollectionContent(UserSchema).then(users => {
       this.currentUser = this.selectCurrentUser(users);
       if (this.currentUser) {
         this.checkForObsoleteDataInDB();
         this.watchUserFolders();
       }
-      callback();
+      callback(pagesRouter());
     });
   };
 
