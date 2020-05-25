@@ -1,10 +1,12 @@
+import { Router } from 'express';
+import { MongoDBErrorRouter } from '../config/mongo-error-router';
 import mongoose from 'mongoose';
 import { logError } from '../logger';
 
 class DatabaseHandler {
   private url: string = process.env.DATABASE_URL;
 
-  connect = async () => {
+  connect = async (callbackOnError: (router: Router) => void) => {
     try {
       await mongoose.connect(this.url, {
         useNewUrlParser: true,
@@ -14,6 +16,7 @@ class DatabaseHandler {
       });
     } catch (error) {
       logError(error);
+      callbackOnError(MongoDBErrorRouter());
     }
   };
 

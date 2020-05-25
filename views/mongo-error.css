@@ -1,0 +1,25 @@
+body {
+  background-color: #373636;
+  color: #fff;
+  font-family: "roboto";
+  text-align: center;
+}
+
+p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  line-height: 30px;
+}
+
+span {
+  background-color: #565656;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid grey;
+}
