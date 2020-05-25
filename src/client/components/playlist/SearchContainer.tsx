@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import TransparentInput from '../utils/TransparentInput';
 
 import SearchIcon from '@material-ui/icons/Search';
 import SearchForm from '../../store/features/Search';
@@ -50,14 +51,7 @@ class SearchContainer extends React.Component<WithStyles, NoState> {
     return (
       <div className={classes.root}>
         <SearchIcon className={classes.searchIcon} />
-        <input
-          placeholder={T.searchPlaceholder}
-          className={classes.input}
-          value={SearchForm.search}
-          onChange={e => {
-            SearchForm.setSearch(e.target.value);
-          }}
-        />
+        <TransparentInput placeholder={T.searchPlaceholder} value={SearchForm.search} onChange={SearchForm.setSearch} />
       </div>
     );
   }

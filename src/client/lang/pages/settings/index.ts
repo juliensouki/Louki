@@ -4,6 +4,7 @@ import { Language } from '../../../../shared/Languages';
 import LanguagesManager from '../../../store/languages/LanguagesManager';
 
 export interface Definition {
+  usernamePlaceholder: string;
   title: string;
   username: string;
   profilePic: string;

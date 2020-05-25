@@ -17,6 +17,7 @@ import Select from '../../utils/Select';
 import SimpleHeader from '../../layout/SimpleHeader';
 import ConfirmModal from '../../utils/ConfirmModal';
 import ManageFoldersModal from '../../modals/ManageFoldersModal';
+import TransparentInput from '../../utils/TransparentInput';
 
 import Navigation from '../../../store/navigation/Navigation';
 import SettingsForm from '../../../store/forms/SettingsForm';
@@ -38,21 +39,6 @@ const styles = (theme: Theme) =>
       color: theme.palette.primary.main,
       [theme.breakpoints.down('sm')]: {
         padding: 20,
-      },
-    },
-    usernameInput: {
-      color: theme.palette.primary.main,
-      verticalAlign: 'top',
-      marginLeft: '0.8em',
-      marginTop: '0.2em',
-      textAlign: 'right',
-      backgroundColor: 'transparent',
-      border: 'none',
-      fontSize: '1.5rem',
-      fontFamily: 'Roboto',
-      display: 'inline-block',
-      '&:focus': {
-        outline: 'none',
       },
     },
     button: {
@@ -174,12 +160,11 @@ class Settings extends React.Component<WithStyles & RouteComponentProps, NoState
           >
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
               <Typography className={classes.text}>{T.username}</Typography>
-              <input
-                className={classes.usernameInput}
+              <TransparentInput
+                alignRight
                 value={SettingsForm.username}
-                onChange={e => {
-                  SettingsForm.setUsername(e.target.value);
-                }}
+                onChange={SettingsForm.setUsername}
+                placeholder={T.usernamePlaceholder}
               />
             </Grid>
             <Grid className={classes.gridContainer} item container direction='row' justify='space-between'>
