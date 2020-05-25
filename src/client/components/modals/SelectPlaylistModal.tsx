@@ -2,8 +2,9 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Typography, List, ListItem, Button } from '@material-ui/core';
+import { Typography, List, ListItem } from '@material-ui/core';
 import Modal from '../utils/Modal';
+import Button from '../utils/Button';
 
 import LoukiStore from '../../store/data/LoukiStore';
 import { Playlist } from '../../../shared/LoukiTypes';
@@ -15,22 +16,6 @@ import notifsTexts from '../../lang/notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
-    cancel: {
-      backgroundColor: '#9D9D9D',
-      color: '#464646',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
-    },
-    save: {
-      backgroundColor: theme.palette.background.default,
-      color: '#9D9D9D',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
-    },
     text: {
       fontSize: '1.5rem',
     },
@@ -59,12 +44,7 @@ class SelectPlaylistModal extends React.Component<Props, NoState> {
   };
 
   get buttons(): Array<JSX.Element> {
-    const classes = this.props.classes;
-    return [
-      <Button key={0} className={classes.cancel} onClick={this.props.handleClose}>
-        {texts.current.cancel}
-      </Button>,
-    ];
+    return [<Button key={0} type='cancel' text={texts.current.cancel} onClick={this.props.handleClose} />];
   }
 
   render() {

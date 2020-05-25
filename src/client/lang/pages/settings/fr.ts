@@ -19,5 +19,6 @@ export default {
   valid: 'Valide',
   invalid: 'Invalide ou non trouvé',
   language: 'Langage',
+  usernamePlaceholder: 'Username...',
   folders: (nb: number) => (nb < 2 ? 'dossier' : 'dossiers'),
 };

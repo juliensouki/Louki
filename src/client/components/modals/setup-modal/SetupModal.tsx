@@ -2,8 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { computed, action, observable } from 'mobx';
 
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import Button from '../../utils/Button';
 import Modal from '../../utils/Modal';
 import NewAccount from './NewAccount';
 import FirstUsage from './FirstUsage';
@@ -13,27 +12,7 @@ import AcceptLocalStorage from './AcceptLocalStorage';
 import SetupForm from '../../../store/forms/SetupForm';
 import Loading from '../../../store/loading/Loading';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    cancelButton: {
-      backgroundColor: '#9D9D9D',
-      color: '#464646',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
-    },
-    confirmButton: {
-      backgroundColor: theme.palette.background.default,
-      color: '#9D9D9D',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
-    },
-  });
-
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   open: boolean;
   onClose: () => void;
 }
@@ -78,41 +57,19 @@ class SetupModal extends React.Component<Props, NoState> {
   }
 
   @computed get buttons(): Array<JSX.Element> {
-    const classes = this.props.classes;
     const buttonsArrays = [
+      [<Button key={0} onClick={this.nextStep} type='save' text='Next' />],
       [
-        <Button key={0} onClick={this.nextStep} className={classes.confirmButton}>
-          Next
-        </Button>,
+        <Button key={0} onClick={this.previousStep} type='cancel' text='Previous' />,
+        <Button key={1} disabled={SetupForm.username.length == 0} onClick={this.nextStep} type='save' text='Next' />,
       ],
       [
-        <Button key={0} onClick={this.previousStep} className={classes.cancelButton}>
-          Previous
-        </Button>,
-        <Button
-          key={1}
-          disabled={SetupForm.username.length == 0}
-          onClick={this.nextStep}
-          className={classes.confirmButton}
-        >
-          Next
-        </Button>,
+        <Button key={0} onClick={this.previousStep} type='cancel' text='Previous' />,
+        <Button key={1} onClick={this.nextStep} type='save' text='Next' />,
       ],
       [
-        <Button key={0} onClick={this.previousStep} className={classes.cancelButton}>
-          Previous
-        </Button>,
-        <Button key={1} onClick={this.nextStep} className={classes.confirmButton}>
-          Next
-        </Button>,
-      ],
-      [
-        <Button key={0} onClick={this.previousStep} className={classes.cancelButton}>
-          Previous
-        </Button>,
-        <Button key={1} onClick={this.validation} className={classes.confirmButton}>
-          Enjoy Louki
-        </Button>,
+        <Button key={0} onClick={this.previousStep} type='cancel' text='Previous' />,
+        <Button key={1} onClick={this.validation} type='save' text='Enjoy Louki' />,
       ],
     ];
     return buttonsArrays[this.currentStep];
@@ -134,4 +91,4 @@ class SetupModal extends React.Component<Props, NoState> {
   }
 }
 
-export default withStyles(styles)(SetupModal);
+export default SetupModal;
