@@ -165,6 +165,7 @@ class PlaylistHeader extends React.Component<Props & RouteComponentProps, NoStat
       MusicPlayer.pauseOrPlay();
     } else {
       MusicPlayer.setCurrentPlaylist(this.props.playlist);
+      MusicPlayer.setPreviewImage(this.props.image);
       MusicPlayer.playMusic(0);
     }
   };

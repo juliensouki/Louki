@@ -64,12 +64,14 @@ interface Props extends WithStyles<typeof styles> {
   addBookmarksEnabled?: boolean;
   getPlaylistOptionsItems: (id: string) => Array<JSX.Element>;
   emptySettings: EmptyPlaylistTexts;
+  image: string;
 }
 
 @observer
 class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, NoState> {
   playMusic = (index: number): void => {
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
+    MusicPlayer.setCurrentPlaylist(this.props.image);
     MusicPlayer.playMusic(index);
   };
 

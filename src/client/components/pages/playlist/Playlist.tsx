@@ -32,6 +32,7 @@ class PlaylistPage extends React.Component<RouteComponentProps, NoState> {
 
       LoukiStore.setCurrentPlaylist(response.data);
       MusicPlayer.setCurrentPlaylist(LoukiStore.idsToMusics(response.data.musics));
+      MusicPlayer.setPreviewImage(response.data.picture);
       Notifications.addNotification(T.removedFromPlaylist(musicName, playlistName), NotificationType.SUCCESS);
     });
   };
@@ -84,6 +85,7 @@ class PlaylistPage extends React.Component<RouteComponentProps, NoState> {
           }}
           addBookmarksEnabled
           options={this.options}
+          image={playlist != null ? playlist.picture : null}
         />
       </div>
     );

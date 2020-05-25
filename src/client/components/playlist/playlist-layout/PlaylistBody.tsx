@@ -27,6 +27,7 @@ interface Props extends WithStyles<typeof styles> {
   emptySettings: EmptyPlaylistTexts;
   addBookmarksEnabled?: boolean;
   options: (id: string) => Array<JSX.Element>;
+  image?: string | null;
 }
 
 @observer
@@ -42,7 +43,7 @@ class PlaylistBody extends React.Component<Props, NoState> {
   }
 
   render() {
-    const { classes, playlist, emptySettings, addBookmarksEnabled, options } = this.props;
+    const { classes, playlist, emptySettings, addBookmarksEnabled, options, image } = this.props;
 
     return (
       <div className={classes.root}>
@@ -54,6 +55,7 @@ class PlaylistBody extends React.Component<Props, NoState> {
               emptySettings={emptySettings}
               getPlaylistOptionsItems={options}
               searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
+              image={image || null}
             />
           }
           desktop={
@@ -63,6 +65,7 @@ class PlaylistBody extends React.Component<Props, NoState> {
               emptySettings={emptySettings}
               getPlaylistOptionsItems={options}
               searchResults={SearchForm.search == '' ? null : SearchForm.searchResults}
+              image={image || null}
             />
           }
         />
