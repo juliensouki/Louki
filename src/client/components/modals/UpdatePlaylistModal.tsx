@@ -3,8 +3,9 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { TextField, Button } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import Modal from '../utils/Modal';
+import Button from '../utils/Button';
 
 import texts from '../../lang/modals/update-playlist-modal';
 import notifsTexts from '../../lang/notifications';
@@ -21,22 +22,6 @@ const styles = (theme: Theme) =>
     },
     root: {
       padding: 15,
-    },
-    cancel: {
-      backgroundColor: '#9D9D9D',
-      color: '#464646',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
-    },
-    save: {
-      backgroundColor: theme.palette.background.default,
-      color: '#9D9D9D',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
     },
     resizeText: {
       fontSize: '1.3rem',
@@ -94,15 +79,17 @@ class SelectPlaylistModal extends React.Component<Props, NoState> {
   };
 
   get buttons(): Array<JSX.Element> {
-    const classes = this.props.classes;
     const T = texts.current;
     return [
-      <Button key={0} className={classes.cancel} onClick={this.handleClose}>
-        {T.cancel}
-      </Button>,
-      <Button key={1} className={classes.save} onClick={this.updatePlaylist}>
-        {T.save}
-      </Button>,
+      <Button
+        key={0}
+        type='cancel'
+        text={T.cancel}
+        onClick={e => {
+          this.handleClose(e);
+        }}
+      />,
+      <Button key={1} type='save' text={T.save} onClick={this.updatePlaylist} />,
     ];
   }
 

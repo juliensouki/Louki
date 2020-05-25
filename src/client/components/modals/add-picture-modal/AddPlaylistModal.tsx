@@ -2,8 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { computed, action, observable } from 'mobx';
 
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import Button from '../../utils/Button';
 import Modal from '../../utils/Modal';
 
 import UploadMethod from './UploadMethod';
@@ -15,27 +14,7 @@ import texts from '../../../lang/modals/add-picture-modal';
 
 import NewPlaylistForm from '../../../store/forms/NewPlaylistForm';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    cancelButton: {
-      backgroundColor: '#9D9D9D',
-      color: '#464646',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
-    },
-    confirmButton: {
-      backgroundColor: theme.palette.background.default,
-      color: '#9D9D9D',
-      textTransform: 'none',
-      marginLeft: '1em',
-      marginRight: '1em',
-      fontSize: '1.3rem',
-    },
-  });
-
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   open: boolean;
   onClose: () => void;
 }
@@ -57,37 +36,25 @@ class AddPlaylistModal extends React.Component<Props, NoState> {
   @observable searchText: string = '';
 
   @computed get buttons(): Array<JSX.Element> {
-    const { classes } = this.props;
     const T = texts.current;
 
     if (this.step == AddPictureSteps.UPLOAD_METHOD) {
-      return [
-        <Button onClick={this.onClose} className={classes.cancelButton} key={0}>
-          {T.cancel}
-        </Button>,
-      ];
+      return [<Button onClick={this.onClose} type='cancel' text={T.cancel} key={0} />];
     } else if (this.step == AddPictureSteps.UPLOAD_BY_URL || this.step == AddPictureSteps.UPLOAD_BY_SEARCH) {
       return [
-        <Button key={0} className={classes.cancelButton} onClick={this.previousStep}>
-          {T.back}
-        </Button>,
-        <Button key={1} className={classes.confirmButton} disabled={!this.UrlRegExp} onClick={this.nextStep}>
-          {T.next}
-        </Button>,
+        <Button key={0} type='cancel' onClick={this.previousStep} text={T.back} />,
+        <Button key={1} type='save' disabled={!this.UrlRegExp} onClick={this.nextStep} text={T.next} />,
       ];
     }
     return [
-      <Button key={0} className={classes.cancelButton} onClick={this.tryAgain} disabled={!this.confirmationLoaded}>
-        {T.tryAgain}
-      </Button>,
+      <Button key={0} type='cancel' onClick={this.tryAgain} disabled={!this.confirmationLoaded} text={T.tryAgain} />,
       <Button
         key={1}
-        className={classes.confirmButton}
+        type='save'
         onClick={this.submit}
         disabled={!this.confirmationLoaded || this.error}
-      >
-        {T.yes}
-      </Button>,
+        text={T.yes}
+      />,
     ];
   }
 
@@ -196,4 +163,4 @@ class AddPlaylistModal extends React.Component<Props, NoState> {
   }
 }
 
-export default withStyles(styles)(AddPlaylistModal);
+export default AddPlaylistModal;

@@ -53,7 +53,7 @@ class TransparentInput extends React.Component<Props, NoState> {
   render() {
     const { classes, alignRight, value, onChange, placeholder } = this.props;
     const T = texts.current;
-    const style = alignRight ? { textAlign: 'right' } : {};
+    const style = alignRight ? { textAlign: 'right' as any } : {};
 
     return (
       <input
