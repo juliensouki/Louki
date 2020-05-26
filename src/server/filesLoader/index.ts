@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Express, Router } from 'express';
 import { pagesRouter } from '../config/pages-router';
 
 import { UpdateArtistOrAlbumResponse } from '../../shared/SocketIODefinitions';
@@ -22,13 +22,21 @@ export default class DataLoader {
   private databaseHandler: any;
   private io: any;
   private watchersMap: any = new Map<string, chokidar.FSWatcher>();
+  private app: Express;
 
   private currentUser: any = null;
 
-  constructor(databaseHandler, io) {
+  constructor(databaseHandler, io, app) {
     this.databaseHandler = databaseHandler;
     this.io = io;
+    this.app = app;
   }
+
+  addMusicRoute = (music: Music) => {
+    this.app.get('/api/v1/music/' + music.__id, (_, res) => {
+      res.sendFile(music.path);
+    });
+  };
 
   loadData = (callback: (router: Router) => void) => {
     this.databaseHandler.getCollectionContent(UserSchema).then(users => {
@@ -37,7 +45,7 @@ export default class DataLoader {
         this.checkForObsoleteDataInDB();
         this.watchUserFolders();
       }
-      callback(pagesRouter());
+      callback(pagesRouter(this.databaseHandler));
     });
   };
 
@@ -90,9 +98,11 @@ export default class DataLoader {
     logger.info('watching : ' + folder);
     fileWatcher.on('add', (newSongPath: string) => {
       logger.info('Detected new song');
-      this.databaseHandler.findOneInDocument(MusicSchema, 'path', newSongPath).then(musics => {
+      this.databaseHandler.findOneInDocument(MusicSchema, 'path', newSongPath).then((musics: Array<Music>) => {
         if (musics.length == 0) {
           filesReader.getMetadataAndAddToDB(newSongPath, folder, this.checkIfSongMustBeAdded);
+        } else {
+          this.addMusicRoute(musics[0]);
         }
       });
     });
@@ -222,6 +232,7 @@ export default class DataLoader {
   createMusic = (values: any, musicId: string, artistId: string, albumId: string): void => {
     MusicSchema.create({ ...values, __id: musicId, artist: artistId, album: albumId }).then((music: Music) => {
       logger.info('Added music ' + musicId);
+      this.addMusicRoute(music);
       this.io.sockets.emit('new_music', music);
     });
   };

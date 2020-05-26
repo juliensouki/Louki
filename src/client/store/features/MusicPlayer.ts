@@ -48,7 +48,7 @@ class MusicPlayer {
   @action setMusicReady = (): void => {
     if (this.currentPlaylist.length <= 0) return;
 
-    const path = this.currentPlaylist[this.musicPlayingIndex].path.replace('/home/souki/projects/Louki/', '/');
+    const path = `/api/v1/music/${this.currentPlaylist[this.musicPlayingIndex].__id}`;
     this.audio = new Audio(path);
 
     this.audio.volume = this.isMute == false ? this.audioLevel / 100 : 0;
