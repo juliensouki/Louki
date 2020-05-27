@@ -23,10 +23,11 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio.listen(server);
 
-const fLoader = new filesLoader(databaseHandler, io);
+const fLoader = new filesLoader(databaseHandler, io, app);
 
 app.set('view engine', 'ejs');
 app.use(express.json());
+
 app.use('/assets', express.static(path.join(process.cwd(), 'assets')));
 app.use('/views', express.static(path.join(process.cwd(), 'views')));
 app.use('/musics', express.static(path.join(process.cwd(), 'musics')));
