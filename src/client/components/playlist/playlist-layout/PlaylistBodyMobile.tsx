@@ -71,7 +71,7 @@ interface Props extends WithStyles<typeof styles> {
 class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, NoState> {
   playMusic = (index: number): void => {
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
-    MusicPlayer.setCurrentPlaylist(this.props.image);
+    MusicPlayer.setPreviewImage(this.props.image);
     MusicPlayer.playMusic(index);
   };
 
