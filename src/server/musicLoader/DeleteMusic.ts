@@ -7,7 +7,6 @@ import { deleteArtist, removeMusicFromArtist } from './DeleteOrUpdateArtist';
 import { deleteAlbum, removeMusicFromAlbum } from './DeleteOrUpdateAlbum';
 
 export const deleteMusic = (music: Music) => {
-  console.log('Have to delete ' + music);
   db.deleteFromDocument(MusicSchema, '__id', music.__id).then(() => {
     logger.info('Deleted music ' + music.title);
     db.getCollectionContent(MusicSchema).then((musics: Array<Music>) => {

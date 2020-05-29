@@ -25,15 +25,9 @@ class MusicLoader {
   };
 
   public processQueues = async () => {
-    console.log('Start musics');
     await this.processMusicsQueue();
-    console.log('End musics');
-    console.log('Start artists');
     await this.processArtistsQueue();
-    console.log('End artists');
-    console.log('Start albums');
     await this.processAlbumsQueue();
-    console.log('End albums');
 
     this.artistsQueue = [];
     this.albumsQueue = [];
@@ -42,8 +36,6 @@ class MusicLoader {
     const musics = await db.getCollectionContent(MusicSchema);
     const artists = await db.getCollectionContent(ArtistSchema);
     const albums = await db.getCollectionContent(AlbumSchema);
-
-    console.log(artists);
 
     io.emit('refresh_all', {
       musics: musics,

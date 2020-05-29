@@ -98,7 +98,6 @@ class FilesWatcher {
   };
 
   watchUserFolders = (): void => {
-    console.log(this.currentUser.musicPaths);
     this.currentUser.musicPaths.forEach((userPath: string) => {
       this.setWatchersForFolder(userPath);
     });
