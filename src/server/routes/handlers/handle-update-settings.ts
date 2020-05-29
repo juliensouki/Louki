@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import UserSchema from '../../db/schemas/UserSchema';
+import { UserSchema } from '../../db/schemas';
 import { Settings, AccountSettings } from '../../../shared/LoukiTypes';
 import { UpdateSettings as UpdateSettingsResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';

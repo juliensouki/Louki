@@ -13,6 +13,4 @@ const playlistSchema = new mongoose.Schema({
   __id: { type: String, unique: true },
 });
 
-const PlaylistSchema = mongoose.model<PlaylistModel>('playlist', playlistSchema);
-
-export = PlaylistSchema;
+export const PlaylistSchema = mongoose.model<PlaylistModel>('playlist', playlistSchema);

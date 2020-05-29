@@ -12,6 +12,4 @@ const artistSchema = new mongoose.Schema(
   { emitIndexErrors: true },
 );
 
-const ArtistSchema = mongoose.model<ArtistModel>('Artist', artistSchema);
-
-export = ArtistSchema;
+export const ArtistSchema = mongoose.model<ArtistModel>('Artist', artistSchema);

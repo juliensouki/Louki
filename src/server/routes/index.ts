@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { Music } from '../../shared/LoukiTypes';
+import { app } from '../config';
 
 import { handleAddBookmark } from './handlers/handle-add-bookmark';
 import { handleAddFolder } from './handlers/handle-add-folder';
@@ -28,7 +30,7 @@ import { handleUpdateSettings } from './handlers/handle-update-settings';
 
 export type Routes = {
   addBookmark: (req: Request, res: Response) => void;
-  addFolder: (req: Request, res: Response, dLoader: any) => void;
+  addFolder: (req: Request, res: Response) => void;
   addMusic: (req: Request, res: Response) => void;
   createPlaylist: (req: Request, res: Response) => void;
   deletePlaylist: (req: Request, res: Response) => void;
@@ -44,7 +46,7 @@ export type Routes = {
   musicSearch: (req: Request, res: Response) => void;
   pixabaySearch: (req: Request, res: Response) => void;
   removeBookmark: (req: Request, res: Response) => void;
-  removeFolder: (req: Request, res: Response, dLoader: any) => void;
+  removeFolder: (req: Request, res: Response) => void;
   removeMusic: (req: Request, res: Response) => void;
   reset: (req: Request, res: Response) => void;
   setupLouki: (req: Request, res: Response) => void;
@@ -80,6 +82,12 @@ const routes: Routes = {
   testSetup: handleTestSetup,
   updatePlaylist: handleUpdatePlaylist,
   updateSettings: handleUpdateSettings,
+};
+
+export const addMusicRoute = (music: Music) => {
+  app.get('/api/v1/music/' + music.__id, (_, res) => {
+    res.sendFile(music.path);
+  });
 };
 
 export default routes;
