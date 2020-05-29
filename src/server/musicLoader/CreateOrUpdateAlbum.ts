@@ -3,7 +3,7 @@ import logger from '../logger';
 import db from '../db';
 import { AlbumSchema } from '../db/schemas';
 
-export const createAlbum = (musicId: string, albumName: string, artistName: string): Promise<any> => {
+export const createAlbum = async (musicId: string, albumName: string, artistName: string): Promise<void> => {
   if (albumName == undefined || artistName == undefined) return;
   const albumId = sha1(albumName);
   const artistId = sha1(artistName);
@@ -15,13 +15,12 @@ export const createAlbum = (musicId: string, albumName: string, artistName: stri
     __id: albumId,
     musics: [musicId],
   });
-  return album.save(async err => {
-    if (!err) {
-      logger.info('Album ' + albumName + ' was created');
-    } else {
-      await addMusicToAlbum(albumId, musicId);
-    }
-  });
+  try {
+    await album.save();
+    logger.info('Album ' + albumName + ' was created');
+  } catch (err) {
+    await addMusicToAlbum(albumId, musicId);
+  }
 };
 
 const addMusicToAlbum = async (albumId: string, musicId: string): Promise<void> => {
