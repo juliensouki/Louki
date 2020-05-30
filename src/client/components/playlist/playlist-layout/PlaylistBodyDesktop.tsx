@@ -48,7 +48,6 @@ const styles = (theme: Theme) =>
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
-      maxWidth: 300,
     },
     tableRow: {
       color: theme.palette.primary.main,
@@ -56,7 +55,6 @@ const styles = (theme: Theme) =>
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
-      maxWidth: 300,
     },
     rowSelected: {
       backgroundColor: '#151414',
@@ -98,6 +96,7 @@ interface Props extends WithStyles<typeof styles> {
 class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, NoState> {
   @observable openSelectPlaylistModal: boolean = false;
   @observable musicToAddToPlaylist: string = '';
+  @observable ref: React.RefObject<HTMLTableSectionElement> = React.createRef();
 
   @action playMusic = (index: number): void => {
     MusicPlayer.setCurrentPlaylist(this.props.playlist);
@@ -130,6 +129,9 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
 
   render() {
     const { classes, playlist, searchResults, getPlaylistOptionsItems, emptySettings } = this.props;
+    const tableWidth = this.ref.current != null ? this.ref.current.offsetWidth : 0;
+    const titleMaxWidth = tableWidth != 0 ? (tableWidth - 100) / 2 : 0;
+    const othersMaxWidth = tableWidth != 0 ? (tableWidth - 100) / 4 : 0;
 
     const T = texts.current;
 
@@ -155,7 +157,7 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
                 <TableCell align='right'></TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody ref={this.ref}>
               {playlist.map((music: Music, index: number) => (
                 <TableRow
                   key={music.__id}
@@ -165,7 +167,12 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
                     this.playMusic(index);
                   }}
                 >
-                  <TableCell className={classes.whiteTableRow} component='th' scope='row'>
+                  <TableCell
+                    className={classes.whiteTableRow}
+                    component='th'
+                    scope='row'
+                    style={{ maxWidth: titleMaxWidth }}
+                  >
                     {this.props.addBookmarksEnabled ? (
                       Bookmarks.isInBookmarks(music.__id) ? (
                         <IconButton
@@ -192,8 +199,12 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
                     ) : null}
                     {music.title}
                   </TableCell>
-                  <TableCell className={classes.whiteTableRow}>{LoukiStore.getArtistNameById(music.artist)}</TableCell>
-                  <TableCell className={classes.tableRow}>{LoukiStore.getAlbumNameById(music.album)}</TableCell>
+                  <TableCell className={classes.whiteTableRow} style={{ maxWidth: othersMaxWidth }}>
+                    {LoukiStore.getArtistNameById(music.artist)}
+                  </TableCell>
+                  <TableCell className={classes.tableRow} style={{ maxWidth: othersMaxWidth }}>
+                    {LoukiStore.getAlbumNameById(music.album)}
+                  </TableCell>
                   <TableCell className={classes.tableRow}>{LoukiStore.msTosec(music.duration)}</TableCell>
                   <TableCell className={classes.tableRow} align='right'>
                     <PlaylistOptions>{getPlaylistOptionsItems(music.__id)}</PlaylistOptions>

@@ -65,8 +65,11 @@ const styles = (theme: Theme) =>
       },
     },
     playPauseIcon: {
-      fontSize: 40,
+      fontSize: 25,
       transition: 'color .5s ease-in-out',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 40,
+      },
       '&:hover': {
         cursor: 'pointer',
         color: theme.palette.secondary.main,
