@@ -1,10 +1,19 @@
 import { Request, Response } from 'express';
+import fs from 'fs';
+import r from 'request';
 import databaseHandler from '../../db';
 import { PlaylistSchema } from '../../db/schemas';
 import uuid from 'uuid';
 import { CreatePlaylist as CreatePlaylistResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 
+const download = function(uri, filename, callback) {
+  r.head(uri, () => {
+    r(uri)
+      .pipe(fs.createWriteStream(filename))
+      .on('close', callback);
+  });
+};
 export const handleCreatePlaylist = (req: Request, res: Response): void => {
   const name = req.body['playlist-name'];
   const description = req.body['playlist-description'];
@@ -15,9 +24,10 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
   let filePath;
   if (file) {
     const extension = file['mimetype'].split('image/')[1];
-    filePath = '/assets/uploads/' + name + '.' + extension;
+    filePath = `/assets/uploads/${name}.${extension}`;
   } else {
-    filePath = req.body.pictureUrl;
+    filePath = `/assets/uploads/${name}`;
+    download(req.body.pictureUrl, `.${filePath}`, () => {});
   }
   PlaylistSchema.create(
     {
