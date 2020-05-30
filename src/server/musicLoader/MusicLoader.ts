@@ -29,6 +29,7 @@ class MusicLoader {
     const artists = await db.getCollectionContent(ArtistSchema);
     const albums = await db.getCollectionContent(AlbumSchema);
 
+    io.emit('sync_end');
     io.emit('refresh_all', {
       musics: musics,
       artists: artists,
