@@ -10,10 +10,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 
 import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import Loader from '../../utils/Loader';
 import MobileMenu from '../../../store/features/MobileMenu';
 import { NavLink } from 'react-router-dom';
 
 import User from '../../../store/data/User';
+import LoukiStore from '../../../store/data/LoukiStore';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -99,11 +101,24 @@ class TopBar extends React.Component<WithStyles, NoState> {
             <ResponsiveAdapter
               breakpoint='sm'
               desktop={
-                <Typography variant='h3' className={classes.logo}>
-                  louki
-                </Typography>
+                <Grid container direction='row' alignItems='center' justify='center'>
+                  <Typography variant='h3' className={classes.logo}>
+                    louki
+                  </Typography>
+                  {LoukiStore.isSynchronizing && (
+                    <React.Fragment>
+                      <Loader size={30} thickness={5} style={{ margin: 15 }} />
+                      <Typography style={{ fontSize: '1.3rem' }}>Synchronizing...</Typography>
+                    </React.Fragment>
+                  )}
+                </Grid>
               }
-              mobile={this.menuIcon}
+              mobile={
+                <Grid container direction='row' alignItems='center' justify='center'>
+                  {this.menuIcon}
+                  {LoukiStore.isSynchronizing && <Loader size={30} thickness={5} style={{ margin: 15 }} />}
+                </Grid>
+              }
             />
           </Grid>
           <Grid item>

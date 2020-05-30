@@ -2,7 +2,7 @@ import { Router } from 'express';
 import chokidar from 'chokidar';
 import fs from 'fs';
 
-import { config, pagesRouter, MongoDBErrorRouter } from '../config';
+import { config, pagesRouter, MongoDBErrorRouter, io } from '../config';
 import MusicLoader, { cleanDB, deleteMusic } from '../musicLoader';
 import { UserSchema, MusicSchema } from '../db/schemas/';
 import logger, { logError } from '../logger';
@@ -60,7 +60,6 @@ class FilesWatcher {
   howLongSinceLastMusicAdded = (): void => {
     const timeSinceLastAddedMusic = +new Date() - +this.lastAddedMusicTime;
     if (timeSinceLastAddedMusic > config.MAX_TIMELAPSE_BETWEEN_MUSICS) {
-      logger.info('IMPORTANT : STOP to add musics');
       clearInterval(this.interval);
       this.newMusicsLoading = false;
       MusicLoader.processQueues();
@@ -69,13 +68,12 @@ class FilesWatcher {
 
   newMusicDetected = (path: string, folder: string): void => {
     if (this.newMusicsLoading == false) {
-      logger.info('IMPORTANT : Starting to add musics');
       this.newMusicsLoading = true;
+      io.emit('sync_start');
       this.interval = setInterval(this.howLongSinceLastMusicAdded, 100);
     }
     this.lastAddedMusicTime = new Date();
     MusicLoader.pushInMusicsQueue(path, folder);
-    logger.info('Detected new song');
   };
 
   setWatchersForFolder = (folder: string): void => {

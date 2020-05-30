@@ -3,9 +3,10 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import SearchField from '../../utils/SearchField';
+import Loader from '../../utils/Loader';
 
 import texts from '../../../lang/modals/add-picture-modal';
 import { PixabaySearch, PixabaySearchResponse } from '../../../requests/Pixabay';
@@ -54,12 +55,6 @@ interface Props extends WithStyles<typeof styles> {
   updateUrl: (url: string) => void;
   searchText: string;
 }
-
-const ColorCircularProgress = withStyles({
-  root: {
-    color: '#FFB13B',
-  },
-})(CircularProgress);
 
 @observer
 class UploadBySearch extends React.Component<Props, NoState> {
@@ -125,7 +120,7 @@ class UploadBySearch extends React.Component<Props, NoState> {
         <div className={classes.searchContainer}>
           {this.loading ? (
             <Grid container alignItems='center' justify='center' style={{ width: '100%', height: '100%' }}>
-              <ColorCircularProgress size={30} thickness={5} />
+              <Loader size={30} thickness={5} />
             </Grid>
           ) : (
             imageRows.map((imageRow, index) => {

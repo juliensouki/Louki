@@ -10,6 +10,7 @@ class LoukiStore {
   @observable private albums: Array<Album> = [];
   @observable private playlists: Array<Playlist> = [];
   @observable private cPlaylist: Playlist | null = null;
+  @observable private isSync: boolean = false;
 
   @observable socket: SocketIOClient.Socket = null;
 
@@ -27,7 +28,18 @@ class LoukiStore {
     this.socket.on('new_music', this.handleNewMusic);
     this.socket.on('new_artist', this.handleNewArtist);
     this.socket.on('new_album', this.handleNewAlbum);
+
+    this.socket.on('sync_start', () => {
+      this.setSync(true);
+    });
+    this.socket.on('sync_end', () => {
+      this.setSync(false);
+    });
   }
+
+  @action setSync = (sync: boolean) => {
+    this.isSync = sync;
+  };
 
   @action handleRefreshAll = (data: any) => {
     this.setMusics(data.musics);
@@ -103,6 +115,10 @@ class LoukiStore {
 
   @computed get allPlaylists(): Array<Playlist> {
     return this.playlists;
+  }
+
+  @computed get isSynchronizing(): boolean {
+    return this.isSync;
   }
 
   msTosec = (seconds: number): string => {
