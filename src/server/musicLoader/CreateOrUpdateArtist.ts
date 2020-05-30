@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import sha1 from 'sha1';
 import logger from '../logger';
 import db from '../db';

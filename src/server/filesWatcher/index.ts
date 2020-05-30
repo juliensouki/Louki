@@ -17,7 +17,7 @@ class FilesWatcher {
 
   private currentUser: any = null;
 
-  loadData = async (callback: (router: Router) => void) => {
+  loadData = async (callback: (router: Router) => void): Promise<void> => {
     try {
       this.currentUser = (await db.findOneInDocument(UserSchema, 'selected', true))[0];
       cleanDB();
@@ -57,9 +57,9 @@ class FilesWatcher {
     return array;
   };
 
-  howLongSinceLastMusicAdded = () => {
+  howLongSinceLastMusicAdded = (): void => {
     const timeSinceLastAddedMusic = +new Date() - +this.lastAddedMusicTime;
-    if (timeSinceLastAddedMusic > 1000) {
+    if (timeSinceLastAddedMusic > config.MAX_TIMELAPSE_BETWEEN_MUSICS) {
       logger.info('IMPORTANT : STOP to add musics');
       clearInterval(this.interval);
       this.newMusicsLoading = false;
@@ -67,7 +67,7 @@ class FilesWatcher {
     }
   };
 
-  newMusicDetected = (path: string, folder) => {
+  newMusicDetected = (path: string, folder: string): void => {
     if (this.newMusicsLoading == false) {
       logger.info('IMPORTANT : Starting to add musics');
       this.newMusicsLoading = true;

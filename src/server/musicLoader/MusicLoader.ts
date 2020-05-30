@@ -12,14 +12,6 @@ class MusicLoader {
   private artistsQueue: Array<[string, string]> = [];
   private albumsQueue: Array<[string, string, string]> = [];
 
-  public pushInArtistsQueue = (musicId: string, artistName: string) => {
-    this.artistsQueue.push([musicId, artistName]);
-  };
-
-  public pushInAlbumsQueue = (musicId: string, albumName: string, artistName: string) => {
-    this.albumsQueue.push([musicId, albumName, artistName]);
-  };
-
   public pushInMusicsQueue = (musicId: string, folder: string) => {
     this.musicsQueue.push([musicId, folder]);
   };

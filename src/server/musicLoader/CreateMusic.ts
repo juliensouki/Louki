@@ -14,12 +14,11 @@ export const addMusic = async (values: Music, artistName: string, albumName: str
   }
   const artistId = artistName == undefined ? '' : sha1(artistName);
   const albumId = albumName == undefined ? '' : sha1(albumName);
-  const musicId = uuid.v4();
 
   try {
-    const music: Music = await MusicSchema.create({ ...values, __id: musicId, artist: artistId, album: albumId });
+    const music: Music = await MusicSchema.create({ ...values, artist: artistId, album: albumId });
     addMusicRoute(music);
-    logger.info('Added music ' + musicId);
+    logger.info('Added music ' + values.__id);
   } catch (err) {
     logError(err);
   }
