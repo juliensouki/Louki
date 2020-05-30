@@ -52,7 +52,7 @@ class FilesWatcher {
   buildWatchArray = (folder: string): Array<string> => {
     const array: Array<string> = [];
     config.supportedAudioFormats.forEach(extension => {
-      array.push(`${folder}**/*.${extension}`);
+      array.push(`${folder}/*.${extension}`);
     });
     return array;
   };
@@ -80,6 +80,7 @@ class FilesWatcher {
     const fileWatcher = chokidar.watch('file', {
       ignored: /(^|[\/\\])\../,
       persistent: true,
+      depth: 1,
     });
 
     this.watchersMap.set(folder, fileWatcher);

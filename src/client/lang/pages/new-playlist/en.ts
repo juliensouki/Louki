@@ -6,7 +6,7 @@ export default {
   yourComputer: 'your computer',
   orFrom: 'or from',
   internet: 'Internet',
-  noPicture: 'No picture select yet',
+  noPicture: 'No picture selected yet',
   currentPicture: 'Picture selected : ',
   save: 'Create playlist',
   nameInput: {

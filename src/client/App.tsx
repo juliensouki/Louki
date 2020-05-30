@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { observable } from 'mobx';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import Layout from './components/Layout';
