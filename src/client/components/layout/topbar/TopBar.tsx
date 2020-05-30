@@ -16,6 +16,7 @@ import { NavLink } from 'react-router-dom';
 
 import User from '../../../store/data/User';
 import LoukiStore from '../../../store/data/LoukiStore';
+import texts from '../../../lang/utils';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -93,6 +94,7 @@ class TopBar extends React.Component<WithStyles, NoState> {
 
   render() {
     const { classes } = this.props;
+    const T = texts.current;
 
     return (
       <div className={classes.root}>
@@ -108,7 +110,7 @@ class TopBar extends React.Component<WithStyles, NoState> {
                   {LoukiStore.isSynchronizing && (
                     <React.Fragment>
                       <Loader size={30} thickness={5} style={{ margin: 15 }} />
-                      <Typography style={{ fontSize: '1.3rem' }}>Synchronizing...</Typography>
+                      <Typography style={{ fontSize: '1.3rem' }}>{T.sync}</Typography>
                     </React.Fragment>
                   )}
                 </Grid>

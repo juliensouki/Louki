@@ -3,6 +3,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { Typography } from '@material-ui/core';
 import Button from '../utils/Button';
 import Modal from './Modal';
+import texts from '../../lang/utils';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -21,12 +22,11 @@ interface Props extends WithStyles<typeof styles> {
 
 const ConfirmModal: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
   const { open, title, onCancel, onConfirm, message, classes } = props;
+  const T = texts.current;
 
   const buttons: Array<JSX.Element> = [
-    <Button key={0} type='cancel' onClick={onCancel} text='No' />,
-    <Button key={1} type='save' text='Yes' onClick={onConfirm}>
-      Yes
-    </Button>,
+    <Button key={1} type='save' text={T.yes} onClick={onConfirm} />,
+    <Button key={0} type='cancel' onClick={onCancel} text={T.no} />,
   ];
 
   return (
