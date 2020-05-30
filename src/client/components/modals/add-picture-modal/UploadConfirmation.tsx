@@ -3,8 +3,9 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { CircularProgress, Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import texts from '../../../lang/modals/add-picture-modal';
+import Loader from '../../utils/Loader';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -34,12 +35,6 @@ interface Props extends WithStyles<typeof styles> {
   error: boolean;
 }
 
-const ColorCircularProgress = withStyles({
-  root: {
-    color: '#FFB13B',
-  },
-})(CircularProgress);
-
 @observer
 class UploadConfirmation extends React.Component<Props, NoState> {
   @observable image: HTMLImageElement;
@@ -58,7 +53,7 @@ class UploadConfirmation extends React.Component<Props, NoState> {
     if (!loaded && !error) {
       return (
         <Grid container alignItems='center' justify='center'>
-          <ColorCircularProgress size={30} thickness={5} />
+          <Loader size={30} thickness={5} />
         </Grid>
       );
     } else if (error == false) {
