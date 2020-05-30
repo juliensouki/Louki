@@ -15,6 +15,8 @@ class LoukiStore {
 
   constructor() {
     this.socket = socketIOClient('http://127.0.0.1:3000');
+
+    this.socket.on('refresh_all', this.handleRefreshAll);
     this.socket.on('refresh_musics', this.setMusics);
     this.socket.on('refresh_artists', this.setArtists);
     this.socket.on('refresh_albums', this.setAlbums);
@@ -26,6 +28,12 @@ class LoukiStore {
     this.socket.on('new_artist', this.handleNewArtist);
     this.socket.on('new_album', this.handleNewAlbum);
   }
+
+  @action handleRefreshAll = (data: any) => {
+    this.setMusics(data.musics);
+    this.setArtists(data.artists);
+    this.setAlbums(data.albums);
+  };
 
   @action setMusics = (musics: Array<Music>) => {
     this.musics = musics;

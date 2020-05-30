@@ -37,6 +37,7 @@ class SpecificArtistOrAlbum extends React.Component<RouteComponentProps, NoState
         this.props.history.push('/all-musics');
       } else {
         const arrayOfIds: Array<string> = response.data.musics;
+        console.log(LoukiStore.idsToMusics(arrayOfIds));
         this.artistOrAlbumName = (response.data as Artist).name || (response.data as Album).title;
         this.playlist = LoukiStore.idsToMusics(arrayOfIds);
       }

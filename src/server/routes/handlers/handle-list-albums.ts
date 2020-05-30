@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db/';
-import AlbumSchema from '../../db/schemas/AlbumSchema';
+import { AlbumSchema } from '../../db/schemas';
 import { ListAlbums as ListAlbumsResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import MusicSchema from '../db/schemas/MusicSchema';
+import { MusicSchema } from '../db/schemas';
 import { getManifest } from './manifest-manager';
 
 export function pagesRouter(db): Router {

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import databaseHandler from '../db';
-import UserSchema from '../db/schemas/UserSchema';
+import { UserSchema } from '../db/schemas';
 
 interface MulterStorage {
   destination: (req: Request, file, cb: (e: Error | null, dest: string) => void) => void;

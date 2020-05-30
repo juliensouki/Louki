@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import ArtistSchema from '../../db/schemas/ArtistSchema';
+import { ArtistSchema } from '../../db/schemas';
 import { ListArtists as ListArtistsResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 

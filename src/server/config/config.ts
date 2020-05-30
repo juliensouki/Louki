@@ -16,6 +16,8 @@ const { version: VERSION } = PackageJson;
 const SERVER_PORT = process.env.PORT || 3000;
 const WEBPACK_PORT = 8085;
 
+const MAX_TIMELAPSE_BETWEEN_MUSICS = 1000; // in milliseconds
+
 const checkEnv = (): boolean => {
   console.log('-------------------------- CONFIGURATION -------------------------------');
   if (!process.env.DATABASE_URL) {
@@ -40,4 +42,4 @@ const checkEnv = (): boolean => {
 
 const supportedAudioFormats = ['mp3', 'ogg', 'wav'];
 
-export { IS_DEV, VERSION, SERVER_PORT, WEBPACK_PORT, checkEnv, supportedAudioFormats };
+export { IS_DEV, VERSION, SERVER_PORT, WEBPACK_PORT, checkEnv, supportedAudioFormats, MAX_TIMELAPSE_BETWEEN_MUSICS };

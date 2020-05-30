@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import UserSchema from '../../db/schemas/UserSchema';
+import { UserSchema } from '../../db/schemas';
 import { User } from '../../../shared/LoukiTypes';
 import { ListBookmarks as ListBookmarksResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';

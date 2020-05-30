@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import PlaylistSchema from '../../db/schemas/PlaylistSchema';
+import { PlaylistSchema } from '../../db/schemas';
 import { GetPlaylist as GetPlaylistResponse, CustomError } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 

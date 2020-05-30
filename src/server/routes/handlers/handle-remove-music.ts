@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import PlaylistSchema from '../../db/schemas/PlaylistSchema';
+import { PlaylistSchema } from '../../db/schemas';
 import { RemoveMusic as RemoveMusicResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 

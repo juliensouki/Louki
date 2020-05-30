@@ -13,6 +13,4 @@ const albumSchema: Schema = new mongoose.Schema(
   { emitIndexErrors: true },
 );
 
-const AlbumSchema: Model<AlbumModel> = mongoose.model<AlbumModel>('Album', albumSchema);
-
-export = AlbumSchema;
+export const AlbumSchema: Model<AlbumModel> = mongoose.model<AlbumModel>('Album', albumSchema);

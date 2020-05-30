@@ -1,9 +1,5 @@
 import { Request, Response } from 'express';
-import AlbumSchema from '../../db/schemas/AlbumSchema';
-import ArtistSchema from '../../db/schemas/ArtistSchema';
-import UserSchema from '../../db/schemas/UserSchema';
-import PlaylistSchema from '../../db/schemas/PlaylistSchema';
-import MusicSchema from '../../db/schemas/MusicSchema';
+import { UserSchema, PlaylistSchema, AlbumSchema, ArtistSchema, MusicSchema } from '../../db/schemas';
 
 export const handleReset = (req: Request, res: Response): void => {
   const promises = [

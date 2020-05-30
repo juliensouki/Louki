@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import UserSchema from '../../db/schemas/UserSchema';
+import { UserSchema } from '../../db/schemas';
 import { SetupLouki as SetupLoukiResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 

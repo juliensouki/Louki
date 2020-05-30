@@ -13,6 +13,4 @@ const musicSchema: Schema = new mongoose.Schema({
   __id: { type: String, unique: true },
 });
 
-const MusicSchema: Model<MusicModel> = mongoose.model<MusicModel>('Music', musicSchema);
-
-export = MusicSchema;
+export const MusicSchema: Model<MusicModel> = mongoose.model<MusicModel>('Music', musicSchema);

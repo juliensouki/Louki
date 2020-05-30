@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import UserSchema from '../../db/schemas/UserSchema';
+import { UserSchema } from '../../db/schemas';
 import { RemoveBookmark as RemoveBookmarkResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 

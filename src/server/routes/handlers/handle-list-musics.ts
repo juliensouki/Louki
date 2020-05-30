@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import databaseHandler from '../../db';
-import MusicSchema from '../../db/schemas/MusicSchema';
+import { MusicSchema } from '../../db/schemas';
 import { ListMusics as ListMusicsResponse } from '../../../shared/RoutesResponses';
 import { logError } from '../../logger';
 

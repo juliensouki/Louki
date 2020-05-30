@@ -1,29 +1,21 @@
 import express, { Router } from 'express';
 import path from 'path';
-import http from 'http';
 import mongoose from 'mongoose';
-import socketio from 'socket.io';
 import bodyParser from 'body-parser';
 import multer from 'multer';
 
 import { apiRouter } from './config/api-router';
 import { staticsRouter } from './config/statics-router';
 import routes from './routes';
-import * as config from './config/config';
+import { config, app, server } from './config';
 
 import { playlistPictureStorage, profilePictureStorage } from './upload';
-import filesLoader from './filesLoader';
+import filesWatcher from './filesWatcher';
 import databaseHandler from './db';
 import logger from './logger';
 
 const playlistUpload = multer({ storage: multer.diskStorage(profilePictureStorage) });
 const profileUpload = multer({ storage: multer.diskStorage(playlistPictureStorage) });
-
-const app = express();
-const server = http.createServer(app);
-const io = socketio.listen(server);
-
-const fLoader = new filesLoader(databaseHandler, io, app);
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -51,8 +43,8 @@ app.post('/api/v1/update-user-settings', profileUpload.single('profile-picture')
   routes.updateSettings(req, res);
 });
 app.get('/api/v1/already-setup', (req, res) => routes.testSetup(req, res));
-app.post('/api/v1/add-folder', (req, res) => routes.addFolder(req, res, fLoader));
-app.post('/api/v1/remove-folder', (req, res) => routes.removeFolder(req, res, fLoader));
+app.post('/api/v1/add-folder', (req, res) => routes.addFolder(req, res));
+app.post('/api/v1/remove-folder', (req, res) => routes.removeFolder(req, res));
 app.post('/api/v1/add-bookmark', (req, res) => routes.addBookmark(req, res));
 app.post('/api/v1/remove-bookmark', (req, res) => routes.removeBookmark(req, res));
 app.post('/api/v1/create-playlist', playlistUpload.single('playlist-picture'), (req, res) => {
@@ -81,6 +73,6 @@ if (config.checkEnv()) {
 
   mongoose.connection.once('open', function() {
     logger.info('Connected to database : ' + process.env.DATABASE_URL);
-    fLoader.loadData(startServer);
+    filesWatcher.loadData(startServer);
   });
 }
