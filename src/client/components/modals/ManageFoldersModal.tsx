@@ -10,6 +10,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
 import User from '../../store/data/User';
+import MusicPlayer from '../../store/features/MusicPlayer';
 import texts from '../../lang/modals/manage-folders-modal';
 import notifsTexts from '../../lang/notifications';
 import SearchField from '../utils/SearchField';

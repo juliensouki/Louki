@@ -1,6 +1,7 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, observe } from 'mobx';
 import Navigation from '../navigation/Navigation';
 import { addSecondsOfPlaying } from '../statistics/Stats';
+import LoukiStore from '../data/LoukiStore';
 import { Music } from '../../../shared/LoukiTypes';
 import texts from '../../lang/layout/music-bar';
 
@@ -15,6 +16,7 @@ class MusicPlayer {
   @observable private musicPlayingIndex: number = 0;
   @observable private currentPlaylist: Array<Music> = [];
   @observable private repeatMode: MusicLoop = MusicLoop.NO_REPEAT;
+  @observable private musicPlaying: Music | null = null;
   @observable private isOrderRandom: boolean = false;
   @observable public audio: HTMLAudioElement | null = null;
   @observable private timePlayedInSec: number = 0;
@@ -45,11 +47,24 @@ class MusicPlayer {
     this.currentPlaylist = playlist;
   };
 
+  @action checkIfPlayingMusicStillExists = () => {
+    if (this.musicPlaying == null) return;
+    if (!LoukiStore.allMusics.includes(this.musicPlaying)) {
+      this.musicPlaying = null;
+      if (!this.audio.paused) {
+        this.audio.pause();
+        this.image = null;
+        this.currentPlaylist = [];
+        this.isPlaying = false;
+      }
+    }
+  };
+
   @action setMusicReady = (): void => {
     if (this.currentPlaylist.length <= 0) return;
 
-    const path = `/api/v1/music/${this.currentPlaylist[this.musicPlayingIndex].__id}`;
-    this.audio = new Audio(path);
+    this.musicPlaying = this.currentPlaylist[this.musicPlayingIndex];
+    this.audio = new Audio(`/api/v1/music/${this.musicPlaying.__id}`);
 
     this.audio.volume = this.isMute == false ? this.audioLevel / 100 : 0;
     this.audio.crossOrigin = 'anonymous';
@@ -60,6 +75,7 @@ class MusicPlayer {
 
     this.isPlaying = true;
     this.audio.play();
+
     this.audio.onended = () => {
       if (this.repeatMode == MusicLoop.REPEAT_ONE) this.playMusic(this.musicPlayingIndex);
       else if (this.isOrderRandom) this.playRandomMusic();

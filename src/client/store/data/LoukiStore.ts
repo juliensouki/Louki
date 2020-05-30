@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import { Album, Artist, Music, Playlist } from '../../../shared/LoukiTypes';
+import MusicPlayer from '../features/MusicPlayer';
 
 import { UpdateArtistOrAlbumResponse } from '../../../shared/SocketIODefinitions';
 import socketIOClient from 'socket.io-client';
@@ -49,6 +50,7 @@ class LoukiStore {
 
   @action setMusics = (musics: Array<Music>) => {
     this.musics = musics;
+    MusicPlayer.checkIfPlayingMusicStillExists();
   };
 
   @action setArtists = (artists: Array<Artist>) => {
