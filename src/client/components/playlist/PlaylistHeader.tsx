@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Grid, Fab, Typography } from '@material-ui/core';
+import { Grid, /*Fab,*/ Typography } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import PlaylistOptions from '../utils/PlaylistOptions';
@@ -250,7 +250,7 @@ class PlaylistHeader extends React.Component<Props & RouteComponentProps, NoStat
                   <Grid item>
                     <Typography className={classes.playlistName}>{this.props.title}</Typography>
                   </Grid>
-                  {noStartButton ? null : (
+                  {/*noStartButton ? null : ( --> Start button in playlist header removed for now, as it looks bad
                     <Grid item>
                       <Fab
                         variant='extended'
@@ -264,7 +264,7 @@ class PlaylistHeader extends React.Component<Props & RouteComponentProps, NoStat
                         {buttonText}
                       </Fab>
                     </Grid>
-                  )}
+                  )*/}
                 </Grid>
               </Grid>
               <Grid item style={{ width: '100%' }}>
