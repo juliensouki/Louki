@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import MobileMenu from '../../../store/features/MobileMenu';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, SvgIcon } from '@material-ui/core';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -46,7 +46,7 @@ interface Props extends WithStyles<typeof styles> {
   showArtist?: boolean;
   aboutprops?: any;
   playlistId?: string;
-  icon: any; //Find type
+  icon: typeof SvgIcon;
 }
 
 const LeftPanelButton: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
