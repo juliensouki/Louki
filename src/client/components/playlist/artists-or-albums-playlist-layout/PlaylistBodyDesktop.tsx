@@ -13,6 +13,7 @@ import { Typography, Button } from '@material-ui/core';
 
 import AlbumIcon from '@material-ui/icons/Album';
 import MicIcon from '@material-ui/icons/Mic';
+import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
 
 import { Artist, Album } from '../../../../shared/LoukiTypes';
 import { Page } from '../../pages/artists-or-albums/ArtistsOrAlbums';
@@ -87,7 +88,7 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
     const { classes, playlist, page } = this.props;
     const T = texts.current;
 
-    if (playlist.lenght == 0) {
+    if (playlist.length == 0) {
       return (
         <React.Fragment>
           <Typography style={{ fontSize: '1.3rem', display: 'inline-block' }}>
@@ -124,7 +125,7 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
                 className={classes.row}
               >
                 <TableCell component='th' scope='row'>
-                  {page == Page.ARTISTS ? <MicIcon /> : <AlbumIcon />}
+                  {page == Page.ARTISTS ? <LibraryMusicIcon /> : <AlbumIcon />}
                 </TableCell>
                 <TableCell className={classes.whiteTableRow} component='th' scope='row'>
                   {page == Page.ARTISTS ? (row as Artist).name : (row as Album).title}
