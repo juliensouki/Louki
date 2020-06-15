@@ -66,6 +66,11 @@ const styles = (theme: Theme) =>
       marginRight: '1em',
       fontSize: '1.3rem',
     },
+    icon: {
+      marginRight: '1em',
+      position: 'relative',
+      top: '0.25em',
+    },
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -104,7 +109,6 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
         <Table aria-label='simple table'>
           <TableHead className={classes.rowTitles}>
             <TableRow>
-              <TableCell className={classes.rowTitles}></TableCell>
               <TableCell className={classes.rowTitles}>{page == Page.ARTISTS ? T.artist : T.albums.title}</TableCell>
               {page == Page.ARTISTS ? (
                 <React.Fragment />
@@ -124,10 +128,12 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
                 }}
                 className={classes.row}
               >
-                <TableCell component='th' scope='row'>
-                  {page == Page.ARTISTS ? <LibraryMusicIcon /> : <AlbumIcon />}
-                </TableCell>
                 <TableCell className={classes.whiteTableRow} component='th' scope='row'>
+                  {page == Page.ARTISTS ? (
+                    <LibraryMusicIcon className={classes.icon} />
+                  ) : (
+                    <AlbumIcon className={classes.icon} />
+                  )}
                   {page == Page.ARTISTS ? (row as Artist).name : (row as Album).title}
                 </TableCell>
                 {page == Page.ARTISTS ? (
