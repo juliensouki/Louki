@@ -3,7 +3,7 @@ import { createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import CloseIcon from '@material-ui/icons/Close';
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Grid, Typography } from '@material-ui/core';
-import ResponsiveAdapter from './ResponsiveAdapter';
+import ResponsiveAdapter from '../responsive/ResponsiveAdapter';
 
 const styles = () =>
   createStyles({

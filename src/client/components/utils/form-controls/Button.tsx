@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { Button as MUIButton } from '@material-ui/core';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -31,14 +31,14 @@ interface Props extends WithStyles<typeof styles> {
   disabled?: boolean;
 }
 
-const Pixabay: React.FunctionComponent<Props> = (props: Props) => {
+const Button: React.FunctionComponent<Props> = (props: Props) => {
   const { classes, type, onClick, text, disabled } = props;
 
   return (
-    <Button className={type == 'cancel' ? classes.cancel : classes.save} onClick={onClick} disabled={disabled}>
+    <MUIButton className={type == 'cancel' ? classes.cancel : classes.save} onClick={onClick} disabled={disabled}>
       {text}
-    </Button>
+    </MUIButton>
   );
 };
 
-export default withStyles(styles)(Pixabay);
+export default withStyles(styles)(Button);

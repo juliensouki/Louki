@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import Code from '../../utils/Code';
+import Code from '../../utils/code/Code';
 
 const styles = (theme: Theme) =>
   createStyles({

@@ -5,7 +5,7 @@ import { observable } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography, Grid } from '@material-ui/core';
 import texts from '../../../lang/modals/add-picture-modal';
-import Loader from '../../utils/Loader';
+import Loader from '../../utils/loading/Loader';
 
 const styles = (theme: Theme) =>
   createStyles({

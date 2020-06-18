@@ -4,8 +4,8 @@ import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
-import Modal from '../utils/Modal';
-import Button from '../utils/Button';
+import Modal from '../utils/modal/Modal';
+import Button from '../utils/form-controls/Button';
 
 import texts from '../../lang/modals/update-playlist-modal';
 import notifsTexts from '../../lang/notifications';

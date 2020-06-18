@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import Button from '../utils/Button';
+import Button from '../form-controls/Button';
 import Modal from './Modal';
-import texts from '../../lang/utils';
+import texts from '../../../lang/utils';
 
 const styles = (theme: Theme) =>
   createStyles({

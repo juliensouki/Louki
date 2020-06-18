@@ -12,12 +12,12 @@ import CheckIcon from '@material-ui/icons/Check';
 
 import { Grid, Button, Typography, Switch } from '@material-ui/core/';
 import MenuItem from '@material-ui/core/MenuItem';
-import Select from '../../utils/Select';
+import Select from '../../utils/form-controls/Select';
 
 import SimpleHeader from '../../layout/SimpleHeader';
-import ConfirmModal from '../../utils/ConfirmModal';
+import ConfirmModal from '../../utils/modal/ConfirmModal';
 import ManageFoldersModal from '../../modals/ManageFoldersModal';
-import TransparentInput from '../../utils/TransparentInput';
+import TransparentInput from '../../utils/form-controls/TransparentInput';
 
 import Navigation from '../../../store/navigation/Navigation';
 import SettingsForm from '../../../store/forms/SettingsForm';

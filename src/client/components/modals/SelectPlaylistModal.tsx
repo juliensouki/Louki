@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography, List, ListItem } from '@material-ui/core';
-import Modal from '../utils/Modal';
-import Button from '../utils/Button';
+import Modal from '../utils/modal/Modal';
+import Button from '../utils/form-controls/Button';
 
 import LoukiStore from '../../store/data/LoukiStore';
 import { Playlist } from '../../../shared/LoukiTypes';

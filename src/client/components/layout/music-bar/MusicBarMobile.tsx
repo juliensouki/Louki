@@ -14,7 +14,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 
 import MusicPreview from './MusicPreview';
 import ProgressBar from './ProgressBar';
-import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import ResponsiveAdapter from '../../utils/responsive/ResponsiveAdapter';
 import MusicPlayer, { MusicLoop } from '../../../store/features/MusicPlayer';
 
 const styles = (theme: Theme) =>

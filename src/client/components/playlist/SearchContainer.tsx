@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import TransparentInput from '../utils/TransparentInput';
+import TransparentInput from '../utils/form-controls/TransparentInput';
 
 import SearchIcon from '@material-ui/icons/Search';
 import SearchForm from '../../store/features/Search';

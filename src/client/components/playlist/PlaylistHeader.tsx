@@ -7,8 +7,8 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { Grid, /*Fab,*/ Typography } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
-import PlaylistOptions from '../utils/PlaylistOptions';
-import PlaylistOptionsItem from '../utils/PlaylistOptionsItem';
+import PlaylistOptions from '../utils/options/PlaylistOptions';
+import PlaylistOptionsItem from '../utils/options/PlaylistOptionsItem';
 import MusicPlayer from '../../store/features/MusicPlayer';
 import Navigation from '../../store/navigation/Navigation';
 import { Stats, getStat } from '../../store/statistics/Stats';

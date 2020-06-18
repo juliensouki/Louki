@@ -5,8 +5,8 @@ import { observable } from 'mobx';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
-import SearchField from '../../utils/SearchField';
-import Loader from '../../utils/Loader';
+import SearchField from '../../utils/form-controls/SearchField';
+import Loader from '../../utils/loading/Loader';
 
 import texts from '../../../lang/modals/add-picture-modal';
 import { PixabaySearch, PixabaySearchResponse } from '../../../requests/Pixabay';

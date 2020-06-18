@@ -3,7 +3,7 @@ import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
-import Notifications, { Notification } from '../../store/features/Notifications';
+import Notifications, { Notification } from '../../../store/features/Notifications';
 
 @observer
 class NotificationsHandler extends React.Component<WithSnackbarProps, NoState> {
