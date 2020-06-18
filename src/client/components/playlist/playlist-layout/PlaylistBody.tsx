@@ -5,11 +5,11 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 
 import PlaylistBodyDesktop from './PlaylistBodyDesktop';
 import PlaylistBodyMobile from './PlaylistBodyMobile';
-import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import ResponsiveAdapter from '../../utils/responsive/ResponsiveAdapter';
 
 import SearchForm from '../../../store/features/Search';
 import { Music } from '../../../../shared/LoukiTypes';
-import { EmptyPlaylistTexts } from '../../utils/ClientTypes';
+import { EmptyPlaylistTexts } from '../../utils/interfaces/ClientTypes';
 
 const styles = (theme: Theme) =>
   createStyles({

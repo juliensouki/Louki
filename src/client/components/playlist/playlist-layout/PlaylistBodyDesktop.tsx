@@ -12,7 +12,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { IconButton, Button, Typography } from '@material-ui/core';
 
-import PlaylistOptions from '../../utils/PlaylistOptions';
+import PlaylistOptions from '../../utils/options/PlaylistOptions';
 
 import { Music } from '../../../../shared/LoukiTypes';
 import LoukiStore from '../../../store/data/LoukiStore';
@@ -24,7 +24,7 @@ import Notifications, { NotificationType } from '../../../store/features/Notific
 import MusicPlayingIcon from './MusicPlayingIcon';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import { EmptyPlaylistTexts } from '../../utils/ClientTypes';
+import { EmptyPlaylistTexts } from '../../utils/interfaces/ClientTypes';
 import texts from '../../../lang/playlist/playlist-layout';
 import notifsTexts from '../../../lang/notifications';
 

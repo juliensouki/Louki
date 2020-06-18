@@ -4,7 +4,7 @@ import { action, observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Typography, Paper, Grid, IconButton } from '@material-ui/core';
-import Modal from '../utils/Modal';
+import Modal from '../utils/modal/Modal';
 import SettingsForm from '../../store/forms/SettingsForm';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -13,7 +13,7 @@ import User from '../../store/data/User';
 import MusicPlayer from '../../store/features/MusicPlayer';
 import texts from '../../lang/modals/manage-folders-modal';
 import notifsTexts from '../../lang/notifications';
-import SearchField from '../utils/SearchField';
+import SearchField from '../utils/form-controls/SearchField';
 import Notifications, { NotificationType } from '../../store/features/Notifications';
 
 import { AddFolder, AddFolderResponse, RemoveFolder, RemoveFolderResponse } from '../../requests/Users';

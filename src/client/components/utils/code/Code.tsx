@@ -20,7 +20,7 @@ interface Props extends WithStyles<typeof styles> {
   inline?: boolean;
 }
 
-const Pixabay: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
+const Code: React.FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
   const { classes, children, inline } = props;
 
   const codeStyle = inline
@@ -34,4 +34,4 @@ const Pixabay: React.FunctionComponent<Props> = (props: React.PropsWithChildren<
   );
 };
 
-export default withStyles(styles)(Pixabay);
+export default withStyles(styles)(Code);

@@ -2,9 +2,10 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import Navigation from '../../store/navigation/Navigation';
-import LoukiStore from '../../store/data/LoukiStore';
-import { GetPlaylist, GetPlaylistResponse } from '../../requests/Playlists';
+import Navigation from '../../../store/navigation/Navigation';
+import LoukiStore from '../../../store/data/LoukiStore';
+import { GetPlaylist, GetPlaylistResponse } from '../../../requests/Playlists';
+
 @observer
 class RouteChangerHandler extends React.Component<RouteComponentProps, NoState> {
   componentDidMount() {

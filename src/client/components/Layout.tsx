@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import RouteChangeHandler from '../components/utils/RouteChangeHandler';
+import RouteChangeHandler from './utils/navigation/RouteChangeHandler';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
@@ -19,7 +19,7 @@ import Settings from './pages/settings/Settings';
 import Favorites from './pages/favorites/Favorites';
 import SpecificArtistOrAlbum from './pages/specific-artist-or-album/SpecificArtistOrAlbum';
 import SetupModal from './modals/setup-modal/SetupModal';
-import NotificationsHandler from './utils/NotificationsHandler';
+import NotificationsHandler from './utils/notifications/NotificationsHandler';
 
 const styles = (theme: Theme) =>
   createStyles({

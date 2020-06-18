@@ -6,7 +6,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import PlaylistHeader from '../../playlist/PlaylistHeader';
 import SearchContainer from '../../playlist/SearchContainer';
 import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
-import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
+import PlaylistOptionsItem from '../../utils/options/PlaylistOptionsItem';
 
 import Bookmarks from '../../../store/data/Bookmarks';
 import LoukiStore from '../../../store/data/LoukiStore';

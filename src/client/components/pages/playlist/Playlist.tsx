@@ -6,7 +6,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import PlaylistHeader from '../../playlist/PlaylistHeader';
 import SearchContainer from '../../playlist/SearchContainer';
 import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
-import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
+import PlaylistOptionsItem from '../../utils/options/PlaylistOptionsItem';
 
 import { Music, Playlist } from '../../../../shared/LoukiTypes';
 import { RemoveMusicFromPlaylist, RemoveMusicResponse } from '../../../requests/Playlists';

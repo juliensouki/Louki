@@ -12,7 +12,7 @@ import { Stats } from '../../../store/statistics/Stats';
 import PlaylistBody from '../../playlist/playlist-layout/PlaylistBody';
 import SearchContainer from '../../playlist/SearchContainer';
 import PlaylistHeader from '../../playlist/PlaylistHeader';
-import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
+import PlaylistOptionsItem from '../../utils/options/PlaylistOptionsItem';
 
 import texts from '../../../lang/pages/specific-artist-or-album';
 import notifsTexts from '../../../lang/notifications';

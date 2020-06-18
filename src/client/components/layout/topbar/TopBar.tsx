@@ -9,8 +9,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 
-import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
-import Loader from '../../utils/Loader';
+import ResponsiveAdapter from '../../utils/responsive/ResponsiveAdapter';
+import Loader from '../../utils/loading/Loader';
 import MobileMenu from '../../../store/features/MobileMenu';
 import { NavLink } from 'react-router-dom';
 

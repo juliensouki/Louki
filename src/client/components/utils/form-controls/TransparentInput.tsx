@@ -4,8 +4,8 @@ import { observer } from 'mobx-react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import SearchIcon from '@material-ui/icons/Search';
-import SearchForm from '../../store/features/Search';
-import texts from '../../lang/playlist/search-container';
+import SearchForm from '../../../store/features/Search';
+import texts from '../../../lang/playlist/search-container';
 
 const styles = (theme: Theme) =>
   createStyles({

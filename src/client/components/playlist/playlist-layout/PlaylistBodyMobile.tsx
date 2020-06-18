@@ -5,9 +5,9 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Button, Grid, Typography } from '@material-ui/core';
-import { EmptyPlaylistTexts } from '../../utils/ClientTypes';
-import PlaylistOptions from '../../utils/PlaylistOptions';
-import PlaylistOptionsItem from '../../utils/PlaylistOptionsItem';
+import { EmptyPlaylistTexts } from '../../utils/interfaces/ClientTypes';
+import PlaylistOptions from '../../utils/options/PlaylistOptions';
+import PlaylistOptionsItem from '../../utils/options/PlaylistOptionsItem';
 import Bookmarks from '../../../store/data/Bookmarks';
 import { AddBookmark, AddBookmarkResponse, RemoveBookmark, RemoveBookmarkResponse } from '../../../requests/Bookmarks';
 import Notifications, { NotificationType } from '../../../store/features/Notifications';

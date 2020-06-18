@@ -14,7 +14,7 @@ import MicIcon from '@material-ui/icons/Mic';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import LeftPanelButton from './LeftPanelButton';
-import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import ResponsiveAdapter from '../../utils/responsive/ResponsiveAdapter';
 import MobileMenu from '../../../store/features/MobileMenu';
 import LoukiStore from '../../../store/data/LoukiStore';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';

@@ -4,7 +4,7 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 
 import PlaylistBodyDesktop from './PlaylistBodyDesktop';
 import PlaylistBodyMobile from './PlaylistBodyMobile';
-import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import ResponsiveAdapter from '../../utils/responsive/ResponsiveAdapter';
 
 import { Page } from '../../pages/artists-or-albums/ArtistsOrAlbums';
 import MusicsData from '../../../store/data/LoukiStore';

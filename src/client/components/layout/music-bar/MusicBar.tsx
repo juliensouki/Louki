@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ResponsiveAdapter from '../../utils/ResponsiveAdapter';
+import ResponsiveAdapter from '../../utils/responsive/ResponsiveAdapter';
 import MusicBarDesktop from './MusicBarDesktop';
 import MusicBarMobile from './MusicBarMobile';
 

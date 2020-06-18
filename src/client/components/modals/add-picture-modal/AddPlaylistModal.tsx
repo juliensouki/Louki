@@ -2,8 +2,8 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { computed, action, observable } from 'mobx';
 
-import Button from '../../utils/Button';
-import Modal from '../../utils/Modal';
+import Button from '../../utils/form-controls/Button';
+import Modal from '../../utils/modal/Modal';
 
 import UploadMethod from './UploadMethod';
 import UploadByUrl from './UploadByUrl';
