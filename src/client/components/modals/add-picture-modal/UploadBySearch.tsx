@@ -7,6 +7,7 @@ import { Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import SearchField from '../../utils/form-controls/SearchField';
 import Loader from '../../utils/loading/Loader';
+import ResponsiveImage from '../../utils/responsive/ResponsiveImage';
 
 import texts from '../../../lang/modals/add-picture-modal';
 import { PixabaySearch, PixabaySearchResponse } from '../../../requests/Pixabay';
@@ -37,16 +38,9 @@ const styles = (theme: Theme) =>
       marginRight: 2,
       marginTop: 2,
       textAlign: 'center',
-      backgroundColor: '#515151',
       [theme.breakpoints.down('sm')]: {
         height: 70,
       },
-    },
-    image: {
-      width: 'auto',
-      maxWidth: '100%',
-      height: 'auto',
-      maxHeight: '100%',
     },
   });
 
@@ -147,7 +141,9 @@ class UploadBySearch extends React.Component<Props, NoState> {
                         className={classes.pictureContainer}
                         style={this.currentUrl == image ? { border: '1px solid #FFB13B' } : {}}
                       >
-                        <img className={classes.image} src={image}></img>
+                        <div style={{ width: '100%', height: '100%' }}>
+                          <ResponsiveImage src={image} height='100%' width='100%' placeholderColor='#515151' />
+                        </div>
                       </Grid>
                     );
                   })}

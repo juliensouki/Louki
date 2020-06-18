@@ -7,6 +7,7 @@ import { withRouter, RoutePropsComponent } from 'react-router';
 
 import MusicPlayer from '../../../store/features/MusicPlayer';
 import LoukiStore from '../../../store/data/LoukiStore';
+import ResponsiveImage from '../../utils/responsive/ResponsiveImage';
 
 const textProperties = {
   overflow: 'hidden',
@@ -88,7 +89,7 @@ class MusicPreview extends React.Component<WithStyles & RoutePropsComponent, NoS
           alignItems='center'
           className={classes.pictureContainer}
         >
-          <img src={MusicPlayer.previewImage} className={classes.musicImage} />
+          <ResponsiveImage src={MusicPlayer.previewImage} height='100%' width='100%' />
         </Grid>
         <Grid
           item

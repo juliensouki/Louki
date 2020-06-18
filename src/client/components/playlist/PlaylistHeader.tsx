@@ -20,6 +20,7 @@ import UpdatePlaylistModal from '../modals/UpdatePlaylistModal';
 import optionsTexts from '../../lang/options';
 import notifsTexts from '../../lang/notifications';
 import Notifications, { NotificationType } from '../../store/features/Notifications';
+import ResponsiveImage from '../utils/responsive/ResponsiveImage';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -231,9 +232,7 @@ class PlaylistHeader extends React.Component<Props & RouteComponentProps, NoStat
               className={classes.playlistPictureContainer}
               style={this.pictureHeight ? { height: this.pictureHeight } : {}}
             >
-              <Grid container alignItems='center' justify='center' style={{ width: '100%', height: '100%' }}>
-                <img src={image} className={classes.playlistPicture}></img>
-              </Grid>
+              <ResponsiveImage src={image} width='100%' height='100%' />
             </div>
             <Grid
               item

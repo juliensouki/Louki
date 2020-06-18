@@ -6,24 +6,12 @@ import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/s
 import { Typography, Grid } from '@material-ui/core';
 import texts from '../../../lang/modals/add-picture-modal';
 import Loader from '../../utils/loading/Loader';
+import ResponsiveImage from '../../utils/responsive/ResponsiveImage';
 
 const styles = (theme: Theme) =>
   createStyles({
     text: {
       fontSize: '1.3rem',
-    },
-    imgContainer: {
-      marginTop: '1em',
-      width: 200,
-      height: 120,
-      textAlign: 'center',
-      backgroundColor: '#515151',
-    },
-    image: {
-      width: 'auto',
-      maxWidth: '100%',
-      height: 'auto',
-      maxHeight: '100%',
     },
   });
 
@@ -60,8 +48,8 @@ class UploadConfirmation extends React.Component<Props, NoState> {
       return (
         <Grid container direction='column'>
           <Typography className={classes.text}>{T.confirmationMessage}</Typography>
-          <div className={classes.imgContainer}>
-            <img className={classes.image} src={url}></img>
+          <div style={{ textAlign: 'center', marginTop: '1em' }}>
+            <ResponsiveImage src={url} width={200} height={100} placeholderColor='#515151' />
           </div>
         </Grid>
       );
