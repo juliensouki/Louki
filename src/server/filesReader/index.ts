@@ -1,6 +1,6 @@
 import { Music } from '../../shared/LoukiTypes';
 import { supportedAudioFormats } from '../config/config';
-import logger, { logError } from '../logger';
+import { logError } from '../logger';
 import * as mm from 'music-metadata';
 import uuid from 'uuid';
 

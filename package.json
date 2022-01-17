@@ -69,7 +69,8 @@
     "mobx-react": "^6.2.2",
     "mongoose": "^5.9.10",
     "music-metadata": "^5.4.3",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -122,16 +123,15 @@
     "rimraf": "^3.0.2",
     "sha1": "^1.1.1",
     "simple-node-logger": "^18.12.24",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.1",
     "socket.io-client": "^2.3.0",
     "style-loader": "^1.2.0",
     "ts-jest": "^24.3.0",
     "ts-node": "^8.9.1",
     "tsc": "^1.20150623.0",
-    "tsc-watch": "^4.2.3",
+    "tsc-watch": "^4.6.0",
     "tsconfig-paths": "^3.9.0",
     "tslib": "^2.0.0",
-    "typescript": "^3.8.3",
     "url-loader": "^2.3.0",
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.7.0",
