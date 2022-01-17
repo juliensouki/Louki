@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Installing dependencies
       run: npm install
-    - name: Eslint
+    - name: Build server and client
+      run: npm run build
+    - name: Lint
       run: npm run lint
-    - name: Typescript
-      run: npm run type-check

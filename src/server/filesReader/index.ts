@@ -41,6 +41,8 @@ class FilesReader {
       }
       supportedAudioFormats.forEach(extension => {
         metadata.music.title = metadata.music.title.replace(folder, '').replace(`.${extension}`, '');
+        //Making sure folder path does not contain \ instead of / because in this case they didn't get erased properly
+        metadata.music.title = metadata.music.title.replace(folder.split('/').join('\\'), '');
       });
       return metadata;
     } catch (err) {
