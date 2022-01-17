@@ -1,6 +1,6 @@
 import { Music } from '../../shared/LoukiTypes';
 import { supportedAudioFormats } from '../config/config';
-import { logError } from '../logger';
+import logger, { logError } from '../logger';
 import * as mm from 'music-metadata';
 import uuid from 'uuid';
 
@@ -41,6 +41,8 @@ class FilesReader {
       }
       supportedAudioFormats.forEach(extension => {
         metadata.music.title = metadata.music.title.replace(folder, '').replace(`.${extension}`, '');
+        //Making sure folder path does not contain \ instead of / because in this case they didn't get erased properly
+        metadata.music.title = metadata.music.title.replace(folder.split('/').join('\\'), '');
       });
       return metadata;
     } catch (err) {
