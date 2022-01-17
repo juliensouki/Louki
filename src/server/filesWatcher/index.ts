@@ -33,6 +33,9 @@ class FilesWatcher {
     db.findOneInDocument(MusicSchema, 'path', path).then(music => {
       if (music && music.length > 0) {
         deleteMusic(music[0]);
+      } else {
+        //Windows paths (\ instead of /)
+        this.detectDeletedSong(path.split('/').join('\\'));
       }
     });
   };

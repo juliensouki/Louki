@@ -42,14 +42,16 @@ class MusicLoader {
       const [path, folder] = this.musicsQueue[i];
       const results = await db.findOneInDocument(MusicSchema, 'path', path);
 
-      const { music, artists, album } = await filesReader.getMetadataAndAddToDB(path, folder);
-
-      if (results && results.length == 0) {
-        this.artistsQueue.push([music.__id, artists[0]]);
-        this.albumsQueue.push([music.__id, album, artists[0]]);
-        await addMusic(music, artists[0], album);
-      } else {
-        addMusicRoute(results[0]);
+      const musicInfo = await filesReader.getMetadataAndAddToDB(path, folder);
+      if (musicInfo) {
+        const { music, artists, album } = musicInfo;
+        if (results && results.length == 0) {
+          this.artistsQueue.push([music.__id, artists[0]]);
+          this.albumsQueue.push([music.__id, album, artists[0]]);
+          await addMusic(music, artists[0], album);
+        } else {
+          addMusicRoute(results[0]);
+        }
       }
     }
   };
