@@ -69,6 +69,8 @@
     "mobx-react": "^6.2.2",
     "mongoose": "^5.9.10",
     "music-metadata": "^5.4.3",
+    "react-virtualized-auto-sizer": "^1.0.6",
+    "react-window": "^1.8.6",
     "uuid": "^3.4.0"
   },
   "devDependencies": {

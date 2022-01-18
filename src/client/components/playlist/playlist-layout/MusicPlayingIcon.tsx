@@ -13,8 +13,6 @@ function Icon() {
       style={{
         height: 20,
         marginRight: 15,
-        position: 'relative',
-        top: 5,
       }}
     >
       <rect fill='#fff' width='3' height='100' transform='translate(0) rotate(180 3 50)'>
