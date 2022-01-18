@@ -1,77 +1,28 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { observable } from 'mobx';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import { IconButton, Button, Typography } from '@material-ui/core';
-
-import PlaylistOptions from '../../utils/options/PlaylistOptions';
+import { Button, Divider, Grid, Typography } from '@material-ui/core';
 
 import { Music } from '../../../../shared/LoukiTypes';
-import LoukiStore from '../../../store/data/LoukiStore';
-import MusicPlayer from '../../../store/features/MusicPlayer';
-import Navigation from '../../../store/navigation/Navigation';
-import Bookmarks from '../../../store/data/Bookmarks';
-import Notifications, { NotificationType } from '../../../store/features/Notifications';
 
-import MusicPlayingIcon from './MusicPlayingIcon';
+import PlaylistBodyDesktopRow from './PlaylistBodyDesktopRow';
+import { FixedSizeList as List } from 'react-window';
+
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { EmptyPlaylistTexts } from '../../utils/interfaces/ClientTypes';
 import texts from '../../../lang/playlist/playlist-layout';
-import notifsTexts from '../../../lang/notifications';
 
 const styles = (theme: Theme) =>
   createStyles({
-    '@global': {
-      '.MuiTableCell-root': {
-        padding: '0.2em',
-      },
-    },
     rowTitles: {
       fontWeight: 'bolder',
       textTransform: 'uppercase',
       fontSize: '1.5rem',
       color: theme.palette.primary.main,
       paddingBottom: '0.8em',
-    },
-    whiteTableRow: {
-      color: '#fff',
-      fontSize: '1.3rem',
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-    },
-    tableRow: {
-      color: theme.palette.primary.main,
-      fontSize: '1.3rem',
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-    },
-    rowSelected: {
-      backgroundColor: '#151414',
-    },
-    row: {
-      '&:hover': {
-        backgroundColor: '#151414',
-        cursor: 'pointer',
-      },
-    },
-    menuIcon: {
-      '&:hover': {
-        cursor: 'pointer',
-      },
-    },
-    fillFavIcon: {
-      color: theme.palette.secondary.main,
     },
     button: {
       backgroundColor: theme.palette.background.default,
@@ -92,47 +43,42 @@ interface Props extends WithStyles<typeof styles> {
   image: string;
 }
 
+const ROW_SIZE = 50;
+
 @observer
 class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, NoState> {
   @observable openSelectPlaylistModal: boolean = false;
   @observable musicToAddToPlaylist: string = '';
   @observable ref: React.RefObject<HTMLTableSectionElement> = React.createRef();
 
-  @action playMusic = (index: number): void => {
-    MusicPlayer.setCurrentPlaylist(this.props.playlist);
-    MusicPlayer.setPreviewImage(this.props.image);
-    MusicPlayer.playMusic(index);
-  };
-
-  addBookmark = (event, id: string) => {
-    const T = notifsTexts.current;
-
-    event.stopPropagation();
-    Bookmarks.addBookmark(id);
-    const musicName = LoukiStore.idToMusic(id).title;
-    Notifications.addNotification(T.addedBookmark(musicName), NotificationType.SUCCESS);
-  };
-
-  deleteBookmark = (event, id: string) => {
-    const T = notifsTexts.current;
-
-    event.stopPropagation();
-    const musicName = LoukiStore.idToMusic(id).title;
-    Notifications.addNotification(T.removedBookmark(musicName), NotificationType.SUCCESS);
-    Bookmarks.deleteBookmark(id);
-  };
-
   redirectHome = () => {
     const emptySettings: EmptyPlaylistTexts = this.props.emptySettings;
     this.props.history.push(emptySettings.redirectRoute);
   };
 
-  render() {
-    const { classes, playlist, searchResults, getPlaylistOptionsItems, emptySettings } = this.props;
-    const tableWidth = this.ref.current != null ? this.ref.current.offsetWidth : 0;
-    const titleMaxWidth = tableWidth != 0 ? (tableWidth - 100) / 2 : 0;
-    const othersMaxWidth = tableWidth != 0 ? (tableWidth - 100) / 4 : 0;
+  getMusicRows = ({ index }: { index: number }): JSX.Element => {
+    const { playlist, searchResults, addBookmarksEnabled, getPlaylistOptionsItems, image } = this.props;
+    const music = playlist[index];
+    return (
+      <>
+        <PlaylistBodyDesktopRow
+          key={music.__id}
+          index={index}
+          music={music}
+          searchResults={searchResults}
+          getPlaylistOptionsItems={getPlaylistOptionsItems}
+          playlist={playlist}
+          image={image}
+          addBookmarksEnabled={addBookmarksEnabled}
+        />
+        {((searchResults === null && index + 1 < playlist.length) ||
+          (searchResults != null && index + 1 < searchResults.length)) && <Divider />}
+      </>
+    );
+  };
 
+  render() {
+    const { classes, playlist, emptySettings } = this.props;
     const T = texts.current;
 
     if (playlist == null || playlist.length == 0) {
@@ -146,74 +92,27 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
       );
     } else {
       return (
-        <React.Fragment>
-          <Table aria-label='simple table'>
-            <TableHead className={classes.rowTitles}>
-              <TableRow>
-                <TableCell className={classes.rowTitles}>{T.song}</TableCell>
-                <TableCell className={classes.rowTitles}>{T.artist}</TableCell>
-                <TableCell className={classes.rowTitles}>{T.album}</TableCell>
-                <TableCell className={classes.rowTitles}>{T.duration}</TableCell>
-                <TableCell align='right'></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody ref={this.ref}>
-              {playlist.map((music: Music, index: number) => (
-                <TableRow
-                  key={music.__id}
-                  style={searchResults != null && !searchResults.includes(music.__id) ? { display: 'none' } : {}}
-                  className={MusicPlayer.playingMusicId == music.__id ? classes.rowSelected : classes.row}
-                  onClick={() => {
-                    this.playMusic(index);
-                  }}
-                >
-                  <TableCell
-                    className={classes.whiteTableRow}
-                    component='th'
-                    scope='row'
-                    style={{ maxWidth: titleMaxWidth }}
-                  >
-                    {this.props.addBookmarksEnabled ? (
-                      Bookmarks.isInBookmarks(music.__id) ? (
-                        <IconButton
-                          onClick={event => {
-                            this.deleteBookmark(event, music.__id);
-                          }}
-                        >
-                          <FavoriteIcon className={classes.fillFavIcon} />
-                        </IconButton>
-                      ) : (
-                        <IconButton
-                          onClick={event => {
-                            this.addBookmark(event, music.__id);
-                          }}
-                        >
-                          <FavoriteBorderIcon />
-                        </IconButton>
-                      )
-                    ) : null}
-                    {MusicPlayer.isPlaying &&
-                    MusicPlayer.playingMusicId == music.__id &&
-                    Navigation.currentRoute == MusicPlayer.playlistRoute ? (
-                      <MusicPlayingIcon />
-                    ) : null}
-                    {music.title}
-                  </TableCell>
-                  <TableCell className={classes.whiteTableRow} style={{ maxWidth: othersMaxWidth }}>
-                    {LoukiStore.getArtistNameById(music.artist)}
-                  </TableCell>
-                  <TableCell className={classes.tableRow} style={{ maxWidth: othersMaxWidth }}>
-                    {LoukiStore.getAlbumNameById(music.album)}
-                  </TableCell>
-                  <TableCell className={classes.tableRow}>{LoukiStore.msTosec(music.duration)}</TableCell>
-                  <TableCell className={classes.tableRow} align='right'>
-                    <PlaylistOptions>{getPlaylistOptionsItems(music.__id)}</PlaylistOptions>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </React.Fragment>
+        <Grid container direction='column'>
+          <Grid container item direction='row'>
+            <Grid container item xs={6}>
+              <Typography className={classes.rowTitles}>{T.song}</Typography>
+            </Grid>
+            <Grid container item xs={2}>
+              <Typography className={classes.rowTitles}>{T.artist}</Typography>
+            </Grid>
+            <Grid container item xs={2}>
+              <Typography className={classes.rowTitles}>{T.album}</Typography>
+            </Grid>
+            <Grid container item xs={1}>
+              <Typography className={classes.rowTitles}>{T.duration}</Typography>
+            </Grid>
+            <Grid container item xs={1} />
+          </Grid>
+          <Divider />
+          <List height={ROW_SIZE * playlist.length} itemCount={playlist.length} itemSize={ROW_SIZE} ref={this.ref}>
+            {this.getMusicRows}
+          </List>
+        </Grid>
       );
     }
   }
