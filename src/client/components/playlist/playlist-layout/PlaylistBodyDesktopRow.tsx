@@ -70,7 +70,7 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
 
   constructor(props) {
     super(props);
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize);
   }
 
   @action playMusic = (index: number): void => {
@@ -99,17 +99,11 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
 
   @action
   handleResize = () => {
-    this.maxWidthTitle = (this.ref && this.ref.current) ? this.ref.current.offsetWidth - 50 : undefined
+    this.maxWidthTitle = this.ref && this.ref.current ? this.ref.current.offsetWidth - 50 : undefined;
   };
 
   render() {
-    const {
-      classes,
-      music,
-      index,
-      searchResults,
-      getPlaylistOptionsItems,
-    } = this.props;
+    const { classes, music, index, searchResults, getPlaylistOptionsItems } = this.props;
 
     return (
       <Grid
@@ -122,14 +116,7 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
           this.playMusic(index);
         }}
       >
-        <Grid
-          className={classes.whiteTableRow}
-          container
-          alignItems='center'
-          item
-          ref={this.ref}
-          xs={6}
-        >
+        <Grid className={classes.whiteTableRow} container alignItems='center' item ref={this.ref} xs={6}>
           {this.props.addBookmarksEnabled ? (
             Bookmarks.isInBookmarks(music.__id) ? (
               <IconButton
@@ -154,10 +141,7 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
           Navigation.currentRoute == MusicPlayer.playlistRoute ? (
             <MusicPlayingIcon />
           ) : null}
-          <Typography
-            style={{ maxWidth: this.maxWidthTitle }}
-            className={classes.tableText}
-          >
+          <Typography style={{ maxWidth: this.maxWidthTitle }} className={classes.tableText}>
             {music.title}
           </Typography>
         </Grid>
@@ -168,11 +152,9 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
           <Typography className={classes.tableText}>{LoukiStore.getAlbumNameById(music.album)}</Typography>
         </Grid>
         <Grid container item xs={1} className={classes.tableRow}>
-          <Typography className={classes.tableText}>
-            {LoukiStore.msTosec(music.duration)}
-          </Typography>
+          <Typography className={classes.tableText}>{LoukiStore.msTosec(music.duration)}</Typography>
         </Grid>
-        <Grid xs={1} className={classes.tableRow}>
+        <Grid container item xs={1} className={classes.tableRow}>
           <PlaylistOptions>{getPlaylistOptionsItems(music.__id)}</PlaylistOptions>
         </Grid>
       </Grid>

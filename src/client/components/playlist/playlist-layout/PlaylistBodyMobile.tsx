@@ -18,6 +18,8 @@ import LoukiStore from '../../../store/data/LoukiStore';
 import MusicPlayer from '../../../store/features/MusicPlayer';
 import Navigation from '../../../store/navigation/Navigation';
 
+import { FixedSizeList as List } from 'react-window';
+
 const styles = (theme: Theme) =>
   createStyles({
     button: {
@@ -67,6 +69,8 @@ interface Props extends WithStyles<typeof styles> {
   image: string;
 }
 
+const ROW_SIZE = 80;
+
 @observer
 class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, NoState> {
   playMusic = (index: number): void => {
@@ -104,15 +108,70 @@ class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, No
     });
   };
 
+  getMusicRows = ({ index }: { index: number }) => {
+    const { playlist, searchResults, getPlaylistOptionsItems, classes, addBookmarksEnabled } = this.props;
+    const music = playlist[index];
+
+    return (
+      <Grid
+        container
+        direction='row'
+        alignItems='center'
+        justify='space-between'
+        key={music.__id}
+        style={searchResults != null && !searchResults.includes(music.__id) ? { display: 'none' } : {}}
+        className={classes.songContainer}
+      >
+        <Grid item style={{ marginLeft: -15 }}>
+          <PlaylistOptions>
+            {getPlaylistOptionsItems(music.__id)}
+            {addBookmarksEnabled ? (
+              <PlaylistOptionsItem
+                title={Bookmarks.isInBookmarks(music.__id) ? 'Remove from favorites' : 'Add to favorites'}
+                handleClick={() => {
+                  Bookmarks.isInBookmarks(music.__id)
+                    ? this.handleRemoveBookmark(music.__id)
+                    : this.handleAddBookmark(music.__id);
+                }}
+              />
+            ) : (
+              []
+            )}
+          </PlaylistOptions>
+        </Grid>
+        <Grid
+          item
+          container
+          direction='column'
+          alignItems='flex-start'
+          justify='space-between'
+          onClick={() => {
+            this.playMusic(index);
+          }}
+          className={classes.songInfoContainer}
+        >
+          <Grid item style={{ width: '100%' }}>
+            {MusicPlayer.playingMusicId == music.__id && Navigation.currentRoute == MusicPlayer.playlistRoute ? (
+              <Typography style={{ color: 'rgb(255, 177, 59)' }} className={classes.songName}>
+                {music.title}
+              </Typography>
+            ) : (
+              <Typography className={classes.songName}>{music.title}</Typography>
+            )}
+          </Grid>
+          <Grid item>
+            <Typography className={classes.artistName}>{LoukiStore.getArtistNameById(music.artist)}</Typography>
+          </Grid>
+        </Grid>
+        <Grid item style={{ width: 'auto' }}>
+          <Typography className={classes.songDuration}>{LoukiStore.msTosec(music.duration)}</Typography>
+        </Grid>
+      </Grid>
+    );
+  };
+
   render() {
-    const {
-      classes,
-      playlist,
-      emptySettings,
-      getPlaylistOptionsItems,
-      searchResults,
-      addBookmarksEnabled,
-    } = this.props;
+    const { classes, playlist, emptySettings } = this.props;
 
     if (playlist == null || playlist.length == 0) {
       return (
@@ -132,62 +191,9 @@ class PlaylistBodyMobile extends React.Component<Props & RouteComponentProps, No
     } else {
       return (
         <div style={{ width: '100%' }}>
-          {playlist.map((music, index) => (
-            <Grid
-              container
-              direction='row'
-              alignItems='center'
-              justify='space-between'
-              key={music.__id}
-              style={searchResults != null && !searchResults.includes(music.__id) ? { display: 'none' } : {}}
-              className={classes.songContainer}
-            >
-              <Grid item style={{ marginLeft: -15 }}>
-                <PlaylistOptions>
-                  {getPlaylistOptionsItems(music.__id)}
-                  {addBookmarksEnabled ? (
-                    <PlaylistOptionsItem
-                      title={Bookmarks.isInBookmarks(music.__id) ? 'Remove from favorites' : 'Add to favorites'}
-                      handleClick={() => {
-                        Bookmarks.isInBookmarks(music.__id)
-                          ? this.handleRemoveBookmark(music.__id)
-                          : this.handleAddBookmark(music.__id);
-                      }}
-                    />
-                  ) : (
-                    []
-                  )}
-                </PlaylistOptions>
-              </Grid>
-              <Grid
-                item
-                container
-                direction='column'
-                alignItems='flex-start'
-                justify='space-between'
-                onClick={() => {
-                  this.playMusic(index);
-                }}
-                className={classes.songInfoContainer}
-              >
-                <Grid item style={{ width: '100%' }}>
-                  {MusicPlayer.playingMusicId == music.__id && Navigation.currentRoute == MusicPlayer.playlistRoute ? (
-                    <Typography style={{ color: 'rgb(255, 177, 59)' }} className={classes.songName}>
-                      {music.title}
-                    </Typography>
-                  ) : (
-                    <Typography className={classes.songName}>{music.title}</Typography>
-                  )}
-                </Grid>
-                <Grid item>
-                  <Typography className={classes.artistName}>{LoukiStore.getArtistNameById(music.artist)}</Typography>
-                </Grid>
-              </Grid>
-              <Grid item style={{ width: 'auto' }}>
-                <Typography className={classes.songDuration}>{LoukiStore.msTosec(music.duration)}</Typography>
-              </Grid>
-            </Grid>
-          ))}
+          <List height={ROW_SIZE * playlist.length} itemCount={playlist.length} itemSize={ROW_SIZE}>
+            {this.getMusicRows}
+          </List>
         </div>
       );
     }
