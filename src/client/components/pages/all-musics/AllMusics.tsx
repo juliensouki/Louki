@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import PlaylistHeader from '../../playlist/PlaylistHeader';
 import SearchContainer from '../../playlist/SearchContainer';
@@ -18,10 +18,14 @@ import texts from '../../../lang/pages/all-musics';
 import optionsTexts from '../../../lang/options';
 import notifsTexts from '../../../lang/notifications';
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
     root: {
+      display: 'flex',
+      flexDirection: 'column',
       width: '100%',
+      height: '100%',
+      overflow: 'hidden',
     },
   });
 

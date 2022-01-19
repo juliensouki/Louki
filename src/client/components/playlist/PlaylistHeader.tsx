@@ -32,8 +32,8 @@ const styles = (theme: Theme) =>
     root: {
       width: 'calc(100% - 4em)',
       position: 'relative',
-      marginTop: '2em',
-      marginLeft: '2em',
+      paddingTop: '2em',
+      paddingLeft: '2em',
       [theme.breakpoints.down('xs')]: {
         height: 150,
       },

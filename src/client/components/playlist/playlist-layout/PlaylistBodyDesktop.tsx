@@ -8,7 +8,8 @@ import { Button, Divider, Grid, Typography } from '@material-ui/core';
 import { Music } from '../../../../shared/LoukiTypes';
 
 import PlaylistBodyDesktopRow from './PlaylistBodyDesktopRow';
-import { FixedSizeList as List } from 'react-window';
+import { VariableSizeList  as List } from 'react-window';
+import { AutoSizer } from 'react-virtualized';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -77,6 +78,8 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
     );
   };
 
+  getItemSize = index => index + 1 < this.props.playlist.length ? ROW_SIZE : ROW_SIZE - 1;
+
   render() {
     const { classes, playlist, emptySettings } = this.props;
     const T = texts.current;
@@ -92,7 +95,7 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
       );
     } else {
       return (
-        <Grid container direction='column'>
+        <Grid container direction='column' style={{ height: '100%' }}>
           <Grid container item direction='row'>
             <Grid container item xs={6}>
               <Typography className={classes.rowTitles}>{T.song}</Typography>
@@ -109,9 +112,13 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
             <Grid container item xs={1} />
           </Grid>
           <Divider />
-          <List height={ROW_SIZE * playlist.length} itemCount={playlist.length} itemSize={ROW_SIZE} ref={this.ref}>
-            {this.getMusicRows}
-          </List>
+            <AutoSizer>
+              {({ height, width }) => (
+                <List height={height - 32} width={width} itemCount={playlist.length} itemSize={this.getItemSize} ref={this.ref}>
+                  {this.getMusicRows}
+                </List>
+              )}
+            </AutoSizer>
         </Grid>
       );
     }

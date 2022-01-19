@@ -14,6 +14,7 @@ import { EmptyPlaylistTexts } from '../../utils/interfaces/ClientTypes';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
+      flexGrow: 1,
       width: 'calc(100% - 4em)',
       padding: '2em',
       [theme.breakpoints.down('xs')]: {
