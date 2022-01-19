@@ -21,33 +21,38 @@ export const handleCreatePlaylist = (req: Request, res: Response): void => {
   const creationDate = new Date().getTime();
   const id = uuid.v4();
 
-  let filePath;
-  if (file) {
-    const extension = file['mimetype'].split('image/')[1];
-    filePath = `/assets/uploads/${name}.${extension}`;
-  } else {
-    filePath = `/assets/uploads/${name}`;
-    download(req.body.pictureUrl, `.${filePath}`, () => {});
+  try {
+    let filePath;
+    if (file) {
+      const extension = file['mimetype'].split('image/')[1];
+      filePath = `/assets/uploads/${name}.${extension}`;
+    } else if (req.body.pictureUrl) {
+      filePath = `/assets/uploads/${name}`;
+      download(req.body.pictureUrl, `.${filePath}`, () => {});
+    }
+    PlaylistSchema.create(
+      {
+        name: name,
+        picture: filePath,
+        description: description,
+        musics: [],
+        createdAt: creationDate,
+        __id: id,
+      },
+      () => {
+        databaseHandler.getCollectionContent(PlaylistSchema).then(
+          (response: CreatePlaylistResponse) => {
+            res.status(200).send(response);
+          },
+          error => {
+            logError(error);
+            res.status(500).send(error.message);
+          },
+        );
+      },
+    );
+  } catch (e) {
+    logError(e);
+    res.status(500).send('Unable to create playlist');
   }
-  PlaylistSchema.create(
-    {
-      name: name,
-      picture: filePath,
-      description: description,
-      musics: [],
-      createdAt: creationDate,
-      __id: id,
-    },
-    () => {
-      databaseHandler.getCollectionContent(PlaylistSchema).then(
-        (response: CreatePlaylistResponse) => {
-          res.status(200).send(response);
-        },
-        error => {
-          logError(error);
-          res.status(500).send(error.message);
-        },
-      );
-    },
-  );
 };

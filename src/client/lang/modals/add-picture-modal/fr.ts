@@ -5,7 +5,7 @@ export default {
   upload: 'Uploadez',
   search: 'Recherchez',
   uploadText: 'une image en utilisant une url',
-  searchText: 'une image directement depuis Louki',
+  searchText: 'une image directement depuis Louki (nécessite une API key pixabay)',
   confirmation: 'Confirmation',
   back: 'Retour',
   tryAgain: 'Réessayer',

@@ -16,6 +16,7 @@ export interface Definition {
   alreadyInPlaylistNotif(musicName: string, playlistName: string): string;
   playlistUpdated: (playlist: string) => string;
   playlistCreated: (playlist: string) => string;
+  failedCreatingPlaylist: (playlist: string) => string;
   errors: {
     folderNotAdded: (folder: string) => string;
   };

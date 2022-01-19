@@ -43,7 +43,6 @@ const styles = (theme: Theme) =>
       borderRadius: '100%',
       height: '4rem',
       width: '4rem',
-      backgroundColor: theme.palette.secondary.main,
       marginLeft: '1.5em',
     },
     pic: {
