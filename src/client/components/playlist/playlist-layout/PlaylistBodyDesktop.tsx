@@ -56,7 +56,7 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
     this.props.history.push(emptySettings.redirectRoute);
   };
 
-  getMusicRows = ({ index, data }: { index: number, data: Omit<Props, "emptySettings"> }): JSX.Element => {
+  getMusicRows = ({ index, data }: { index: number; data: Omit<Props, 'emptySettings'> }): JSX.Element => {
     const { playlist, searchResults, addBookmarksEnabled, getPlaylistOptionsItems, image } = data;
     const music = playlist[index];
     return (
@@ -128,7 +128,8 @@ class PlaylistBodyDesktop extends React.Component<Props & RouteComponentProps, N
               addBookmarksEnabled,
               getPlaylistOptionsItems,
               image,
-            }}>
+            }}
+          >
             {this.getMusicRows}
           </List>
         </Grid>

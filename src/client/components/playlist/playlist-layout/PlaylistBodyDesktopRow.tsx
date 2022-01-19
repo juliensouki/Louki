@@ -104,7 +104,10 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
 
   render() {
     const { classes, music, index, searchResults, getPlaylistOptionsItems } = this.props;
-    const isMusicPlaying = MusicPlayer.isPlaying && MusicPlayer.playingMusicId == music.__id && Navigation.currentRoute == MusicPlayer.playlistRoute;
+    const isMusicPlaying =
+      MusicPlayer.isPlaying &&
+      MusicPlayer.playingMusicId == music.__id &&
+      Navigation.currentRoute == MusicPlayer.playlistRoute;
 
     return (
       <Grid
