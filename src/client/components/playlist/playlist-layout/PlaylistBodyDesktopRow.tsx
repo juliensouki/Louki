@@ -104,6 +104,7 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
 
   render() {
     const { classes, music, index, searchResults, getPlaylistOptionsItems } = this.props;
+    const isMusicPlaying = MusicPlayer.isPlaying && MusicPlayer.playingMusicId == music.__id && Navigation.currentRoute == MusicPlayer.playlistRoute;
 
     return (
       <Grid
@@ -136,12 +137,14 @@ class PlaylistBodyDesktopRow extends React.Component<Props, NoState> {
               </IconButton>
             )
           ) : null}
-          {MusicPlayer.isPlaying &&
-          MusicPlayer.playingMusicId == music.__id &&
-          Navigation.currentRoute == MusicPlayer.playlistRoute ? (
-            <MusicPlayingIcon />
-          ) : null}
-          <Typography style={{ maxWidth: this.maxWidthTitle }} className={classes.tableText}>
+          {isMusicPlaying ? <MusicPlayingIcon /> : null}
+          <Typography
+            style={{
+              maxWidth: this.maxWidthTitle,
+              paddingLeft: isMusicPlaying ? undefined : 5,
+            }}
+            className={classes.tableText}
+          >
             {music.title}
           </Typography>
         </Grid>

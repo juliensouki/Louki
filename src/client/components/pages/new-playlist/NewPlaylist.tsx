@@ -129,6 +129,8 @@ class NewPlaylist extends React.Component<WithStyles & RouteComponentProps, NoSt
         LoukiStore.setPlaylists(response.data);
         Notifications.addNotification(nT.playlistCreated(NewPlaylistForm.name), NotificationType.SUCCESS);
         this.props.history.push('/all-musics');
+      }).catch(() => {
+        Notifications.addNotification(nT.failedCreatingPlaylist(NewPlaylistForm.name), NotificationType.ERROR);
       });
     } else {
       if (NewPlaylistForm.name.length == 0) {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action, observable } from 'mobx';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import RouteChangeHandler from './utils/navigation/RouteChangeHandler';
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core/styles';
@@ -75,7 +75,6 @@ class Layout extends React.Component<Props, NoState> {
             <LeftPanel />
             <PlaylistPanel>
               <Switch>
-                <Route path={'/'} component={AllMusics} exact />
                 <Route path={'/all-musics'} component={AllMusics} exact />
                 <Route path={'/favorites'} component={Favorites} exact />
                 <Route path={'/playlist/:id'} component={Playlist} exact />
@@ -85,7 +84,7 @@ class Layout extends React.Component<Props, NoState> {
                 <Route path={'/albums'} component={ArtistsOrAlbums} exact />
                 <Route path={'/album/:id'} component={SpecificArtistOrAlbum} exact />
                 <Route path={'/settings'} component={Settings} exact />
-                <Route component={AllMusics} />
+                <Redirect to='/all-musics' />
               </Switch>
             </PlaylistPanel>
           </Grid>

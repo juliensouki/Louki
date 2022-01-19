@@ -5,7 +5,7 @@ export default {
   upload: 'Upload',
   search: 'Search',
   uploadText: 'a picture using a url',
-  searchText: 'and upload a picture directly from Louki',
+  searchText: 'and upload a picture directly from Louki (requires a pixabay API key)',
   confirmation: 'Confirmation',
   back: 'Back',
   tryAgain: 'Try again',
