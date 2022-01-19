@@ -1,7 +1,7 @@
 # Louki
-[![Made with React](https://img.shields.io/badge/React-17-green?logo=react&logoColor=white)](https://reactjs.org "Go to React homepage")
-[![Made with Node.js](https://img.shields.io/badge/Node.js->=12-green?logo=node.js&logoColor=white)](https://nodejs.org "Go to Node.js homepage")
-[![Made with TypeScript](https://img.shields.io/badge/TypeScript-4-green?logo=typescript&logoColor=white)](https://typescriptlang.org "Go to TypeScript homepage")
+[![Made with React](https://img.shields.io/badge/React-16.13.1-green?logo=react&logoColor=white)](https://reactjs.org "Go to React homepage")
+[![Made with Node.js](https://img.shields.io/badge/Node.js->=12.8.1-green?logo=node.js&logoColor=white)](https://nodejs.org "Go to Node.js homepage")
+[![Made with TypeScript](https://img.shields.io/badge/TypeScript-3.9.7-green?logo=typescript&logoColor=white)](https://typescriptlang.org "Go to TypeScript homepage")
 [![Made with GH Actions](https://img.shields.io/badge/CI-GitHub_Actions-blue?logo=github-actions&logoColor=white)](https://github.com/features/actions "Go to GitHub Actions homepage")
 
 ## What is Louki ?
