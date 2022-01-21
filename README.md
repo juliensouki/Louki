@@ -37,6 +37,7 @@ Here are the main features:
     
 ## Contribution
 I am not working on Louki anymore, but if you want to contribute feel free to open a pull request and I will be happy to review it.
+If you want to contribute, but don't know what to do, feel free to look at my <a href='https://github.com/juliensouki/Louki/wiki/Contribution-suggestions'>contribution suggestions</a>.
 
 
 ## Author
