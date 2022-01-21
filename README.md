@@ -12,19 +12,19 @@ You will find the documentation [here](https://github.com/juliensouki/Louki/wiki
 ## Features
 
 Here are the main features:
-- [x] Play/pause music
-- [x] Activate random order mode
-- [x] Activate playlist or music loop mode
-- [x] Go to the next or previous music
-- [x] Create a profile and customize a bunch of settings
-- [x] Load/unload music files using a folder path
-- [x] Create/update/delete playlist
-- [x] Add to remove music from favorites
-- [x] Display all of your music
-- [x] Display music by artist/album
-- [x] Change volume
-- [x] Search for a music in a playlist
-- [x] Use the app in English or French
+- Display all of your music
+- Display music by artist/album
+- Create/update/delete playlist
+- Search for a music in a playlist
+- Add and remove music favorites
+- Play/pause music
+- Go to the next or previous music
+- Activate random order mode
+- Activate playlist or music loop mode
+- Change volume
+- Create a profile and customize a bunch of settings
+- Load/unload music files using a folder path
+- Use the app in English or French
 
 
 ## Folders Layout 
