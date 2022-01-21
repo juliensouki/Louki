@@ -1,22 +1,31 @@
 # Louki
+[![Made with React](https://img.shields.io/badge/React-16.13.1-green?logo=react&logoColor=white)](https://reactjs.org "Go to React homepage")
+[![Made with Node.js](https://img.shields.io/badge/Node.js->=12.8.1-green?logo=node.js&logoColor=white)](https://nodejs.org "Go to Node.js homepage")
+[![Made with TypeScript](https://img.shields.io/badge/TypeScript-3.9.7-green?logo=typescript&logoColor=white)](https://typescriptlang.org "Go to TypeScript homepage")
+[![Made with GH Actions](https://img.shields.io/badge/CI-GitHub_Actions-blue?logo=github-actions&logoColor=white)](https://github.com/features/actions "Go to GitHub Actions homepage")
 
 ## What is Louki ?
-> The project just started. It will be finished in March/April 2020.
+Louki is an open-source music player I wrote when I was a student. My goal was to provide a basic tool that supports the core features of a music player/manager so that it can be reused by other people to create more advanced projects.
 
-Louki will be a web application, providing basic music management features : 
-- [ ] Get songs (and meta data) in folder chosen by user 
-- [ ] Create/Manage/Delete playlists
-- [ ] Music player (pause, repeat, next/prev song...)
-- [ ] Search by artist/album
-- [ ] Search song in playlist
-- [ ] Custom settings 
-- [ ] Web scrapping to update songs information
+You will find the documentation [here](https://github.com/juliensouki/Louki/wiki).
 
-Louki will be an open-source and cross-platform solution. The main objective is to create a reusable solution, easily improvable so that any developer can use it and make it how they want.
+## Features
 
-## Cross-platform
+Here are the main features:
+- Display all of your music
+- Display music by artist/album
+- Create/update/delete playlist
+- Search for a music in a playlist
+- Add and remove music favorites
+- Play/pause music
+- Go to the next or previous music
+- Activate random order mode
+- Activate playlist or music loop mode
+- Change volume
+- Create a profile and customize a bunch of settings
+- Load/unload music files using a folder path
+- Use the app in English or French
 
-Louki is developed as a web application in order to be able to be ran on Windows/MacOS/Linux, since it only needs a browser. It will be ran locally since there is no point to deploy it.
 
 ## Folders Layout 
 
@@ -26,6 +35,10 @@ Louki is developed as a web application in order to be able to be ran on Windows
     │   ├── server/          # Back-end part (nodeJS)
     │   ├── shared/          # Data structures shared by Front-end and Back-end (typescript)
     
-## Author
+## Contribution
+I am not working on Louki anymore, but if you want to contribute feel free to open a pull request and I will be happy to review it.
+If you want to contribute, but don't know what to do, feel free to look at my <a href='https://github.com/juliensouki/Louki/wiki/Contribution-suggestions'>contribution suggestions</a>.
 
+
+## Author
 Julien Souki-Léon.
