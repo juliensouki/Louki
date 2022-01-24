@@ -1,0 +1,26 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.io = exports.server = exports.app = exports.config = exports.getManifest = exports.MongoDBErrorRouter = exports.staticsRouter = exports.pagesRouter = exports.apiRouter = void 0;
+const tslib_1 = require("tslib");
+const express_1 = tslib_1.__importDefault(require("express"));
+const socket_io_1 = tslib_1.__importDefault(require("socket.io"));
+const http_1 = tslib_1.__importDefault(require("http"));
+const api_router_1 = require("./api-router");
+Object.defineProperty(exports, "apiRouter", { enumerable: true, get: function () { return api_router_1.apiRouter; } });
+const pages_router_1 = require("./pages-router");
+Object.defineProperty(exports, "pagesRouter", { enumerable: true, get: function () { return pages_router_1.pagesRouter; } });
+const statics_router_1 = require("./statics-router");
+Object.defineProperty(exports, "staticsRouter", { enumerable: true, get: function () { return statics_router_1.staticsRouter; } });
+const mongo_error_router_1 = require("./mongo-error-router");
+Object.defineProperty(exports, "MongoDBErrorRouter", { enumerable: true, get: function () { return mongo_error_router_1.MongoDBErrorRouter; } });
+const manifest_manager_1 = require("./manifest-manager");
+Object.defineProperty(exports, "getManifest", { enumerable: true, get: function () { return manifest_manager_1.getManifest; } });
+const config = tslib_1.__importStar(require("./config"));
+exports.config = config;
+const app = express_1.default();
+exports.app = app;
+const server = http_1.default.createServer(app);
+exports.server = server;
+const io = socket_io_1.default.listen(server);
+exports.io = io;
+//# sourceMappingURL=index.js.map
